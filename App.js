@@ -4,6 +4,23 @@ import { AppLoading, Asset, Font, Icon } from 'expo';
 
 import Main from './src'
 
+// import { createStore, applyMiddleware } from 'redux'
+// import createSagaMiddleware from 'redux-saga'
+// //
+// // import reducer from './reducers'
+// // import mySaga from './sagas'
+//
+// // create the saga middleware
+// const sagaMiddleware = createSagaMiddleware()
+// // mount it on the Store
+// const store = createStore(
+//   reducer,
+//   applyMiddleware(sagaMiddleware)
+// )
+//
+// // then run the saga
+// sagaMiddleware.run(mySaga)
+
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
@@ -56,6 +73,6 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#555555',
   },
 });

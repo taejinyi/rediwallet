@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { WebBrowser } from 'expo';
+import { Provider } from 'react-redux'
 
 import { MonoText } from '../components/StyledText';
 
@@ -101,7 +102,7 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#555555',
   },
   developmentModeText: {
     marginBottom: 20,
