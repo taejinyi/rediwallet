@@ -1,25 +1,50 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font, Icon } from 'expo';
+import {Platform, StatusBar, StyleSheet, View} from 'react-native';
+import {AppLoading, Asset, Font, Icon} from 'expo';
 
 import Main from './src'
 
-// import { createStore, applyMiddleware } from 'redux'
-// import createSagaMiddleware from 'redux-saga'
-// //
-// // import reducer from './reducers'
-// // import mySaga from './sagas'
+import {DangerZone} from 'expo'
+import {Provider} from 'react-redux'
+import {all} from 'redux-saga/effects'
+import createSagaMiddleware from 'redux-saga'
+import moment from 'moment/min/moment-with-locales'
+import {applyMiddleware, combineReducers, createStore} from 'redux'
+
+import {reducers as pageReducers} from './src/pages'
+import {reducers as systemReducers} from './src/system'
+
+import {sagas} from './src/pages'
+
+import './src/global';
+
+function* rootSaga() {
+  yield all(sagas)
+}
+
+const reducer = combineReducers({
+  ...systemReducers,
+  ...pageReducers,
+})
+
+const sagaMiddleware = createSagaMiddleware()
+const store = createStore(reducer, applyMiddleware(sagaMiddleware))
+
+sagaMiddleware.run(rootSaga)
+
+if (module.hot) {
+  module.hot.accept(() => {
+    store.replaceReducer(reducer)
+  })
+}
 //
-// // create the saga middleware
-// const sagaMiddleware = createSagaMiddleware()
-// // mount it on the Store
-// const store = createStore(
-//   reducer,
-//   applyMiddleware(sagaMiddleware)
-// )
+// const Web3 = require('web3');
 //
-// // then run the saga
-// sagaMiddleware.run(mySaga)
+// const web3 = new Web3(
+//   new Web3.providers.HttpProvider('https://mainnet.infura.io/'),
+// );
+//
+
 
 export default class App extends React.Component {
   state = {
@@ -38,7 +63,9 @@ export default class App extends React.Component {
       );
     } else {
       return (
-        <Main />
+        <Provider store={store}>
+          <Main />
+        </Provider>
       );
     }
   }
@@ -66,7 +93,7 @@ export default class App extends React.Component {
   };
 
   _handleFinishLoading = () => {
-    this.setState({ isLoadingComplete: true });
+    this.setState({isLoadingComplete: true});
   };
 }
 

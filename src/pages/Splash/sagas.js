@@ -13,27 +13,7 @@ import { SPLASH_STATE, GET_INFORMATION, SAVE_SPLASH_STATE } from './actions'
 // } from '../Wallet/sagas'
 
 export function* getInformation(action) {
-  const { db, mnemonic } = action
-  //
-  // yield call(getMnoInformationFromDB, {
-  //   db: db
-  // })
-  //
-  // // yield call(getContactsFromDB, {
-  // //   db: db,
-  // // })
-  // try {
-  //   const fetchResult = yield call(() => db.get('mnemonic'))
-  //
-  //   yield put({
-  //     mnemonic: fetchResult.data,
-  //     type: ,
-  //   })
-  //
-  // } catch (error) {
-  //   return false
-  // }
-
+  // const { db, mnemonic } = action
 
   yield put({
     type: SAVE_SPLASH_STATE,

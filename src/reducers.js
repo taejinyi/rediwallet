@@ -1,4 +1,4 @@
-import { SAVE_PIN_NUMBER, SAVE_MNEMONIC, SHOW_PROCESSING_MODAL, HIDE_PROCESSING_MODAL } from './actions'
+import {SAVE_PIN_NUMBER, SAVE_MNEMONIC, SHOW_PROCESSING_MODAL, HIDE_PROCESSING_MODAL, SAVE_IS_LOCKED} from './actions'
 
 const appStateReducer = (state = {}, action) => {
   switch(action.type) {
@@ -18,6 +18,10 @@ const appStateReducer = (state = {}, action) => {
     case SAVE_MNEMONIC:
       return Object.assign({}, state, {
         mnemonic: action.mnemonic
+      })
+    case SAVE_IS_LOCKED:
+      return Object.assign({}, state, {
+        isLocked: action.isLocked
       })
     default:
       return state

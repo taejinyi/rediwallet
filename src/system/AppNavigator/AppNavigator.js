@@ -19,7 +19,7 @@ import withLock from '../WithLock'
 
 const MainTabNavigator = TabNavigator({
   Wallet: {
-    screen: withDB(WalletPage),
+    screen: withDB(withLock(WalletPage)),
     navigationOptions: {
       tabBarLabel: '지갑',
       tabBarIcon: () => (
@@ -30,7 +30,7 @@ const MainTabNavigator = TabNavigator({
     }
   },
   Settings: {
-    screen: withDB(SettingPage),
+    screen: withDB(withLock(SettingPage)),
     navigationOptions: {
       tabBarLabel: '설정',
       tabBarIcon: () => (
@@ -83,12 +83,19 @@ const MainNavigator = StackNavigator({
       header: null
     }
   },
+  Lock: {
+    screen: LockPage,
+    navigationOptions: {
+      header: null,
+      headerBackTitle: 'Lock',
+    }
+  },
   // QRCodeScan: {
   //   screen: QRCodeScan,
   //   navigationOptions: {
   //     header: null
   //   }
-  // },
+  // }
 })
 
 const MnemonicManagementStackNavigator = StackNavigator({
@@ -135,11 +142,12 @@ const AppNavigator = StackNavigator({
       headerBackTitle: 'Landing',
     }
   },
-  MnemonicManagement: {
-    screen: MnemonicManagementStackNavigator,
+  MnemonicBackup: {
+    screen: withDB(withLock(MnemonicBackupPage)),
     navigationOptions: {
       header: null,
-    },
+      headerBackTitle: 'Mnemonic Backup',
+    }
   }}, {
     initialRouteName: 'Splash',
 })

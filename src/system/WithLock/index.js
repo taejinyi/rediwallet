@@ -11,7 +11,7 @@ const withLock = (Component) => {
   }
 
   const mapStateToProps = (state) => ({
-    pinNumber: state.lockStateReducer.pinNumber,
+    mnemonic: state.appStateReducer.mnemonic,
   })
 
   return connect(mapStateToProps)(WrapperComponent)

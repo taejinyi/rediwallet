@@ -7,8 +7,6 @@ import { FileSystem, SecureStore, Notifications, Permissions } from 'expo'
 import { actions } from 'rediwallet/src/pages'
 import { SPLASH_STATE, getInformation } from './actions'
 
-// import * as services from 'src/apis/network'
-
 class SplashPage extends React.Component {
 	navigateTo = (_routeName) => {
     const { dispatch } = this.props.navigation
@@ -23,16 +21,6 @@ class SplashPage extends React.Component {
     dispatch(resetAction)
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { nav } = nextProps
-    const { splashState, mnemonic } = nextProps
-
-    if(mnemonic.length < 5) {
-      return this.navigateTo('Landing')
-    }
-    return this.navigateTo('Main')
-  }
-
 	async componentDidMount() {
     const { db, nav, } = this.props
     // TODO: Uncomment it
@@ -44,16 +32,14 @@ class SplashPage extends React.Component {
 
 		setTimeout(async () => {
 			const mnemonic = await SecureStore.getItemAsync('mnemonic')
-
 			if(mnemonic == null) {
 				this.navigateTo('Landing', nav)
 			} else {
         const { saveMnemonic, getInformation } = this.props
-
         saveMnemonic(mnemonic)
-
+        this.navigateTo('Main', nav)
         // await this.checkPushTokenExistOrSave(token)
-        getInformation(db, mnemonic)
+        // getInformation(db, mnemonic)
 			}
 		}, 1000)
 	}
@@ -67,7 +53,7 @@ class SplashPage extends React.Component {
         backgroundColor: '#555555',
       }}>
         <StatusBar barStyle='light-content' />
-				<Image style={{ width: 120, height: 30, }} source={ require('rediwallet/src/assets/images/logo.png') } />
+				<Image style={{ width: 160, height: 30, }} source={ require('rediwallet/src/assets/images/logo.png') } />
 			</View>
 		)
 	}
@@ -79,7 +65,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   saveMnemonic: (mnemonic) => dispatch(actions.saveMnemonic(mnemonic)),
-  getInformation: (db, mnemonic) => dispatch(getInformation(db, mnemonic)),
 })
+  // getInformation: (db, mnemonic) => dispatch(getInformation(db, mnemonic)),
 
 export default connect(mapStateToProps, mapDispatchToProps)(SplashPage)
