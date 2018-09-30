@@ -11,7 +11,7 @@ import SettingPage from './Setting'
 import appStateReducer from '../reducers'
 import splashStateReducer from './Splash/reducers'
 import {
-  saveIsLocked,
+  saveUnlocked,
   saveMnemonic,
   showProcessingModal,
   hideProcessingModal,
@@ -35,7 +35,7 @@ import {
 
 const actions = {
   saveMnemonic,
-  saveIsLocked,
+  saveUnlocked,
   showProcessingModal,
   hideProcessingModal,
   // lockWithFingerprint,

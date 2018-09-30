@@ -61,6 +61,7 @@ class LandingPage extends React.Component {
         <View style={{ flex: 1, }}>
           <Left>
             <Button
+              style={{ marginTop: 50 }}
               onPress={this.generateMnemonic}
               transparent>
               <Text style={{ fontWeight: 'bold', color: '#10b5bc' }}>Create New Account</Text>

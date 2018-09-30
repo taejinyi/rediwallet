@@ -4,12 +4,11 @@ import AppNavigator from './system/AppNavigator/AppNavigator';
 import { Root } from 'native-base'
 // import Modal from 'react-native-modal'
 import { RippleLoader, TextLoader } from 'react-native-indicator'
-
 import './global';
 import {AppLoading, SecureStore} from "expo";
 import Modal from 'react-native-modal'
 import DialogInput from "react-native-dialog-input";
-import {actions} from "./pages";
+import {actions, LockPage} from "./pages";
 import connect from "react-redux/es/connect/connect";
 const Web3 = require('web3');
 
@@ -20,26 +19,38 @@ const web3 = new Web3(
 class Main extends React.Component {
   constructor(props) {
     super(props)
-    props.saveIsLocked(true)
   }
 
   async componentWillMount() {
-    console.log(this.props.isLocked)
+    console.log("unlocked?")
+    console.log(this.props.unlocked)
 
-    if (this.props.isLocked) {
+    if (this.props.unlocked !== true) {
+      console.log("isLocked")
       if (await Expo.Fingerprint.hasHardwareAsync()) {
-        if(Expo.Fingerprint.isEnrolledAsync()) {
-          console.log("Fingerprint is already enrolled")
-          console.log(await Expo.Fingerprint.authenticateAsync())
+        if(await Expo.Fingerprint.isEnrolledAsync()) {
+          const result = await Expo.Fingerprint.authenticateAsync()
+          if (result.success) {
+            this.props.saveUnlocked(true)
+          } else {
+
+          }
+
         } else {
           console.log("Fingerprint is not enrolled")
           console.log(await Expo.Fingerprint.authenticateAsync())
         }
       }
     }
+    else {
+      console.log("isUnlocked")
+      console.log(await Expo.Fingerprint.hasHardwareAsync())
+      console.log(await Expo.Fingerprint.isEnrolledAsync())
+      console.log(await Expo.Fingerprint.authenticateAsync())
+    }
 
   //
-  // saveIsLocked
+  // saveunlocked
   //   await SecureStore.('mnemonic')    SecureStore.
   //   if (this.props.mnekl)
   //   if (Expo.Fingerprint.hasHardwareAsync()) {
@@ -52,7 +63,7 @@ class Main extends React.Component {
 
   render() {
     // web3.eth.getBlock('latest').then(console.log);
-		const { isProcessingModalShow, processingModalMessage } = this.props
+		const { isProcessingModalShow, processingModalMessage, unlocked } = this.props
 
 
     return (
@@ -68,14 +79,8 @@ class Main extends React.Component {
             <TextLoader text={ processingModalMessage } textStyle={{ marginTop: 15, fontSize: 17, color: 'black', }} />
           </View>
         </Modal>
-        {/*<DialogInput isDialogVisible={this.props.isLocked}*/}
-          {/*title={"DialogInput 1"}*/}
-          {/*message={"Message for DialogInput #1"}*/}
-          {/*hintInput ={"HINT INPUT"}*/}
-          {/*submitInput={ (inputText) => {this.sendInput(inputText)} }*/}
-          {/*closeDialog={ () => {this.showDialog(false)}}>*/}
-        {/*</DialogInput>*/}
-        <StatusBar barStyle='light-content' />
+        <LockPage isVisible={ unlocked !== true }/>
+        {/*<StatusBar barStyle='light-content' />*/}
         {/*<NotificationSystem ref={ el => this.notificationSystem = el } />*/}
         {/*<AppNavigator screenProps={{ t: i18n.getFixedT() }} />*/}
         <AppNavigator />
@@ -96,11 +101,11 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  isLocked: state.appStateReducer.isLocked,
+  unlocked: state.appStateReducer.unlocked,
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  saveIsLocked: (isLocked) => dispatch(actions.saveIsLocked(isLocked)),
+  saveUnlocked: (unlocked) => dispatch(actions.saveUnlocked(unlocked)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main)
