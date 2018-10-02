@@ -11,15 +11,17 @@ import {
   LockPage,
   UnlockPage,
   WalletPage,
+  WalletDetailPage,
   SettingPage
 } from 'rediwallet/src/pages'
 
 import withDB from '../WithDB'
 import withLock from '../WithLock'
+import withWallet from '../WithWallet'
 
 const MainTabNavigator = TabNavigator({
   Wallet: {
-    screen: withDB(withLock(WalletPage)),
+    screen: withDB(withLock(withWallet(WalletPage))),
     navigationOptions: {
       tabBarLabel: '지갑',
       tabBarIcon: () => (
@@ -90,6 +92,13 @@ const MainNavigator = StackNavigator({
       headerBackTitle: 'Lock',
     }
   },
+  WalletDetail: {
+    screen: WalletDetailPage,
+    navigationOptions: {
+      header: null,
+      headerBackTitle: 'Wallet Detail',
+    }
+  }
   // QRCodeScan: {
   //   screen: QRCodeScan,
   //   navigationOptions: {

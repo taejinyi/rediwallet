@@ -1,14 +1,18 @@
 import React from 'react';
-import {Alert, Platform, StatusBar, StyleSheet, View} from 'react-native';
-import AppNavigator from './system/AppNavigator/AppNavigator';
+import {StatusBar, StyleSheet, View} from 'react-native';
 import { Root } from 'native-base'
 // import Modal from 'react-native-modal'
 import { RippleLoader, TextLoader } from 'react-native-indicator'
 import './global';
-import {AppLoading, SecureStore} from "expo";
+import {SecureStore, Util} from "expo";
 import Modal from 'react-native-modal'
-import DialogInput from "react-native-dialog-input";
 import {actions, LockPage} from "./pages";
+import { withDB, withLock, AppNavigator } from './system'
+
+// import i18n from './utils/i18n'
+
+// const WatcherManager = withLock(withDB(Watcher))
+
 import connect from "react-redux/es/connect/connect";
 const Web3 = require('web3');
 
@@ -22,50 +26,30 @@ class Main extends React.Component {
   }
 
   async componentWillMount() {
-    console.log("unlocked?")
-    console.log(this.props.unlocked)
 
-    if (this.props.unlocked !== true) {
-      console.log("isLocked")
-      if (await Expo.Fingerprint.hasHardwareAsync()) {
-        if(await Expo.Fingerprint.isEnrolledAsync()) {
-          const result = await Expo.Fingerprint.authenticateAsync()
-          if (result.success) {
-            this.props.saveUnlocked(true)
-          } else {
 
-          }
+  }
 
-        } else {
-          console.log("Fingerprint is not enrolled")
-          console.log(await Expo.Fingerprint.authenticateAsync())
-        }
-      }
-    }
-    else {
-      console.log("isUnlocked")
-      console.log(await Expo.Fingerprint.hasHardwareAsync())
-      console.log(await Expo.Fingerprint.isEnrolledAsync())
-      console.log(await Expo.Fingerprint.authenticateAsync())
-    }
+  _onTokenInvalid = async () => {
+    await SecureStore.deleteItemAsync('mnemonic')
+    await this.props.db.destroy()
+    this.props.saveMnemonic(undefined)
+    await Util.reload()
+    const { dispatch } = this.props
 
-  //
-  // saveunlocked
-  //   await SecureStore.('mnemonic')    SecureStore.
-  //   if (this.props.mnekl)
-  //   if (Expo.Fingerprint.hasHardwareAsync()) {
-  //     Expo.Fingerprint.isEnrolledAsync()
-  //   }
-  //       await SecureStore.deleteItemAsync('mnemonic')
-
+    // dispatch(NavigationActions.reset({
+    //   index: 0,
+    //   key: null,
+    //   actions: [ NavigationActions.navigate({ routeName: 'Splash' }) ],
+    // }))
 
   }
 
   render() {
     // web3.eth.getBlock('latest').then(console.log);
 		const { isProcessingModalShow, processingModalMessage, unlocked } = this.props
-
-
+    console.log('Unlocked = ')
+    console.log(unlocked)
     return (
       <Root>
         <Modal
@@ -79,8 +63,8 @@ class Main extends React.Component {
             <TextLoader text={ processingModalMessage } textStyle={{ marginTop: 15, fontSize: 17, color: 'black', }} />
           </View>
         </Modal>
-        <LockPage isVisible={ unlocked !== true }/>
-        {/*<StatusBar barStyle='light-content' />*/}
+        <LockPage isVisible={ this.props.unlocked !== true }/>
+        <StatusBar barStyle='light-content' />
         {/*<NotificationSystem ref={ el => this.notificationSystem = el } />*/}
         {/*<AppNavigator screenProps={{ t: i18n.getFixedT() }} />*/}
         <AppNavigator />

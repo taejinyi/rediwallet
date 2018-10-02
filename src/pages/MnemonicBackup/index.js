@@ -19,7 +19,7 @@ class MnemonicBackupPage extends React.Component {
     const { mnemonic } = this.props
     return (
       <Container>
-        <View style={{ flex: 1, }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
           <TextLoader text={mnemonic} textStyle={{ marginTop: 15, color: '#10b5bc', fontSize: 17, }} />
           <Button
             onPress={this.closePage}

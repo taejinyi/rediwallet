@@ -31,10 +31,13 @@ class SplashPage extends React.Component {
     // }
 
 		setTimeout(async () => {
+		  console.log('turned on')
 			const mnemonic = await SecureStore.getItemAsync('mnemonic')
 			if(mnemonic == null) {
+			  console.log('goto landing')
 				this.navigateTo('Landing', nav)
 			} else {
+			  console.log('goto main')
         const { saveMnemonic, getInformation } = this.props
         saveMnemonic(mnemonic)
         this.navigateTo('Main', nav)

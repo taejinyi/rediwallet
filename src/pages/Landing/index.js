@@ -6,17 +6,13 @@ import { actions } from '../.'
 import { SecureStore } from 'expo'
 import {
   Alert,
-  Animated,
 	StyleSheet,
   Text,
 	View,
 } from 'react-native'
 import {
 	Button,
-	Card,
-	CardItem,
   Right,
-  StyleProvider,
 	Left,
 } from 'native-base'
 import platform from 'rediwallet/src/native-base-theme/variables/platform'

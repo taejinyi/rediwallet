@@ -1,0 +1,22 @@
+{
+	"signin": {
+		"login": "로그인"
+	},
+	"wallet": {
+		"accountBalance": "계좌잔고",
+	    "creditStatus": "카드 현황",
+		"availableAmount": "이용가능금액",
+		"borrowedAmount": "대출이용금액",
+		"soonReceivableAmount": "다음 달 받을금액",
+		"transactions": "거래내역",
+		"repay": "상환하기",
+		"cashAdvance": "현금서비스",
+		"scanQRCode": "QR코드 스캔하기",
+		"myQRCode": "내 QR코드 보기",
+		"cancel": "취소",
+		"choosePictureFromAlbum": "앨범에서 사진 선택",
+		"nothingToRepay": "상환 할 필요가 없습니다",
+		"confirm": "확인",
+		"myWalletQRCode": "내 지갑의 QRCode"
+	},
+}
