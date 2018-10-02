@@ -2,7 +2,7 @@ export const SAVE_WALLETS = 'SAVE_WALLETS'
 export const GET_WALLETS_FROM_DB = 'GET_WALLETS_FROM_DB'
 export const GET_WALLETS_FROM_SERVER = 'GET_WALLETS_FROM_SERVER'
 export const SAVE_WALLETS_TO_DB = 'SAVE_WALLETS_TO_DB'
-export const ADD_WALLET = 'ADD_WALLET'
+export const ADD_ACCOUNT = 'ADD_ACCOUNT'
 
 export const saveWallets = (wallets) => ({
   wallets: wallets,
@@ -20,8 +20,8 @@ export const getWalletsFromDB = (db) => ({
   type: GET_WALLETS_FROM_DB,
 })
 
-export const addWallet = (db, wallet) => ({
+export const addAccount = (db, wallet) => ({
   db: db,
   wallet: wallet,
-  type: ADD_WALLET,
+  type: ADD_ACCOUNT,
 })

@@ -19,14 +19,32 @@ class WalletPage extends React.Component {
 
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
   }
-  addWallet = async () => {
+  addAccount = async () => {
     const ethers = require('ethers');
-    const wallet = await ethers.Wallet.fromMnemonic(this.props.mnemonic);
+    const no = 1;
+    const path = "m/44'/60'/0'/0/" + no
+    const wallet = await ethers.Wallet.fromMnemonic(this.props.mnemonic, path);
     console.log(this.props.mnemonic)
     console.log(wallet)
-    this.props.addWallet(wallet)
+    const account = {
+      address: wallet.address,
+      privateKey: wallet.privateKey,
+      no: no
+    }
+    console.log(account)
+    this.props.addAccount(account)
   }
-
+  /*
+   Wallet {
+    "address": "0x8f55dE5d4df0Ac41A8e8b4dF9D0D87df5e94fC06",
+    "defaultGasLimit": 1500000,
+    "mnemonic": "glad blur gun hill possible copy laugh idea reopen visual blind east",
+    "path": "m/44'/60'/0'/0/0",
+    "privateKey": "0x509c06df0bf81b75f595f190a40ab59ab401bf6064badbbebb1021e9b3142637",
+    "provider": undefined,
+    "sign": [Function anonymous],
+  }
+   */
   componentWillReceiveProps(nextProps) {
     this.setState({
       wallets: nextProps.wallets,
@@ -47,13 +65,13 @@ class WalletPage extends React.Component {
         </View>
         <Content style={{ backgroundColor: 'white', }}>
           <ListItem
-            onPress={ this.addWallet }
+            onPress={ this.addAccount }
             icon last>
             <Left>
               <Icon style={{ color: '#666666', }} name='ios-megaphone' />
             </Left>
             <Body>
-              <Text>Create Account</Text>
+              <Text>Add Account</Text>
             </Body>
             <Right>
               <Icon name='arrow-forward' />
@@ -106,7 +124,7 @@ const styles = StyleSheet.create({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  addWallet: (wallet) => dispatch(actions.addWallet(wallet)),
+  addAccount: (account) => dispatch(actions.addAccount(account)),
 })
 
 export default connect(null, mapDispatchToProps)(WalletPage)

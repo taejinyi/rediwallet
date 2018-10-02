@@ -7,7 +7,7 @@ import {
   SAVE_WALLETS_TO_DB,
   GET_WALLETS_FROM_DB,
   GET_WALLETS_FROM_SERVER,
-  ADD_WALLET,
+  ADD_ACCOUNT,
 } from './actions'
 
 export function* saveWalletsToDB(action) {
@@ -61,7 +61,7 @@ export function* getWalletsFromDB(action) {
   }
 }
 
-export function* addWallet(action) {
+export function* addAccount(action) {
   const { db, wallet } = action
 
 
@@ -89,7 +89,7 @@ export function* addWallet(action) {
 const walletSaga = [
   takeEvery(SAVE_WALLETS_TO_DB, saveWalletsToDB),
   takeEvery(GET_WALLETS_FROM_DB, getWalletsFromDB),
-  takeEvery(ADD_WALLET, addWallet),
+  takeEvery(ADD_ACCOUNT, addAccount),
 ]
 
 export default walletSaga

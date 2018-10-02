@@ -13,7 +13,7 @@ import appStateReducer from '../reducers'
 import splashStateReducer from './Splash/reducers'
 import walletReducer from './Wallet/reducers'
 
-import { addWallet } from './Wallet/actions'
+import { addAccount } from './Wallet/actions'
 import {
   saveUnlocked,
   saveMnemonic,
@@ -40,7 +40,7 @@ import {
 const actions = {
   saveMnemonic,
   saveUnlocked,
-  addWallet,
+  addAccount,
   showProcessingModal,
   hideProcessingModal,
   // lockWithFingerprint,
