@@ -50,6 +50,7 @@ class Main extends React.Component {
 		const { isProcessingModalShow, processingModalMessage, unlocked } = this.props
     console.log('Unlocked = ')
     console.log(unlocked)
+    this.props.saveUnlocked(true)
     return (
       <Root>
         <Modal

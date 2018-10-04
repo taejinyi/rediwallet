@@ -1,21 +1,22 @@
 import _ from 'lodash'
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FlatList, Text, View, StyleSheet, VirtualizedList } from 'react-native'
+import { FlatList, Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import {Button} from "native-base";
 
-class WalletsList extends React.Component {
+class WalletAccountList extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      lastWalletIndex: props.wallets ? ((Object.keys(props.wallets).length) - 1) : undefined,
+      lastWalletIndex: props.wallet ? ((Object.keys(props.wallet).length) - 1) : undefined,
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.wallets) {
+    if(nextProps.wallet) {
       this.setState({
-        lastWalletIndex: Object.keys(nextProps.wallets).length - 1,
+        lastWalletIndex: Object.keys(nextProps.wallet).length - 1,
       })
     }
   }
@@ -23,42 +24,37 @@ class WalletsList extends React.Component {
   onWalletClicked = (cardIndex) => {
   }
 
-  renderWalletItem = (wallet) => {
+  renderAccountItem = (account) => {
     const { navigation } = this.props
+    console.log(account)
 
     const {
-      slug,
       address,
-      balance,
-      ... rest,
-    } = wallet.item
+      nonce,
+    } = account.item
 
 
     return (
       <View style={ styles.walletContainer }>
-        <Wallet
-          isReal={ true }
-          slug={ slug }
-          address={ address }
-          balance={ balance }
-
-          navigation={ navigation }
-          { ... rest }
-        />
+        <TouchableOpacity onPress={ () => {
+          navigation.navigate('AccountDetail', { address: address })
+        }}>
+          <Text style={{ fontWeight: 'bold', color: '#10b5bc' }}>{ nonce.toString() + ": " + address }</Text>
+        </TouchableOpacity>
       </View>
     )
   }
 
   render() {
-    const { wallets, } = this.props
+    const { wallet, } = this.props
 
-    if(wallets === null)
+    if(wallet === null)
       return null
 
     return (
       <FlatList
-        data={ _.values(wallets) }
-        renderItem={ this.renderWalletItem() }
+        data={ _.values(wallet) }
+        renderItem={ this.renderAccountItem }
         contentContainerStyle={{ padding: 15 }}
         keyExtractor={( item, index ) => index.toString() }
       />
@@ -66,8 +62,8 @@ class WalletsList extends React.Component {
   }
 }
 
-WalletsList.propTypes = {
-  wallets: PropTypes.oneOfType([ PropTypes.array, PropTypes.object ]),
+WalletAccountList.propTypes = {
+  wallet: PropTypes.oneOfType([ PropTypes.array, PropTypes.object ]),
   navigation: PropTypes.object,
 }
 
@@ -96,4 +92,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default WalletsList
+export default WalletAccountList

@@ -1,38 +1,51 @@
 import _ from 'lodash'
 import React from 'react'
-import { StyleSheet, View, Text } from 'react-native'
+import {StyleSheet, View, Text, Alert} from 'react-native'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 import { Container, Content, Body, Left, List, ListItem, Icon, Separator, Right } from 'native-base'
 // import { Util, SecureStore } from 'expo'
-import { Header, WalletsList } from 'rediwallet/src/components'
+import { Header, WalletAccountList } from 'rediwallet/src/components'
 import {actions} from "../index";
 import connect from "react-redux/es/connect/connect";
 // import { NavigationActions } from 'react-navigation'
+import {SecureStore} from "expo";
 
 class WalletPage extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      wallets: props.wallets,
+      wallet: props.wallet,
     }
 
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
   }
   addAccount = async () => {
-    const ethers = require('ethers');
-    const no = 1;
-    const path = "m/44'/60'/0'/0/" + no
-    const wallet = await ethers.Wallet.fromMnemonic(this.props.mnemonic, path);
-    console.log(this.props.mnemonic)
-    console.log(wallet)
-    const account = {
-      address: wallet.address,
-      privateKey: wallet.privateKey,
-      no: no
+    const strWalletIndex = await SecureStore.getItemAsync('walletIndex')
+    const mnemonic = await SecureStore.getItemAsync('mnemonic')
+
+    let walletIndex
+    if(strWalletIndex == null) {
+      walletIndex = 0
+    } else {
+      walletIndex = parseInt(strWalletIndex, 10) + 1
     }
-    console.log(account)
-    this.props.addAccount(account)
+    const ethers = require('ethers');
+    const path = "m/44'/60'/0'/0/" + walletIndex
+    const _newAccount = await ethers.Wallet.fromMnemonic(mnemonic, path);
+    const newAccount = {
+      address: _newAccount.address,
+      privateKey: _newAccount.privateKey,
+      nonce: walletIndex
+    }
+    console.log(newAccount)
+    this.props.addAccount(this.props.db, newAccount)
+    try {
+      await SecureStore.setItemAsync('walletIndex', walletIndex.toString())
+    } catch(error) {
+      console.log(error)
+      Alert.alert('Wallet Index Save Error', 'Failed to save the wallet index.')
+    }
   }
   /*
    Wallet {
@@ -47,13 +60,13 @@ class WalletPage extends React.Component {
    */
   componentWillReceiveProps(nextProps) {
     this.setState({
-      wallets: nextProps.wallets,
+      wallet: nextProps.wallet,
     })
   }
 
   render() {
     const { navigation } = this.props
-    const { wallets } = this.state
+    const { wallet } = this.state
 
     return (
       <View style={{ flex: 1, }}>
@@ -80,10 +93,10 @@ class WalletPage extends React.Component {
           <Separator />
 
           {
-            wallets ? (
-              <View style={ styles.walletsListContainer }>
-                <WalletsList
-                  wallets={ wallets }
+            wallet ? (
+              <View style={ styles.WalletAccountListContainer }>
+                <WalletAccountList
+                  wallet={ wallet }
                   navigation={ navigation }
                 />
               </View>
@@ -117,14 +130,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  walletsListContainer: {
+  WalletAccountListContainer: {
     width: '100%',
     height: '100%',
   }
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  addAccount: (account) => dispatch(actions.addAccount(account)),
+  addAccount: (db, account) => dispatch(actions.addAccount(db, account)),
 })
 
 export default connect(null, mapDispatchToProps)(WalletPage)

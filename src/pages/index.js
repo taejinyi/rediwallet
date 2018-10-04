@@ -7,13 +7,14 @@ import UnlockPage from './Unlock'
 import MnemonicBackupPage from './MnemonicBackup'
 import MnemonicImportPage from './MnemonicImport'
 import WalletPage from './Wallet'
-import WalletDetailPage from './AccountDetail'
+import AccountDetailPage from './AccountDetail'
 import SettingPage from './Setting'
 import appStateReducer from '../reducers'
 import splashStateReducer from './Splash/reducers'
 import walletReducer from './Wallet/reducers'
 
 import { addAccount } from './Wallet/actions'
+import { getInformation } from './Splash/actions'
 import {
   saveUnlocked,
   saveMnemonic,
@@ -30,6 +31,8 @@ import {
 //   unlockWithFingerprint,
 //   unlockWithPinNumber
 // } from './Unlock/actions'
+import walletSaga from './Wallet/sagas'
+import splashSaga from './Splash/sagas'
 
 // import lockSaga from './Lock/sagas'
 // import unlockSaga from './Unlock/sagas'
@@ -39,6 +42,7 @@ import {
 
 const actions = {
   saveMnemonic,
+  getInformation,
   saveUnlocked,
   addAccount,
   showProcessingModal,
@@ -50,6 +54,9 @@ const actions = {
 }
 
 const sagas = [
+  walletSaga,
+  splashSaga,
+
   // ... lockSaga,
   // ... unlockSaga,
 ]
@@ -69,7 +76,7 @@ export {
   MnemonicBackupPage,
   MnemonicImportPage,
   WalletPage,
-  WalletDetailPage,
+  AccountDetailPage,
   SettingPage,
 
   actions,

@@ -5,8 +5,7 @@ export const SPLASH_STATE = {
   STATE_FINISH: 'STATE_FINISH',
 }
 
-export const getInformation = (db, mnemonic) => ({
+export const getInformation = (db) => ({
   db: db,
-  mnemonic: mnemonic,
   type: GET_INFORMATION,
 })

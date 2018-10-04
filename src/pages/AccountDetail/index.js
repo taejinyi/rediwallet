@@ -9,27 +9,25 @@ import {actions} from "../index";
 import connect from "react-redux/es/connect/connect";
 import { NavigationActions } from 'react-navigation'
 
-class WalletDetailPage extends React.Component {
+class AccountDetailPage extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      transactions: undefined,
-      isLoading: false,
+      // transactions: undefined,
+      // isLoading: false,
     }
   }
 
 
   componentWillMount() {
-    const { address } = this.props.navigation.state.params
-    const { db, mnemonic, getWalletDetail } = this.props
-
-    getUnionTransactions(db, token, slug, 0, 20)
+    // const { address } = this.props.navigation.state.params
+    // const { db, mnemonic, getWalletDetail } = this.props
   }
 
   render() {
     const { navigation } = this.props
-
+    const { address } = this.props.navigation.state.params
     return (
       <View style={{ flex: 1, }}>
         <View style={{ flex: 0.3, }}>
@@ -39,29 +37,7 @@ class WalletDetailPage extends React.Component {
           />
         </View>
         <Content style={{ backgroundColor: 'white', }}>
-          <ListItem icon last>
-            <Left>
-              <Icon style={{ color: '#666666', }} name='ios-megaphone' />
-            </Left>
-            <Body>
-              <Text>Ethereum</Text>
-            </Body>
-            <Right>
-              <Icon name='arrow-forward' />
-            </Right>
-          </ListItem>
-          <Separator />
-          <ListItem icon last>
-            <Left>
-              <Icon style={{ color: '#666666', }} name='ios-megaphone' />
-            </Left>
-            <Body>
-              <Text>Infleum</Text>
-            </Body>
-            <Right>
-              <Icon name='arrow-forward' />
-            </Right>
-          </ListItem>
+          <Text>{address}</Text>
         </Content>
       </View>
     )
@@ -69,7 +45,7 @@ class WalletDetailPage extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  saveMnemonic: (mnemonic) => dispatch(actions.saveMnemonic(mnemonic)),
+  // saveMnemonic: (mnemonic) => dispatch(actions.saveMnemonic(mnemonic)),
 })
 
-export default connect(null, mapDispatchToProps)(WalletDetailPage)
+export default connect(null, mapDispatchToProps)(AccountDetailPage)

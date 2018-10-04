@@ -1,11 +1,21 @@
-import { SAVE_WALLETS } from './actions'
+import {ADD_ACCOUNT, SAVE_DEFAULT_ACCOUNT, SAVE_WALLET} from './actions'
 
 const walletReducer = (state = {}, action) => {
   switch(action.type) {
-    case SAVE_WALLETS:
+    case ADD_ACCOUNT:
       return Object.assign({}, state, {
-        wallets: action.wallets,
+        db: action.db,
+        account: action.account,
       })
+    case SAVE_WALLET:
+      return Object.assign({}, state, {
+        wallet: action.wallet,
+      })
+    case SAVE_DEFAULT_ACCOUNT:
+      return Object.assign({}, state, {
+        defaultAccount: action.account,
+      })
+
     default:
       return state
   }

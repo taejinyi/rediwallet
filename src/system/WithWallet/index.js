@@ -11,7 +11,7 @@ const withWallet = (Component) => {
   }
 
   const mapStateToProps = (state) => ({
-    wallets: state.walletReducer.wallets,
+    wallet: state.walletReducer.wallet,
   })
 
   return connect(mapStateToProps)(WrapperComponent)

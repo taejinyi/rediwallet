@@ -34,15 +34,11 @@ class SplashPage extends React.Component {
 		  console.log('turned on')
 			const mnemonic = await SecureStore.getItemAsync('mnemonic')
 			if(mnemonic == null) {
-			  console.log('goto landing')
 				this.navigateTo('Landing', nav)
 			} else {
-			  console.log('goto main')
-        const { saveMnemonic, getInformation } = this.props
-        saveMnemonic(mnemonic)
+        const { getInformation } = this.props
+        await getInformation(db)
         this.navigateTo('Main', nav)
-        // await this.checkPushTokenExistOrSave(token)
-        // getInformation(db, mnemonic)
 			}
 		}, 1000)
 	}
@@ -68,7 +64,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   saveMnemonic: (mnemonic) => dispatch(actions.saveMnemonic(mnemonic)),
+  getInformation: (db) => dispatch(actions.getInformation(db)),
 })
-  // getInformation: (db, mnemonic) => dispatch(getInformation(db, mnemonic)),
 
 export default connect(mapStateToProps, mapDispatchToProps)(SplashPage)
