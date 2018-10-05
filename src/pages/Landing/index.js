@@ -2,7 +2,7 @@ import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 import { Container } from 'native-base'
-import { actions } from '../.'
+import { actions, sagas } from '../.'
 import { SecureStore } from 'expo'
 import {
   Alert,
@@ -43,7 +43,8 @@ class LandingPage extends React.Component {
           Alert.alert('토큰 저장 에러', '토큰을 저장하는데 에러가 발생 하였습니다.')
         }
 		saveMnemonic(mnemonic)
-
+    const { db } = this.props
+    this.props.getInformation(db)
     this.debounceNavigate('MnemonicBackup')
   }
 
@@ -127,6 +128,7 @@ const mapDispatchToProps = (dispatch) => ({
   showProcessingModal: (message) => dispatch(actions.showProcessingModal(message)),
   hideProcessingModal: () => dispatch(actions.hideProcessingModal()),
   saveMnemonic: (mnemonic) => dispatch(actions.saveMnemonic(mnemonic)),
+  getInformation: (db) => dispatch(actions.getInformation(db)),
 })
 
 export default connect(null, mapDispatchToProps)(LandingPage)

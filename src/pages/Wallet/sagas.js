@@ -1,70 +1,54 @@
 import { call, put, take, takeEvery } from 'redux-saga/effects'
 
 import {
-  ADD_ACCOUNT,
+  ADD_ACCOUNT, GENERATE_ACCOUNT,
   SAVE_DEFAULT_ACCOUNT,
   SAVE_WALLET,
+  GET_WALLET_FROM_NETWORK,
+  GET_ACCOUNT_FROM_NETWORK,
 } from './actions'
 import {SecureStore} from "expo";
-//
-// export function* saveWalletsToDB(action) {
-//   const { db, wallets } = action
-//
-//   try {
-//     const fetchResult = yield call(() => db.get('wallets'))
-//     const newData = Object.assign({}, fetchResult.data, wallets)
-//
-//     yield call(() => db.put({
-//       _id: 'wallets',
-//       data: newData,
-//       _rev: fetchResult._rev,
-//     }))
-//
-//     yield put({
-//       type: SAVE_WALLETS,
-//       wallets: newData,
-//     })
-//
-//   } catch (error) {
-//     const { status } = error
-//
-//     if(status === 404) {
-//       yield call(() => db.put({
-//         _id: 'wallets',
-//         data: wallets
-//       }))
-//
-//       yield put({
-//         type: SAVE_WALLETS,
-//         wallets: wallets,
-//       })
-//     }
-//   }
-// }
-//
-// export function* getWalletsFromDB(action) {
-//   const { db } = action
-//
-//   try {
-//     const fetchResult = yield call(() => db.get('wallets'))
-//     const { data } = fetchResult
-//
-//     yield put({
-//       type: SAVE_WALLETS,
-//       wallets: data
-//     })
-//   } catch (error) {
-//     return false
-//   }
-// }
+import {Alert} from "react-native";
 
+export function* generateAccount(action) {
+  const { db, currency } = action
+  const strWalletIndex = yield SecureStore.getItemAsync('walletIndex')
+  const mnemonic = yield SecureStore.getItemAsync('mnemonic')
+
+  let walletIndex
+  if(strWalletIndex == null) {
+    walletIndex = 0
+  } else {
+    walletIndex = parseInt(strWalletIndex, 10) + 1
+  }
+  const ethers = require('ethers');
+  const path = "m/44'/60'/0'/0/" + walletIndex
+  const _newAccount = yield ethers.Wallet.fromMnemonic(mnemonic, path);
+  const newAccount = {
+    address: _newAccount.address,
+    privateKey: _newAccount.privateKey,
+    nonce: walletIndex,
+    currency: currency
+  }
+  yield call(addAccount, {
+    db: db,
+    account: newAccount
+  })
+  try {
+    yield SecureStore.setItemAsync('walletIndex', walletIndex.toString())
+  } catch(error) {
+    Alert.alert('Wallet Index Save Error', 'Failed to save the wallet index.')
+  }
+  return true
+}
 export function* addAccount(action) {
-  console.log("in addAccount")
   const { db, account } = action
   const newAccountPublic = {
     [ account.address ]: {
       address: account.address,
       nonce: account.nonce,
+      currency: account.currency,
+      balance: 0
     }
   }
   const newAccount = {
@@ -72,10 +56,10 @@ export function* addAccount(action) {
       address: account.address,
       nonce: account.nonce,
       privateKey: account.privateKey,
+      currency: account.currency,
+      balance: 0
     }
   }
-  console.log(newAccountPublic)
-  console.log(newAccount)
 
   try {
     const fetchResult = yield call(() => db.get('wallet'))
@@ -86,7 +70,6 @@ export function* addAccount(action) {
       data: newDataPublic,
       _rev: fetchResult._rev,
     }))
-    console.log(newDataPublic)
     yield put({
       type: SAVE_WALLET,
       wallet: newDataPublic,
@@ -119,10 +102,34 @@ export function* addAccount(action) {
   return account.address
 }
 
+export function* getWalletFromNetwork(action) {
+  console.log('in getWalletFromNetwork')
+  const { wallet } = action
+  console.log(wallet)
+
+  const allPropertyNames = Object.keys(wallet)
+
+  for (let j=0; j<allPropertyNames.length; j++) {
+    const name = allPropertyNames[j];
+    const value = wallet[name];
+    yield call(() => getAccountFromNetwork({account: value}))
+  }
+}
+
+export function* getAccountFromNetwork(action) {
+  console.log('in getAccountFromNetwork')
+  const { account } = action
+  console.log(account.address, account.currency, account.nonce, account.balance)
+
+}
+
 const walletSaga = [
-  // takeEvery(SAVE_WALLETS_TO_DB, saveWalletsToDB),
-  // takeEvery(GET_WALLETS_FROM_DB, getWalletsFromDB),
+  // takeEvery(SAVE_WALLET_TO_DB, saveWalletToDB),
+  // takeEvery(GET_WALLET_FROM_DB, getWalletFromDB),
+  takeEvery(GET_WALLET_FROM_NETWORK, getWalletFromNetwork),
+  takeEvery(GET_ACCOUNT_FROM_NETWORK, getAccountFromNetwork),
   takeEvery(ADD_ACCOUNT, addAccount),
+  takeEvery(GENERATE_ACCOUNT, generateAccount),
   // takeEvery(SAVE_WALLET, saveWallet),
 ]
 

@@ -5,7 +5,6 @@ import { StatusBar, Image, View } from 'react-native'
 import { FileSystem, SecureStore, Notifications, Permissions } from 'expo'
 
 import { actions } from 'rediwallet/src/pages'
-import { SPLASH_STATE, getInformation } from './actions'
 
 class SplashPage extends React.Component {
 	navigateTo = (_routeName) => {
@@ -36,8 +35,20 @@ class SplashPage extends React.Component {
 			if(mnemonic == null) {
 				this.navigateTo('Landing', nav)
 			} else {
-        const { getInformation } = this.props
-        await getInformation(db)
+        const res = await this.props.getInformation(db)
+        console.log(res)
+        console.log("generateAccount?")
+        if (!res) {
+          console.log("generateAccount?")
+          const { dispatch } = this.props
+          dispatch(actions.generateAccount(db, 'ETH'))
+          console.log('IFUM')
+          dispatch(actions.generateAccount(db, 'IFUM'))
+          console.log('KRWT')
+          dispatch(actions.generateAccount(db, 'KRWT'))
+
+        }
+
         this.navigateTo('Main', nav)
 			}
 		}, 1000)

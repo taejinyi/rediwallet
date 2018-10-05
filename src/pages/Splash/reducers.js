@@ -1,4 +1,4 @@
-import { SAVE_SPLASH_STATE } from './actions'
+import {GET_INFORMATION, SAVE_SPLASH_STATE} from './actions'
 
 const splashStateReducer = (state = {}, action) => {
   switch(action.type) {
@@ -6,6 +6,11 @@ const splashStateReducer = (state = {}, action) => {
       return Object.assign({}, state, {
         splashState: action.splashState,
       })
+    case GET_INFORMATION:
+      return Object.assign({}, state, {
+        db: action.db,
+      })
+
     default:
       return state
   }

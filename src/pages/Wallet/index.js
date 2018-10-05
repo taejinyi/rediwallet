@@ -5,7 +5,9 @@ import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 import { Container, Content, Body, Left, List, ListItem, Icon, Separator, Right } from 'native-base'
 // import { Util, SecureStore } from 'expo'
 import { Header, WalletAccountList } from 'rediwallet/src/components'
-import {actions} from "../index";
+import {actions, sagas} from "../index";
+import { call, put, take, takeEvery } from 'redux-saga/effects'
+
 import connect from "react-redux/es/connect/connect";
 // import { NavigationActions } from 'react-navigation'
 import {SecureStore} from "expo";
@@ -20,44 +22,12 @@ class WalletPage extends React.Component {
 
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
   }
-  addAccount = async () => {
-    const strWalletIndex = await SecureStore.getItemAsync('walletIndex')
-    const mnemonic = await SecureStore.getItemAsync('mnemonic')
+  getWalletFromNetwork = async () => {
+    const { db, dispatch, wallet } = this.props
+    console.log('button')
+    this.props.getWalletFromNetwork(wallet)
+  }
 
-    let walletIndex
-    if(strWalletIndex == null) {
-      walletIndex = 0
-    } else {
-      walletIndex = parseInt(strWalletIndex, 10) + 1
-    }
-    const ethers = require('ethers');
-    const path = "m/44'/60'/0'/0/" + walletIndex
-    const _newAccount = await ethers.Wallet.fromMnemonic(mnemonic, path);
-    const newAccount = {
-      address: _newAccount.address,
-      privateKey: _newAccount.privateKey,
-      nonce: walletIndex
-    }
-    console.log(newAccount)
-    this.props.addAccount(this.props.db, newAccount)
-    try {
-      await SecureStore.setItemAsync('walletIndex', walletIndex.toString())
-    } catch(error) {
-      console.log(error)
-      Alert.alert('Wallet Index Save Error', 'Failed to save the wallet index.')
-    }
-  }
-  /*
-   Wallet {
-    "address": "0x8f55dE5d4df0Ac41A8e8b4dF9D0D87df5e94fC06",
-    "defaultGasLimit": 1500000,
-    "mnemonic": "glad blur gun hill possible copy laugh idea reopen visual blind east",
-    "path": "m/44'/60'/0'/0/0",
-    "privateKey": "0x509c06df0bf81b75f595f190a40ab59ab401bf6064badbbebb1021e9b3142637",
-    "provider": undefined,
-    "sign": [Function anonymous],
-  }
-   */
   componentWillReceiveProps(nextProps) {
     this.setState({
       wallet: nextProps.wallet,
@@ -78,13 +48,13 @@ class WalletPage extends React.Component {
         </View>
         <Content style={{ backgroundColor: 'white', }}>
           <ListItem
-            onPress={ this.addAccount }
+            onPress={ this.getWalletFromNetwork }
             icon last>
             <Left>
               <Icon style={{ color: '#666666', }} name='ios-megaphone' />
             </Left>
             <Body>
-              <Text>Add Account</Text>
+              <Text>Get Wallet From Network</Text>
             </Body>
             <Right>
               <Icon name='arrow-forward' />
@@ -138,6 +108,10 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => ({
   addAccount: (db, account) => dispatch(actions.addAccount(db, account)),
+  generateAccount: (db, currency) => dispatch(actions.generateAccount(db, currency)),
+  getWalletFromNetwork: (wallet) => dispatch(actions.getWalletFromNetwork(wallet)),
+  getAccountFromNetwork: (account) => dispatch(actions.getAccountFromNetwork(account)),
+
 })
 
 export default connect(null, mapDispatchToProps)(WalletPage)

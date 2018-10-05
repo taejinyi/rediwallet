@@ -145,7 +145,7 @@ const AppNavigator = StackNavigator({
     }
   },
   Landing: {
-    screen: LandingPage,
+    screen: withDB(LandingPage),
     navigationOptions: {
       header: null,
       headerBackTitle: 'Landing',
