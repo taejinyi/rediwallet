@@ -1,3 +1,4 @@
+import getBalance from './web3'
 const DEBUG = false
 
 let API_URL

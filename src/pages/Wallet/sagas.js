@@ -9,7 +9,7 @@ import {
 } from './actions'
 import {SecureStore} from "expo";
 import {Alert} from "react-native";
-
+import * as network from 'rediwallet/src/network/web3'
 export function* generateAccount(action) {
   const { db, currency } = action
   const strWalletIndex = yield SecureStore.getItemAsync('walletIndex')
@@ -120,6 +120,9 @@ export function* getAccountFromNetwork(action) {
   console.log('in getAccountFromNetwork')
   const { account } = action
   console.log(account.address, account.currency, account.nonce, account.balance)
+  // const response = yield network.getBalance(account.address)
+
+  const response = yield call(() => network.getBalance(account.address))
 
 }
 
