@@ -107,27 +107,28 @@ export function* getWalletFromNetwork(action) {
   console.log('in getWalletFromNetwork')
   let { db, wallet } = action
   console.log(wallet)
-
-  const allPropertyNames = Object.keys(wallet)
-
-  for (let j=0; j<allPropertyNames.length; j++) {
-    const name = allPropertyNames[j];
-    const value = wallet[name];
-    const accountData = yield call(() => getAccountFromNetwork({account: value}))
-    console.log(accountData)
-
-    wallet = Object.assign({}, wallet, accountData)
-  }
-  console.log('final in getWalletFromNetwork')
-  console.log(wallet)
-  yield put({
-    type: SAVE_WALLET,
-    wallet: wallet,
-  })
-  yield call(() => db.put({
-    _id: 'wallet',
-    data: wallet
-  }))
+  //
+  // const allPropertyNames = Object.keys(wallet)
+  //
+  // for (let j=0; j<allPropertyNames.length; j++) {
+  //   const name = allPropertyNames[j];
+  //   const value = wallet[name];
+  //   const accountData = yield call(() => getAccountFromNetwork({account: value}))
+  //   console.log(accountData)
+  //
+  //   wallet = Object.assign({}, wallet, accountData)
+  // }
+  // console.log('final in getWalletFromNetwork')
+  // console.log(wallet)
+  // // yield put({
+  // //   type: SAVE_WALLET,
+  // //   wallet: wallet,
+  // // })
+  // // yield call(() => db.put({
+  // //   _id: 'wallet',
+  // //   data: wallet
+  // // }))
+  return true
 }
 
 export function* getAccountFromNetwork(action) {

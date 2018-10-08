@@ -9,6 +9,10 @@ import {generateAccount, getWalletFromNetwork} from "../../pages/Wallet/sagas";
 //   NonceTxMiddleware, SignedTxMiddleware, Client,
 //   Address, LocalAddress, CryptoUtils, LoomProvider, EvmContract
 // } from 'loom-js'
+// import {
+//   LoomProvider
+// } from 'loom-js'
+
 const mainnet = new Web3(
   new Web3.providers.HttpProvider('https://mainnet.infura.io/'),
 );

@@ -25,7 +25,7 @@ class WalletPage extends React.Component {
   getWalletFromNetwork = async () => {
     const { db, dispatch, wallet } = this.props
     console.log('button')
-    this.props.getWalletFromNetwork(db, wallet)
+    await this.props.getWalletFromNetwork(db, wallet)
   }
 
   componentWillReceiveProps(nextProps) {
