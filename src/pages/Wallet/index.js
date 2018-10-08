@@ -25,7 +25,7 @@ class WalletPage extends React.Component {
   getWalletFromNetwork = async () => {
     const { db, dispatch, wallet } = this.props
     console.log('button')
-    this.props.getWalletFromNetwork(wallet)
+    this.props.getWalletFromNetwork(db, wallet)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => ({
   addAccount: (db, account) => dispatch(actions.addAccount(db, account)),
   generateAccount: (db, currency) => dispatch(actions.generateAccount(db, currency)),
-  getWalletFromNetwork: (wallet) => dispatch(actions.getWalletFromNetwork(wallet)),
+  getWalletFromNetwork: (db, wallet) => dispatch(actions.getWalletFromNetwork(db, wallet)),
   getAccountFromNetwork: (account) => dispatch(actions.getAccountFromNetwork(account)),
 
 })

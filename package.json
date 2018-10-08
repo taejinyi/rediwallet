@@ -18,6 +18,8 @@
     "expo": "^27.0.1",
     "hangul-js": "^0.2.4",
     "i18next": "^11.2.2",
+    "loom-js": "^1.26.0",
+    "loom-truffle-provider": "^0.7.0",
     "native-base": "^2.4.2",
     "node-libs-browser": "2.1.0",
     "numeral": "^2.0.6",

@@ -14,20 +14,26 @@ class AccountDetailPage extends React.Component {
     super(props)
 
     this.state = {
-      // transactions: undefined,
-      // isLoading: false,
+      transactions: undefined,
+      isLoading: true,
     }
   }
 
 
   componentWillMount() {
+    console.log(infleumContract.abi)
     // const { address } = this.props.navigation.state.params
     // const { db, mnemonic, getWalletDetail } = this.props
+
   }
 
   render() {
+
     const { navigation } = this.props
-    const { address } = this.props.navigation.state.params
+    const { account } = this.props.navigation.state.params
+    console.log("AccountDetailPage")
+    console.log(account)
+
     return (
       <View style={{ flex: 1, }}>
         <View style={{ flex: 0.3, }}>
@@ -37,7 +43,9 @@ class AccountDetailPage extends React.Component {
           />
         </View>
         <Content style={{ backgroundColor: 'white', }}>
-          <Text>{address}</Text>
+          <Text>Transactions of {account.address}</Text>
+          <Text>Received</Text>
+          <Text>Sent</Text>
         </Content>
       </View>
     )

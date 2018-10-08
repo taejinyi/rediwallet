@@ -20,7 +20,6 @@ const walletReducer = (state = {}, action) => {
       return Object.assign({}, state, {
         defaultAccount: action.account,
       })
-
     default:
       return state
   }

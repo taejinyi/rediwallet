@@ -26,20 +26,15 @@ class WalletAccountList extends React.Component {
 
   renderAccountItem = (account) => {
     const { navigation } = this.props
-    console.log(account)
 
-    const {
-      address,
-      nonce,
-    } = account.item
-
+    const accountData = account.item
 
     return (
       <View style={ styles.walletContainer }>
         <TouchableOpacity onPress={ () => {
-          navigation.navigate('AccountDetail', { address: address })
+          navigation.navigate('AccountDetail', { account: accountData })
         }}>
-          <Text style={{ fontWeight: 'bold', color: '#10b5bc' }}>{ nonce.toString() + ": " + address }</Text>
+          <Text style={{ fontWeight: 'bold', color: '#10b5bc' }}>{ accountData.nonce.toString() + ": " + accountData.address }</Text>
         </TouchableOpacity>
       </View>
     )

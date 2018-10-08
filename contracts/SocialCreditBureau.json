@@ -1,0 +1,1834 @@
+{
+  "contractName": "SocialCreditBureau",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "unionLimits",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "unions",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "commitments",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "balances",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "loans",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "individualLimits",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipRenounced",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x60806040526000600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506107b3806100956000396000f300608060405260043610610099576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063715018a61461009e57806374402a72146100b55780638da5cb5b1461012c578063a20fe1c714610183578063adb6f63f146101f0578063c23f001f14610267578063e1ec3c68146102de578063f2fde38b1461034b578063feaca1ee1461038e575b600080fd5b3480156100aa57600080fd5b506100b3610405565b005b3480156100c157600080fd5b50610116600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610507565b6040518082815260200191505060405180910390f35b34801561013857600080fd5b5061014161052c565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561018f57600080fd5b506101ae60048036038101908080359060200190929190505050610551565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b3480156101fc57600080fd5b50610251600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610584565b6040518082815260200191505060405180910390f35b34801561027357600080fd5b506102c8600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506105a9565b6040518082815260200191505060405180910390f35b3480156102ea57600080fd5b50610309600480360381019080803590602001909291905050506105ce565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561035757600080fd5b5061038c600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610601565b005b34801561039a57600080fd5b506103ef600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610668565b6040518082815260200191505060405180910390f35b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561046057600080fd5b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482060405160405180910390a260008060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550565b6005602052816000526040600020602052806000526040600020600091509150505481565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60086020528060005260406000206000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6003602052816000526040600020602052806000526040600020600091509150505481565b6002602052816000526040600020602052806000526040600020600091509150505481565b60096020528060005260406000206000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561065c57600080fd5b6106658161068d565b50565b6004602052816000526040600020602052806000526040600020600091509150505481565b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141515156106c957600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a7230582052ab6b6789ed8b7910c1a5cacb5d2e001bbdca5bdf6399c5ff95eb661e8838080029",
+  "deployedBytecode": "0x608060405260043610610099576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063715018a61461009e57806374402a72146100b55780638da5cb5b1461012c578063a20fe1c714610183578063adb6f63f146101f0578063c23f001f14610267578063e1ec3c68146102de578063f2fde38b1461034b578063feaca1ee1461038e575b600080fd5b3480156100aa57600080fd5b506100b3610405565b005b3480156100c157600080fd5b50610116600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610507565b6040518082815260200191505060405180910390f35b34801561013857600080fd5b5061014161052c565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561018f57600080fd5b506101ae60048036038101908080359060200190929190505050610551565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b3480156101fc57600080fd5b50610251600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610584565b6040518082815260200191505060405180910390f35b34801561027357600080fd5b506102c8600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506105a9565b6040518082815260200191505060405180910390f35b3480156102ea57600080fd5b50610309600480360381019080803590602001909291905050506105ce565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561035757600080fd5b5061038c600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610601565b005b34801561039a57600080fd5b506103ef600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610668565b6040518082815260200191505060405180910390f35b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561046057600080fd5b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482060405160405180910390a260008060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550565b6005602052816000526040600020602052806000526040600020600091509150505481565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60086020528060005260406000206000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6003602052816000526040600020602052806000526040600020600091509150505481565b6002602052816000526040600020602052806000526040600020600091509150505481565b60096020528060005260406000206000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561065c57600080fd5b6106658161068d565b50565b6004602052816000526040600020602052806000526040600020600091509150505481565b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141515156106c957600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a7230582052ab6b6789ed8b7910c1a5cacb5d2e001bbdca5bdf6399c5ff95eb661e8838080029",
+  "sourceMap": "256:955:5:-;;;352:3;321:34;;;;;;;;;;;;;;;;;;;;575:10:16;567:5;;:18;;;;;;;;;;;;;;;;;;256:955:5;;;;;;",
+  "deployedSourceMap": "256:955:5:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;827:111:16;;8:9:-1;5:2;;;30:1;27;20:12;5:2;827:111:16;;;;;;624:66:5;;8:9:-1;5:2;;;30:1;27;20:12;5:2;624:66:5;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;238:20:16;;8:9:-1;5:2;;;30:1;27;20:12;5:2;238:20:16;;;;;;;;;;;;;;;;;;;;;;;;;;;1069:42:5;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1069:42:5;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;471:66;;8:9:-1;5:2;;;30:1;27;20:12;5:2;471:66:5;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;401:63;;8:9:-1;5:2;;;30:1;27;20:12;5:2;401:63:5;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1118:41;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1118:41:5;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1100:103:16;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1100:103:16;;;;;;;;;;;;;;;;;;;;;;;;;;;;546:71:5;;8:9:-1;5:2;;;30:1;27;20:12;5:2;546:71:5;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;827:111:16;719:5;;;;;;;;;;;705:19;;:10;:19;;;697:28;;;;;;;;903:5;;;;;;;;;;;884:25;;;;;;;;;;;;931:1;915:5;;:18;;;;;;;;;;;;;;;;;;827:111::o;624:66:5:-;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;238:20:16:-;;;;;;;;;;;;;:::o;1069:42:5:-;;;;;;;;;;;;;;;;;;;;;;:::o;471:66::-;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;401:63::-;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;1118:41::-;;;;;;;;;;;;;;;;;;;;;;:::o;1100:103:16:-;719:5;;;;;;;;;;;705:19;;:10;:19;;;697:28;;;;;;;;1169:29;1188:9;1169:18;:29::i;:::-;1100:103;:::o;546:71:5:-;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;1338:171:16:-;1429:1;1408:23;;:9;:23;;;;1400:32;;;;;;;;1471:9;1443:38;;1464:5;;;;;;;;;;;1443:38;;;;;;;;;;;;1495:9;1487:5;;:17;;;;;;;;;;;;;;;;;;1338:171;:::o",
+  "source": "pragma solidity ^0.4.24;\r\n\r\nimport \"openzeppelin-solidity/contracts/math/SafeMath.sol\";\r\nimport \"openzeppelin-solidity/contracts/token/ERC20/ERC20.sol\";\r\nimport \"openzeppelin-solidity/contracts/ownership/Ownable.sol\";\r\nimport \"./CreditLineFactory.sol\";\r\n\r\ncontract SocialCreditBureau is CreditLineFactory, Ownable {\r\n    address private etherAddress = 0x0;\r\n\r\n    // creditor => token => balance\r\n    mapping(address => mapping(address => uint256)) public balances;\r\n    mapping(address => mapping(address => uint256)) public commitments;\r\n\r\n    mapping(address => mapping(address => uint256)) public individualLimits;\r\n    mapping(address => mapping(address => uint256)) public unionLimits;\r\n\r\n\r\n    enum Status {NotExists, Created, Pending, Active, Done, Declined}\r\n    enum KycLevel {Undefined, Tier1, Tier2, Tier3, Tier4, Tier5}\r\n\r\n    struct Profile {\r\n        Status status;\r\n        KycLevel kycLevel;\r\n    }\r\n    // borrower id => borrower\r\n    mapping (uint256 => address) borrowers;\r\n    mapping (uint256 => address) investors;\r\n\r\n    // loan id => loan\r\n    mapping (uint256 => address) public unions;\r\n    mapping (uint256 => address) public loans;\r\n\r\n\r\n    mapping (address => Profile) profiles;\r\n}\r\n\r\n//pragma solidity ^0.4.25;\r\n//\r\n//import \"openzeppelin-solidity/contracts/math/SafeMath.sol\";\r\n//import \"openzeppelin-solidity/contracts/token/ERC20/ERC20.sol\";\r\n//import \"./SocialCreditUnion.sol\";\r\n//\r\n//contract SocialCreditBureau {\r\n//    using SafeMath for uint256;\r\n//    struct CreditLine {\r\n//        address creditor;\r\n//        uint256 individualLimit;\r\n//        uint256 unionLimit;\r\n//    }\r\n//\r\n//    enum Status {NotExists, Created, Pending, Active, Done, Declined}\r\n//    enum KycLevel {Undefined, Tier1, Tier2, Tier3, Tier4, Tier5}\r\n//\r\n//    struct Profile {\r\n//        Status status;\r\n//        KycLevel kycLevel;\r\n//    }\r\n//\r\n//\r\n//    // union id => union\r\n//\r\n//    // borrower id => borrower\r\n//    mapping (uint256 => address) borrowers;\r\n//    mapping (uint256 => address) investors;\r\n//\r\n//    // loan id => loan\r\n//    mapping (uint256 => address) public unions;\r\n//    mapping (uint256 => address) public loans;\r\n//\r\n//\r\n//    mapping (address => Profile) profiles;\r\n//\r\n//    address private admin;\r\n//    address private etherAddress = 0x0;\r\n//    // creditor => token => balance\r\n//    mapping(address => mapping(address => uint256)) public balances;\r\n//    mapping(address => mapping(address => uint256)) public commitments;\r\n//\r\n//\r\n//\r\n//    mapping(address => mapping(address => uint256)) public individualLimits;\r\n//    mapping(address => mapping(address => uint256)) public unionLimits;\r\n//\r\n//\r\n//\r\n//    HoQuConfig public config;\r\n//\r\n//    mapping (bytes16 => User) public users;\r\n//    mapping (bytes16 => Identification) public ids;\r\n//    mapping (bytes16 => Stats) public stats;\r\n//    mapping (bytes16 => Company) public companies;\r\n//    mapping (bytes16 => Network) public networks;\r\n//    mapping (bytes16 => Offer) public offers;\r\n//    mapping (bytes16 => Tracker) public trackers;\r\n//    mapping (bytes16 => AdCampaign) public adCampaigns;\r\n//\r\n//    event UserRegistered(address indexed ownerAddress, bytes16 id, string role);\r\n//    event UserAddressAdded(address indexed ownerAddress, address additionalAddress);\r\n//    event StatsChanged(address indexed ownerAddress, bytes16 id, uint256 rating);\r\n//    event IdentificationAdded(address indexed ownerAddress, bytes16 id, string name);\r\n//    event KycReportAdded(address indexed ownerAddress, KycLevel kycLevel);\r\n//    event CompanyRegistered(address indexed ownerAddress, bytes16 id, string name);\r\n//    event NetworkRegistered(address indexed ownerAddress, bytes16 id, string name);\r\n//    event TrackerRegistered(address indexed ownerAddress, bytes16 id, string name);\r\n//    event OfferAdded(address indexed ownerAddress, bytes16 id, string name);\r\n//    event AdCampaignAdded(address indexed ownerAddress, bytes16 id, address contractAddress);\r\n//\r\n//    modifier onlyOwner() {\r\n//        require(config.isAllowed(msg.sender));\r\n//        _;\r\n//    }\r\n//\r\n//    constructor(address configAddress) public {\r\n//        config = HoQuConfig(configAddress);\r\n//    }\r\n//\r\n//    function setConfigAddress(address configAddress) public onlyOwner {\r\n//        config = HoQuConfig(configAddress);\r\n//    }\r\n//\r\n//    function setUser(bytes16 id, string role, address ownerAddress, KycLevel kycLevel, string pubKey, Status status) public onlyOwner {\r\n//        if (users[id].status == Status.NotExists) {\r\n//            users[id] = User({\r\n//                createdAt : now,\r\n//                numOfAddresses : 1,\r\n//                role : role,\r\n//                kycLevel : KycLevel.Tier1,\r\n//                pubKey : pubKey,\r\n//                status : Status.Created\r\n//            });\r\n//            users[id].addresses[0] = ownerAddress;\r\n//\r\n//            emit UserRegistered(ownerAddress, id, role);\r\n//        } else {\r\n//            if (bytes(role).length != 0) {\r\n//                users[id].role = role;\r\n//            }\r\n//            if (kycLevel != KycLevel.Undefined) {\r\n//                users[id].kycLevel = kycLevel;\r\n//            }\r\n//            if (bytes(pubKey).length != 0) {\r\n//                users[id].pubKey = pubKey;\r\n//            }\r\n//            if (status != Status.NotExists) {\r\n//                users[id].status = status;\r\n//            }\r\n//        }\r\n//    }\r\n//\r\n//    function addUserAddress(bytes16 id, address ownerAddress) public onlyOwner {\r\n//        require(users[id].status != Status.NotExists);\r\n//\r\n//        users[id].addresses[users[id].numOfAddresses] = ownerAddress;\r\n//        users[id].numOfAddresses++;\r\n//\r\n//        emit UserAddressAdded(users[id].addresses[0], ownerAddress);\r\n//    }\r\n//\r\n//    function getUserAddress(bytes16 id, uint8 num) public constant returns (address) {\r\n//        require(users[id].status != Status.NotExists);\r\n//\r\n//        return users[id].addresses[num];\r\n//    }\r\n//\r\n//    function setIdentification(bytes16 id, bytes16 userId, string idType, string name, bytes16 companyId, Status status) public onlyOwner {\r\n//        if (ids[id].status == Status.NotExists) {\r\n//            address ownerAddress = getUserAddress(userId, 0);\r\n//\r\n//            ids[id] = Identification({\r\n//                createdAt : now,\r\n//                userId : userId,\r\n//                idType : idType,\r\n//                name: name,\r\n//                companyId : companyId,\r\n//                numOfKycReports : 0,\r\n//                status : Status.Created\r\n//            });\r\n//\r\n//            emit IdentificationAdded(ownerAddress, id, name);\r\n//        } else {\r\n//            if (bytes(idType).length != 0) {\r\n//                ids[id].idType = idType;\r\n//            }\r\n//            if (companyId.length != 0) {\r\n//                ids[id].companyId = companyId;\r\n//            }\r\n//            if (status != Status.NotExists) {\r\n//                ids[id].status = status;\r\n//            }\r\n//        }\r\n//    }\r\n//\r\n//    function setStats(bytes16 id, bytes16 userId, uint256 rating, uint256 volume, uint256 contragents, uint256 stat1, uint256 stat2, Status status) public onlyOwner {\r\n//        if (stats[id].status == Status.NotExists) {\r\n//            address ownerAddress = userId.length > 0 ? getUserAddress(userId, 0) : address(0);\r\n//\r\n//            stats[id] = Stats({\r\n//                rating : rating,\r\n//                volume : volume,\r\n//                contragents : contragents,\r\n//                stat1 : stat1,\r\n//                stat2 : stat2,\r\n//                status : Status.Created\r\n//            });\r\n//            if (userId.length > 0) {\r\n//                stats[userId] = stats[id];\r\n//            }\r\n//\r\n//            emit StatsChanged(ownerAddress, id, rating);\r\n//        } else {\r\n//            if (rating != 0) {\r\n//                stats[id].rating = rating;\r\n//                if (userId.length > 0) {\r\n//                    stats[userId].rating = rating;\r\n//                }\r\n//            }\r\n//            if (volume != 0) {\r\n//                stats[id].volume = volume;\r\n//                if (userId.length > 0) {\r\n//                    stats[userId].volume = volume;\r\n//                }\r\n//            }\r\n//            if (contragents != 0) {\r\n//                stats[id].contragents = contragents;\r\n//                if (userId.length > 0) {\r\n//                    stats[userId].contragents = contragents;\r\n//                }\r\n//            }\r\n//            if (stat1 != 0) {\r\n//                stats[id].stat1 = stat1;\r\n//                if (userId.length > 0) {\r\n//                    stats[userId].stat1 = stat1;\r\n//                }\r\n//            }\r\n//            if (stat2 != 0) {\r\n//                stats[id].stat2 = stat2;\r\n//                if (userId.length > 0) {\r\n//                    stats[userId].stat2 = stat2;\r\n//                }\r\n//            }\r\n//            if (status != Status.NotExists) {\r\n//                stats[id].status = status;\r\n//            }\r\n//        }\r\n//    }\r\n//\r\n//    function addKycReport(bytes16 id, string meta, KycLevel kycLevel, string dataUrl) public onlyOwner {\r\n//        require(ids[id].status != Status.NotExists);\r\n//\r\n//        ids[id].kycReports[ids[id].numOfKycReports] = KycReport({\r\n//            createdAt : now,\r\n//            meta : meta,\r\n//            kycLevel : kycLevel,\r\n//            dataUrl : dataUrl\r\n//        });\r\n//        ids[id].numOfKycReports++;\r\n//\r\n//        emit KycReportAdded(users[ids[id].userId].addresses[0], kycLevel);\r\n//    }\r\n//\r\n//    function getKycReport(bytes16 id, uint16 num) public constant returns (uint, string, KycLevel, string) {\r\n//        require(ids[id].status != Status.NotExists);\r\n//\r\n//        return (\r\n//            ids[id].kycReports[num].createdAt,\r\n//            ids[id].kycReports[num].meta,\r\n//            ids[id].kycReports[num].kycLevel,\r\n//            ids[id].kycReports[num].dataUrl\r\n//        );\r\n//    }\r\n//\r\n//    function setCompany(bytes16 id, bytes16 ownerId, string name, string dataUrl, Status status) public onlyOwner {\r\n//        if (companies[id].status == Status.NotExists) {\r\n//            require(users[ownerId].status != Status.NotExists);\r\n//            require(users[ownerId].addresses[0] != address(0));\r\n//\r\n//            companies[id] = Company({\r\n//                createdAt : now,\r\n//                ownerId : ownerId,\r\n//                name : name,\r\n//                dataUrl : dataUrl,\r\n//                status : Status.Created\r\n//            });\r\n//\r\n//            emit CompanyRegistered(users[ownerId].addresses[0], id, name);\r\n//        } else {\r\n//            if (bytes(name).length != 0) {\r\n//                companies[id].name = name;\r\n//            }\r\n//            if (bytes(dataUrl).length != 0) {\r\n//                companies[id].dataUrl = dataUrl;\r\n//            }\r\n//            if (status != Status.NotExists) {\r\n//                companies[id].status = status;\r\n//            }\r\n//        }\r\n//    }\r\n//\r\n//    function setNetwork(bytes16 id, bytes16 ownerId, string name, string dataUrl, Status status) public onlyOwner {\r\n//        if (networks[id].status == Status.NotExists) {\r\n//            require(users[ownerId].status != Status.NotExists);\r\n//            require(users[ownerId].addresses[0] != address(0));\r\n//\r\n//            networks[id] = Network({\r\n//                createdAt : now,\r\n//                ownerId : ownerId,\r\n//                name : name,\r\n//                dataUrl : dataUrl,\r\n//                status : Status.Created\r\n//            });\r\n//\r\n//            emit NetworkRegistered(users[ownerId].addresses[0], id, name);\r\n//        } else {\r\n//            if (bytes(name).length != 0) {\r\n//                networks[id].name = name;\r\n//            }\r\n//            if (bytes(dataUrl).length != 0) {\r\n//                networks[id].dataUrl = dataUrl;\r\n//            }\r\n//            if (status != Status.NotExists) {\r\n//                networks[id].status = status;\r\n//            }\r\n//        }\r\n//    }\r\n//\r\n//    function setTracker(bytes16 id, bytes16 ownerId, bytes16 networkId, string name, string dataUrl, Status status) public onlyOwner {\r\n//        if (networkId.length != 0) {\r\n//            require(networks[networkId].status != Status.NotExists);\r\n//        }\r\n//\r\n//        if (trackers[id].status == Status.NotExists) {\r\n//            require(users[ownerId].status != Status.NotExists);\r\n//            require(users[ownerId].addresses[0] != address(0));\r\n//\r\n//            trackers[id] = Tracker({\r\n//                createdAt : now,\r\n//                ownerId : ownerId,\r\n//                networkId : networkId,\r\n//                name : name,\r\n//                dataUrl : dataUrl,\r\n//                status : Status.Created\r\n//            });\r\n//\r\n//            emit TrackerRegistered(users[ownerId].addresses[0], id, name);\r\n//        } else {\r\n//            if (networkId.length != 0) {\r\n//                trackers[id].networkId = networkId;\r\n//            }\r\n//            if (bytes(name).length != 0) {\r\n//                trackers[id].name = name;\r\n//            }\r\n//            if (bytes(dataUrl).length != 0) {\r\n//                trackers[id].dataUrl = dataUrl;\r\n//            }\r\n//            if (status != Status.NotExists) {\r\n//                trackers[id].status = status;\r\n//            }\r\n//        }\r\n//    }\r\n//\r\n//    function setOffer(bytes16 id, bytes16 ownerId, bytes16 networkId, bytes16 merchantId, address payerAddress, string name, string dataUrl, uint256 cost, Status status) public onlyOwner {\r\n//        if (networkId.length != 0) {\r\n//            require(networks[networkId].status != Status.NotExists);\r\n//        }\r\n//        if (merchantId.length != 0) {\r\n//            require(users[merchantId].status != Status.NotExists);\r\n//        }\r\n//\r\n//        if (trackers[id].status == Status.NotExists) {\r\n//            require(users[ownerId].status != Status.NotExists);\r\n//            require(users[ownerId].addresses[0] != address(0));\r\n//\r\n//            offers[id] = Offer({\r\n//                createdAt : now,\r\n//                networkId : networkId,\r\n//                merchantId: merchantId,\r\n//                ownerId : ownerId,\r\n//                payerAddress : payerAddress,\r\n//                name : name,\r\n//                dataUrl : dataUrl,\r\n//                cost : cost,\r\n//                status : Status.Created\r\n//            });\r\n//\r\n//            emit OfferAdded(payerAddress, id, name);\r\n//        } else {\r\n//            if (networkId.length != 0) {\r\n//                offers[id].networkId = networkId;\r\n//            }\r\n//            if (merchantId.length != 0) {\r\n//                offers[id].merchantId = merchantId;\r\n//            }\r\n//            if (payerAddress != address(0)) {\r\n//                offers[id].payerAddress = payerAddress;\r\n//            }\r\n//            if (bytes(name).length != 0) {\r\n//                offers[id].name = name;\r\n//            }\r\n//            if (bytes(dataUrl).length != 0) {\r\n//                offers[id].dataUrl = dataUrl;\r\n//            }\r\n//            if (cost != 0) {\r\n//                offers[id].cost = cost;\r\n//            }\r\n//            if (status != Status.NotExists) {\r\n//                offers[id].status = status;\r\n//            }\r\n//        }\r\n//    }\r\n//\r\n//    function setAdCampaign(bytes16 id, bytes16 ownerId, bytes16 offerId, address contractAddress, Status status) public onlyOwner {\r\n//        if (trackers[id].status == Status.NotExists) {\r\n//            require(users[ownerId].status != Status.NotExists);\r\n//            require(users[ownerId].addresses[0] != address(0));\r\n//            require(offers[offerId].status != Status.NotExists);\r\n//\r\n//            address ownerAddress = getUserAddress(ownerId, 0);\r\n//\r\n//            adCampaigns[id] = AdCampaign({\r\n//                createdAt : now,\r\n//                offerId : offerId,\r\n//                ownerId : ownerId,\r\n//                contractAddress : contractAddress,\r\n//                status : Status.Created\r\n//            });\r\n//\r\n//            emit AdCampaignAdded(ownerAddress, id, contractAddress);\r\n//        } else {\r\n//            if (contractAddress != address(0)) {\r\n//                adCampaigns[id].contractAddress = contractAddress;\r\n//            }\r\n//            if (status != Status.NotExists) {\r\n//                adCampaigns[id].status = status;\r\n//            }\r\n//        }\r\n//    }\r\n",
+  "sourcePath": "/mnt/c/myproject/dapps/contracts/SocialCreditBureau.sol",
+  "ast": {
+    "absolutePath": "/mnt/c/myproject/dapps/contracts/SocialCreditBureau.sol",
+    "exportedSymbols": {
+      "SocialCreditBureau": [
+        354
+      ]
+    },
+    "id": 355,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 279,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:5"
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/math/SafeMath.sol",
+        "file": "openzeppelin-solidity/contracts/math/SafeMath.sol",
+        "id": 280,
+        "nodeType": "ImportDirective",
+        "scope": 355,
+        "sourceUnit": 2551,
+        "src": "28:59:5",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol",
+        "file": "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol",
+        "id": 281,
+        "nodeType": "ImportDirective",
+        "scope": 355,
+        "sourceUnit": 2776,
+        "src": "89:63:5",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 282,
+        "nodeType": "ImportDirective",
+        "scope": 355,
+        "sourceUnit": 2637,
+        "src": "154:63:5",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/mnt/c/myproject/dapps/contracts/CreditLineFactory.sol",
+        "file": "./CreditLineFactory.sol",
+        "id": 283,
+        "nodeType": "ImportDirective",
+        "scope": 355,
+        "sourceUnit": 14,
+        "src": "219:33:5",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 284,
+              "name": "CreditLineFactory",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 13,
+              "src": "287:17:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_CreditLineFactory_$13",
+                "typeString": "contract CreditLineFactory"
+              }
+            },
+            "id": 285,
+            "nodeType": "InheritanceSpecifier",
+            "src": "287:17:5"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 286,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2636,
+              "src": "306:7:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$2636",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 287,
+            "nodeType": "InheritanceSpecifier",
+            "src": "306:7:5"
+          }
+        ],
+        "contractDependencies": [
+          13,
+          2636
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 354,
+        "linearizedBaseContracts": [
+          354,
+          2636,
+          13
+        ],
+        "name": "SocialCreditBureau",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 290,
+            "name": "etherAddress",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "321:34:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 288,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "321:7:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "307830",
+              "id": 289,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "352:3:5",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_0_by_1",
+                "typeString": "int_const 0"
+              },
+              "value": "0x0"
+            },
+            "visibility": "private"
+          },
+          {
+            "constant": false,
+            "id": 296,
+            "name": "balances",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "401:63:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
+              "typeString": "mapping(address => mapping(address => uint256))"
+            },
+            "typeName": {
+              "id": 295,
+              "keyType": {
+                "id": 291,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "409:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "401:47:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
+                "typeString": "mapping(address => mapping(address => uint256))"
+              },
+              "valueType": {
+                "id": 294,
+                "keyType": {
+                  "id": 292,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "428:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "nodeType": "Mapping",
+                "src": "420:27:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                  "typeString": "mapping(address => uint256)"
+                },
+                "valueType": {
+                  "id": 293,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "439:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 302,
+            "name": "commitments",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "471:66:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
+              "typeString": "mapping(address => mapping(address => uint256))"
+            },
+            "typeName": {
+              "id": 301,
+              "keyType": {
+                "id": 297,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "479:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "471:47:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
+                "typeString": "mapping(address => mapping(address => uint256))"
+              },
+              "valueType": {
+                "id": 300,
+                "keyType": {
+                  "id": 298,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "498:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "nodeType": "Mapping",
+                "src": "490:27:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                  "typeString": "mapping(address => uint256)"
+                },
+                "valueType": {
+                  "id": 299,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "509:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 308,
+            "name": "individualLimits",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "546:71:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
+              "typeString": "mapping(address => mapping(address => uint256))"
+            },
+            "typeName": {
+              "id": 307,
+              "keyType": {
+                "id": 303,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "554:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "546:47:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
+                "typeString": "mapping(address => mapping(address => uint256))"
+              },
+              "valueType": {
+                "id": 306,
+                "keyType": {
+                  "id": 304,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "573:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "nodeType": "Mapping",
+                "src": "565:27:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                  "typeString": "mapping(address => uint256)"
+                },
+                "valueType": {
+                  "id": 305,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "584:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 314,
+            "name": "unionLimits",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "624:66:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
+              "typeString": "mapping(address => mapping(address => uint256))"
+            },
+            "typeName": {
+              "id": 313,
+              "keyType": {
+                "id": 309,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "632:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "624:47:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
+                "typeString": "mapping(address => mapping(address => uint256))"
+              },
+              "valueType": {
+                "id": 312,
+                "keyType": {
+                  "id": 310,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "651:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "nodeType": "Mapping",
+                "src": "643:27:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                  "typeString": "mapping(address => uint256)"
+                },
+                "valueType": {
+                  "id": 311,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "662:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "SocialCreditBureau.Status",
+            "id": 321,
+            "members": [
+              {
+                "id": 315,
+                "name": "NotExists",
+                "nodeType": "EnumValue",
+                "src": "714:9:5"
+              },
+              {
+                "id": 316,
+                "name": "Created",
+                "nodeType": "EnumValue",
+                "src": "725:7:5"
+              },
+              {
+                "id": 317,
+                "name": "Pending",
+                "nodeType": "EnumValue",
+                "src": "734:7:5"
+              },
+              {
+                "id": 318,
+                "name": "Active",
+                "nodeType": "EnumValue",
+                "src": "743:6:5"
+              },
+              {
+                "id": 319,
+                "name": "Done",
+                "nodeType": "EnumValue",
+                "src": "751:4:5"
+              },
+              {
+                "id": 320,
+                "name": "Declined",
+                "nodeType": "EnumValue",
+                "src": "757:8:5"
+              }
+            ],
+            "name": "Status",
+            "nodeType": "EnumDefinition",
+            "src": "701:65:5"
+          },
+          {
+            "canonicalName": "SocialCreditBureau.KycLevel",
+            "id": 328,
+            "members": [
+              {
+                "id": 322,
+                "name": "Undefined",
+                "nodeType": "EnumValue",
+                "src": "787:9:5"
+              },
+              {
+                "id": 323,
+                "name": "Tier1",
+                "nodeType": "EnumValue",
+                "src": "798:5:5"
+              },
+              {
+                "id": 324,
+                "name": "Tier2",
+                "nodeType": "EnumValue",
+                "src": "805:5:5"
+              },
+              {
+                "id": 325,
+                "name": "Tier3",
+                "nodeType": "EnumValue",
+                "src": "812:5:5"
+              },
+              {
+                "id": 326,
+                "name": "Tier4",
+                "nodeType": "EnumValue",
+                "src": "819:5:5"
+              },
+              {
+                "id": 327,
+                "name": "Tier5",
+                "nodeType": "EnumValue",
+                "src": "826:5:5"
+              }
+            ],
+            "name": "KycLevel",
+            "nodeType": "EnumDefinition",
+            "src": "772:60:5"
+          },
+          {
+            "canonicalName": "SocialCreditBureau.Profile",
+            "id": 333,
+            "members": [
+              {
+                "constant": false,
+                "id": 330,
+                "name": "status",
+                "nodeType": "VariableDeclaration",
+                "scope": 333,
+                "src": "866:13:5",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_enum$_Status_$321",
+                  "typeString": "enum SocialCreditBureau.Status"
+                },
+                "typeName": {
+                  "contractScope": null,
+                  "id": 329,
+                  "name": "Status",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 321,
+                  "src": "866:6:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_enum$_Status_$321",
+                    "typeString": "enum SocialCreditBureau.Status"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 332,
+                "name": "kycLevel",
+                "nodeType": "VariableDeclaration",
+                "scope": 333,
+                "src": "890:17:5",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_enum$_KycLevel_$328",
+                  "typeString": "enum SocialCreditBureau.KycLevel"
+                },
+                "typeName": {
+                  "contractScope": null,
+                  "id": 331,
+                  "name": "KycLevel",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 328,
+                  "src": "890:8:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_enum$_KycLevel_$328",
+                    "typeString": "enum SocialCreditBureau.KycLevel"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Profile",
+            "nodeType": "StructDefinition",
+            "scope": 354,
+            "src": "840:75:5",
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 337,
+            "name": "borrowers",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "953:38:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+              "typeString": "mapping(uint256 => address)"
+            },
+            "typeName": {
+              "id": 336,
+              "keyType": {
+                "id": 334,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "962:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "953:28:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+                "typeString": "mapping(uint256 => address)"
+              },
+              "valueType": {
+                "id": 335,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "973:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 341,
+            "name": "investors",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "998:38:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+              "typeString": "mapping(uint256 => address)"
+            },
+            "typeName": {
+              "id": 340,
+              "keyType": {
+                "id": 338,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "1007:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "998:28:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+                "typeString": "mapping(uint256 => address)"
+              },
+              "valueType": {
+                "id": 339,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "1018:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 345,
+            "name": "unions",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "1069:42:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+              "typeString": "mapping(uint256 => address)"
+            },
+            "typeName": {
+              "id": 344,
+              "keyType": {
+                "id": 342,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "1078:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "1069:28:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+                "typeString": "mapping(uint256 => address)"
+              },
+              "valueType": {
+                "id": 343,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "1089:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 349,
+            "name": "loans",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "1118:41:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+              "typeString": "mapping(uint256 => address)"
+            },
+            "typeName": {
+              "id": 348,
+              "keyType": {
+                "id": 346,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "1127:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "1118:28:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+                "typeString": "mapping(uint256 => address)"
+              },
+              "valueType": {
+                "id": 347,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "1138:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 353,
+            "name": "profiles",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "1170:37:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Profile_$333_storage_$",
+              "typeString": "mapping(address => struct SocialCreditBureau.Profile)"
+            },
+            "typeName": {
+              "id": 352,
+              "keyType": {
+                "id": 350,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "1179:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "1170:28:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Profile_$333_storage_$",
+                "typeString": "mapping(address => struct SocialCreditBureau.Profile)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 351,
+                "name": "Profile",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 333,
+                "src": "1190:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Profile_$333_storage_ptr",
+                  "typeString": "struct SocialCreditBureau.Profile"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 355,
+        "src": "256:955:5"
+      }
+    ],
+    "src": "0:16417:5"
+  },
+  "legacyAST": {
+    "absolutePath": "/mnt/c/myproject/dapps/contracts/SocialCreditBureau.sol",
+    "exportedSymbols": {
+      "SocialCreditBureau": [
+        354
+      ]
+    },
+    "id": 355,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 279,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:5"
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/math/SafeMath.sol",
+        "file": "openzeppelin-solidity/contracts/math/SafeMath.sol",
+        "id": 280,
+        "nodeType": "ImportDirective",
+        "scope": 355,
+        "sourceUnit": 2551,
+        "src": "28:59:5",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol",
+        "file": "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol",
+        "id": 281,
+        "nodeType": "ImportDirective",
+        "scope": 355,
+        "sourceUnit": 2776,
+        "src": "89:63:5",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 282,
+        "nodeType": "ImportDirective",
+        "scope": 355,
+        "sourceUnit": 2637,
+        "src": "154:63:5",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/mnt/c/myproject/dapps/contracts/CreditLineFactory.sol",
+        "file": "./CreditLineFactory.sol",
+        "id": 283,
+        "nodeType": "ImportDirective",
+        "scope": 355,
+        "sourceUnit": 14,
+        "src": "219:33:5",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 284,
+              "name": "CreditLineFactory",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 13,
+              "src": "287:17:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_CreditLineFactory_$13",
+                "typeString": "contract CreditLineFactory"
+              }
+            },
+            "id": 285,
+            "nodeType": "InheritanceSpecifier",
+            "src": "287:17:5"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 286,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2636,
+              "src": "306:7:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$2636",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 287,
+            "nodeType": "InheritanceSpecifier",
+            "src": "306:7:5"
+          }
+        ],
+        "contractDependencies": [
+          13,
+          2636
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 354,
+        "linearizedBaseContracts": [
+          354,
+          2636,
+          13
+        ],
+        "name": "SocialCreditBureau",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 290,
+            "name": "etherAddress",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "321:34:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 288,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "321:7:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "307830",
+              "id": 289,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "352:3:5",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_0_by_1",
+                "typeString": "int_const 0"
+              },
+              "value": "0x0"
+            },
+            "visibility": "private"
+          },
+          {
+            "constant": false,
+            "id": 296,
+            "name": "balances",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "401:63:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
+              "typeString": "mapping(address => mapping(address => uint256))"
+            },
+            "typeName": {
+              "id": 295,
+              "keyType": {
+                "id": 291,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "409:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "401:47:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
+                "typeString": "mapping(address => mapping(address => uint256))"
+              },
+              "valueType": {
+                "id": 294,
+                "keyType": {
+                  "id": 292,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "428:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "nodeType": "Mapping",
+                "src": "420:27:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                  "typeString": "mapping(address => uint256)"
+                },
+                "valueType": {
+                  "id": 293,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "439:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 302,
+            "name": "commitments",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "471:66:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
+              "typeString": "mapping(address => mapping(address => uint256))"
+            },
+            "typeName": {
+              "id": 301,
+              "keyType": {
+                "id": 297,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "479:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "471:47:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
+                "typeString": "mapping(address => mapping(address => uint256))"
+              },
+              "valueType": {
+                "id": 300,
+                "keyType": {
+                  "id": 298,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "498:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "nodeType": "Mapping",
+                "src": "490:27:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                  "typeString": "mapping(address => uint256)"
+                },
+                "valueType": {
+                  "id": 299,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "509:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 308,
+            "name": "individualLimits",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "546:71:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
+              "typeString": "mapping(address => mapping(address => uint256))"
+            },
+            "typeName": {
+              "id": 307,
+              "keyType": {
+                "id": 303,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "554:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "546:47:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
+                "typeString": "mapping(address => mapping(address => uint256))"
+              },
+              "valueType": {
+                "id": 306,
+                "keyType": {
+                  "id": 304,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "573:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "nodeType": "Mapping",
+                "src": "565:27:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                  "typeString": "mapping(address => uint256)"
+                },
+                "valueType": {
+                  "id": 305,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "584:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 314,
+            "name": "unionLimits",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "624:66:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
+              "typeString": "mapping(address => mapping(address => uint256))"
+            },
+            "typeName": {
+              "id": 313,
+              "keyType": {
+                "id": 309,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "632:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "624:47:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_mapping$_t_address_$_t_uint256_$_$",
+                "typeString": "mapping(address => mapping(address => uint256))"
+              },
+              "valueType": {
+                "id": 312,
+                "keyType": {
+                  "id": 310,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "651:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "nodeType": "Mapping",
+                "src": "643:27:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                  "typeString": "mapping(address => uint256)"
+                },
+                "valueType": {
+                  "id": 311,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "662:7:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "SocialCreditBureau.Status",
+            "id": 321,
+            "members": [
+              {
+                "id": 315,
+                "name": "NotExists",
+                "nodeType": "EnumValue",
+                "src": "714:9:5"
+              },
+              {
+                "id": 316,
+                "name": "Created",
+                "nodeType": "EnumValue",
+                "src": "725:7:5"
+              },
+              {
+                "id": 317,
+                "name": "Pending",
+                "nodeType": "EnumValue",
+                "src": "734:7:5"
+              },
+              {
+                "id": 318,
+                "name": "Active",
+                "nodeType": "EnumValue",
+                "src": "743:6:5"
+              },
+              {
+                "id": 319,
+                "name": "Done",
+                "nodeType": "EnumValue",
+                "src": "751:4:5"
+              },
+              {
+                "id": 320,
+                "name": "Declined",
+                "nodeType": "EnumValue",
+                "src": "757:8:5"
+              }
+            ],
+            "name": "Status",
+            "nodeType": "EnumDefinition",
+            "src": "701:65:5"
+          },
+          {
+            "canonicalName": "SocialCreditBureau.KycLevel",
+            "id": 328,
+            "members": [
+              {
+                "id": 322,
+                "name": "Undefined",
+                "nodeType": "EnumValue",
+                "src": "787:9:5"
+              },
+              {
+                "id": 323,
+                "name": "Tier1",
+                "nodeType": "EnumValue",
+                "src": "798:5:5"
+              },
+              {
+                "id": 324,
+                "name": "Tier2",
+                "nodeType": "EnumValue",
+                "src": "805:5:5"
+              },
+              {
+                "id": 325,
+                "name": "Tier3",
+                "nodeType": "EnumValue",
+                "src": "812:5:5"
+              },
+              {
+                "id": 326,
+                "name": "Tier4",
+                "nodeType": "EnumValue",
+                "src": "819:5:5"
+              },
+              {
+                "id": 327,
+                "name": "Tier5",
+                "nodeType": "EnumValue",
+                "src": "826:5:5"
+              }
+            ],
+            "name": "KycLevel",
+            "nodeType": "EnumDefinition",
+            "src": "772:60:5"
+          },
+          {
+            "canonicalName": "SocialCreditBureau.Profile",
+            "id": 333,
+            "members": [
+              {
+                "constant": false,
+                "id": 330,
+                "name": "status",
+                "nodeType": "VariableDeclaration",
+                "scope": 333,
+                "src": "866:13:5",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_enum$_Status_$321",
+                  "typeString": "enum SocialCreditBureau.Status"
+                },
+                "typeName": {
+                  "contractScope": null,
+                  "id": 329,
+                  "name": "Status",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 321,
+                  "src": "866:6:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_enum$_Status_$321",
+                    "typeString": "enum SocialCreditBureau.Status"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 332,
+                "name": "kycLevel",
+                "nodeType": "VariableDeclaration",
+                "scope": 333,
+                "src": "890:17:5",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_enum$_KycLevel_$328",
+                  "typeString": "enum SocialCreditBureau.KycLevel"
+                },
+                "typeName": {
+                  "contractScope": null,
+                  "id": 331,
+                  "name": "KycLevel",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 328,
+                  "src": "890:8:5",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_enum$_KycLevel_$328",
+                    "typeString": "enum SocialCreditBureau.KycLevel"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Profile",
+            "nodeType": "StructDefinition",
+            "scope": 354,
+            "src": "840:75:5",
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 337,
+            "name": "borrowers",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "953:38:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+              "typeString": "mapping(uint256 => address)"
+            },
+            "typeName": {
+              "id": 336,
+              "keyType": {
+                "id": 334,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "962:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "953:28:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+                "typeString": "mapping(uint256 => address)"
+              },
+              "valueType": {
+                "id": 335,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "973:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 341,
+            "name": "investors",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "998:38:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+              "typeString": "mapping(uint256 => address)"
+            },
+            "typeName": {
+              "id": 340,
+              "keyType": {
+                "id": 338,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "1007:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "998:28:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+                "typeString": "mapping(uint256 => address)"
+              },
+              "valueType": {
+                "id": 339,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "1018:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 345,
+            "name": "unions",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "1069:42:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+              "typeString": "mapping(uint256 => address)"
+            },
+            "typeName": {
+              "id": 344,
+              "keyType": {
+                "id": 342,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "1078:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "1069:28:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+                "typeString": "mapping(uint256 => address)"
+              },
+              "valueType": {
+                "id": 343,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "1089:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 349,
+            "name": "loans",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "1118:41:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+              "typeString": "mapping(uint256 => address)"
+            },
+            "typeName": {
+              "id": 348,
+              "keyType": {
+                "id": 346,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "1127:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "1118:28:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+                "typeString": "mapping(uint256 => address)"
+              },
+              "valueType": {
+                "id": 347,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "1138:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 353,
+            "name": "profiles",
+            "nodeType": "VariableDeclaration",
+            "scope": 354,
+            "src": "1170:37:5",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Profile_$333_storage_$",
+              "typeString": "mapping(address => struct SocialCreditBureau.Profile)"
+            },
+            "typeName": {
+              "id": 352,
+              "keyType": {
+                "id": 350,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "1179:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "1170:28:5",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Profile_$333_storage_$",
+                "typeString": "mapping(address => struct SocialCreditBureau.Profile)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 351,
+                "name": "Profile",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 333,
+                "src": "1190:7:5",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Profile_$333_storage_ptr",
+                  "typeString": "struct SocialCreditBureau.Profile"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 355,
+        "src": "256:955:5"
+      }
+    ],
+    "src": "0:16417:5"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.0",
+  "updatedAt": "2018-09-03T06:58:30.218Z"
+}

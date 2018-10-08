@@ -2,6 +2,7 @@ import getBalance from './web3'
 const DEBUG = false
 
 let API_URL
+let WEBSOCKET_URL
 
 if(DEBUG) {
   API_URL = 'http://10.0.1.8:8000'
