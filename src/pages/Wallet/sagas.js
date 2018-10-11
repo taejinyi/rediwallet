@@ -106,35 +106,30 @@ export function* addAccount(action) {
 export function* getWalletFromNetwork(action) {
   console.log('in getWalletFromNetwork')
   let { db, wallet } = action
-  console.log(wallet)
-  //
-  // const allPropertyNames = Object.keys(wallet)
-  //
-  // for (let j=0; j<allPropertyNames.length; j++) {
-  //   const name = allPropertyNames[j];
-  //   const value = wallet[name];
-  //   const accountData = yield call(() => getAccountFromNetwork({account: value}))
-  //   console.log(accountData)
-  //
-  //   wallet = Object.assign({}, wallet, accountData)
-  // }
-  // console.log('final in getWalletFromNetwork')
-  // console.log(wallet)
-  // // yield put({
-  // //   type: SAVE_WALLET,
-  // //   wallet: wallet,
-  // // })
-  // // yield call(() => db.put({
-  // //   _id: 'wallet',
-  // //   data: wallet
-  // // }))
+
+  const allPropertyNames = Object.keys(wallet)
+
+  for (let j=0; j<allPropertyNames.length; j++) {
+    const name = allPropertyNames[j];
+    const value = wallet[name];
+    const accountData = yield call(() => getAccountFromNetwork({account: value}))
+
+    wallet = Object.assign({}, wallet, accountData)
+  }
+  yield put({
+    type: SAVE_WALLET,
+    wallet: wallet,
+  })
+  yield call(() => db.put({
+    _id: 'wallet',
+    data: wallet
+  }))
   return true
 }
 
 export function* getAccountFromNetwork(action) {
-  console.log('in getAccountFromNetwork')
   const { account } = action
-  const response = yield call(() => network.getBalance(account.address))
+  const response = yield call(() => network.getBalance(0))
   const accountData = {
     [ account.address ] : {
       address: account.address,
@@ -143,8 +138,6 @@ export function* getAccountFromNetwork(action) {
       balance: response
     }
   }
-  console.log(accountData)
-
   return accountData
 }
 

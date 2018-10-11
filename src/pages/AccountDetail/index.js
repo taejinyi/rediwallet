@@ -21,7 +21,7 @@ class AccountDetailPage extends React.Component {
 
 
   componentWillMount() {
-    console.log(infleumContract.abi)
+    // console.log(infleumContract.abi)
     // const { address } = this.props.navigation.state.params
     // const { db, mnemonic, getWalletDetail } = this.props
 
