@@ -31,24 +31,11 @@ class SplashPage extends React.Component {
 
 		setTimeout(async () => {
 		  console.log('turned on')
-			const mnemonic = await SecureStore.getItemAsync('mnemonic')
-			if(mnemonic == null) {
+      const publicAddress = await SecureStore.getItemAsync('publicAddress')
+
+			if(publicAddress == null) {
 				this.navigateTo('Landing', nav)
 			} else {
-        const res = await this.props.getInformation(db)
-        console.log(res)
-        console.log("generateAccount?")
-        if (!res) {
-          console.log("generateAccount?")
-          const { dispatch } = this.props
-          dispatch(actions.generateAccount(db, 'ETH'))
-          console.log('IFUM')
-          dispatch(actions.generateAccount(db, 'IFUM'))
-          console.log('KRWT')
-          dispatch(actions.generateAccount(db, 'KRWT'))
-
-        }
-
         this.navigateTo('Main', nav)
 			}
 		}, 1000)
@@ -73,9 +60,4 @@ const mapStateToProps = (state) => ({
   splashState: state.splashStateReducer.splashState,
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  saveMnemonic: (mnemonic) => dispatch(actions.saveMnemonic(mnemonic)),
-  getInformation: (db) => dispatch(actions.getInformation(db)),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(SplashPage)
+export default connect(mapStateToProps)(SplashPage)

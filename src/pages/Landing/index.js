@@ -19,7 +19,9 @@ import platform from 'rediwallet/src/native-base-theme/variables/platform'
 import getTheme from 'rediwallet/src/native-base-theme/components'
 import {TextLoader} from "react-native-indicator";
 
-const ethers = require('ethers');
+import MnemonicPhrase from "../../library/mnemonic-phrase.min";
+import * as loomjs from '../../network/web3/loom.umd'
+import Math from '../../library/seedrandom.min'
 
 class LandingPage extends React.Component {
  	constructor(props) {
@@ -27,25 +29,52 @@ class LandingPage extends React.Component {
 
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
 	}
-  generateMnemonic = async () => {
+  generateWallet = async () => {
+ 		// const { t, i18n } = this.props
  		this.props.showProcessingModal('잠시만 기다려주세요')
- 		console.log("generating mnemonic")
-    const random = await ethers.utils.randomBytes(16)
-    const mnemonic = await ethers.HDNode.entropyToMnemonic(random)
-    const wallet = await ethers.Wallet.fromMnemonic(mnemonic);
-    console.log(random)
-    console.log(mnemonic)
-    console.log(wallet)
-		const { saveMnemonic, } = this.props
+    let publicAddress = await SecureStore.getItemAsync('publicAddress')
+		console.log("publicAddress", publicAddress)
+    if(publicAddress && publicAddress.length > 10) {
+    	 Alert.alert(
+          // t('wallet_already_exist', { locale: i18n.language }),
+          // t('wallet_already_exist_desc', { locale: i18n.language }),
+				 	'Wallet Registered',
+          'Wallet is already registered',
+          [
+            { text: 'OK', onPress: () => this.navigateTo('Main', nav) }
+          ],
+          { cancelable: false}
+        )
+			return
+		}
 		try {
-          await SecureStore.setItemAsync('mnemonic', mnemonic)
-        } catch(error) {
-          Alert.alert('토큰 저장 에러', '토큰을 저장하는데 에러가 발생 하였습니다.')
-        }
-		saveMnemonic(mnemonic)
-    const { db } = this.props
-    this.props.getInformation(db)
-    this.debounceNavigate('MnemonicBackup')
+			console.log('in generateWallet, starting')
+			console.log('in generateWallet, starting', Math)
+			console.log('in generateWallet, starting', Math.default)
+			console.log('in generateWallet, starting', Math.seedrandom)
+
+			const arrayPrivateKey = loomjs.CryptoUtils.generatePrivateKey()
+			console.log('in generateWallet', arrayPrivateKey)
+			const privateKey = loomjs.CryptoUtils.bytesToHex(arrayPrivateKey)
+			console.log('in generateWallet', privateKey)
+			const arrayPublicAddress = loomjs.CryptoUtils.publicKeyFromPrivateKey(arrayPrivateKey)
+			publicAddress = loomjs.CryptoUtils.bytesToHexAddr(arrayPublicAddress)
+			console.log('in generateWallet', publicAddress, privateKey)
+			await SecureStore.setItemAsync('publicAddress', publicAddress)
+			await SecureStore.setItemAsync(publicAddress, privateKey)
+			const { db } = this.props
+			this.debounceNavigate('MnemonicBackup')
+		} catch(error) {
+    	console.log(error)
+			// Alert.alert(
+			// 	"Error",
+			// 	error,
+			// 	[
+			// 		{ text: 'OK', onPress: () => {} }
+			// 	],
+			// 	{ cancelable: false}
+			// )
+		}
   }
 
   importMnemonic = () => {
@@ -58,8 +87,8 @@ class LandingPage extends React.Component {
         <View style={{ flex: 1, }}>
           <Left>
             <Button
-              style={{ marginTop: 50 }}
-              onPress={this.generateMnemonic}
+              style={{ marginTop: 200 }}
+              onPress={this.generateWallet}
               transparent>
               <Text style={{ fontWeight: 'bold', color: '#10b5bc' }}>Create New Account</Text>
             </Button>
@@ -127,8 +156,6 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => ({
   showProcessingModal: (message) => dispatch(actions.showProcessingModal(message)),
   hideProcessingModal: () => dispatch(actions.hideProcessingModal()),
-  saveMnemonic: (mnemonic) => dispatch(actions.saveMnemonic(mnemonic)),
-  getInformation: (db) => dispatch(actions.getInformation(db)),
 })
 
 export default connect(null, mapDispatchToProps)(LandingPage)

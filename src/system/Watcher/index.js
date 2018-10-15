@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Util, SecureStore } from 'expo'
+import { Updates, SecureStore } from 'expo'
 import { FontAwesome } from '@expo/vector-icons'
 import { RippleLoader } from 'react-native-indicator'
 import { Alert, NetInfo, AppState, } from 'react-native'
@@ -42,7 +42,7 @@ class Watcher extends React.Component {
         await db.destroy()
 
         saveToken(undefined)
-        await Util.reload()
+        await Updates.reload()
       } catch (error) {
       }
     }

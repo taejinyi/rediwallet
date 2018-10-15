@@ -25,43 +25,38 @@ export const SAVE_WALLET_TO_DB = 'SAVE_WALLET_TO_DB'
 //   db: db,
 //   type: GET_WALLETS_FROM_DB,
 // })
-export const saveWallet = (db, wallet) => ({
-  db: db,
-  wallet: wallet,
-  type: SAVE_WALLET,
-})
+// export const saveWallet = (db, wallet) => ({
+//   db: db,
+//   wallet: wallet,
+//   type: SAVE_WALLET,
+// })
+//
+// export const saveWalletToDB = (db, wallet) => ({
+//   db: db,
+//   wallet: wallet,
+//   type: SAVE_WALLET_TO_DB,
+// })
 
-export const saveWalletToDB = (db, wallet) => ({
-  db: db,
-  wallet: wallet,
-  type: SAVE_WALLET_TO_DB,
-})
-
-export const generateAccount = (db, currency) => ({
-  db:db,
-  currency: currency,
-  type: GENERATE_ACCOUNT
-})
-
-export const addAccount = (db, account) => ({
-  db: db,
-  account: account,
-  type: ADD_ACCOUNT,
-})
-
-export const saveDefaultAccount = (db, defaultAccount) => ({
-  db: db,
-  defaultAccount: defaultAccount,
-  type: SAVE_DEFAULT_ACCOUNT,
-})
+// export const generateAccount = (db, currency) => ({
+//   db:db,
+//   currency: currency,
+//   type: GENERATE_ACCOUNT
+// })
+//
+// export const addAccount = (db, account) => ({
+//   db: db,
+//   account: account,
+//   type: ADD_ACCOUNT,
+// })
+//
+// export const saveDefaultAccount = (db, defaultAccount) => ({
+//   db: db,
+//   defaultAccount: defaultAccount,
+//   type: SAVE_DEFAULT_ACCOUNT,
+// })
 
 export const getWalletFromNetwork = (db, wallet) => ({
   db: db,
   wallet: wallet,
   type: GET_WALLET_FROM_NETWORK,
-})
-
-export const getAccountFromNetwork = (account) => ({
-  account: account,
-  type: GET_ACCOUNT_FROM_NETWORK,
 })

@@ -74,7 +74,7 @@ class WalletPage extends React.Component {
               <View style={{ justifyContent: 'center', alignItems: 'center', }}>
                 <MaterialCommunityIcons name='close-circle-outline' style={{ fontSize: 84, color: '#aaaaaa', }} />
                 <Text style={{ fontSize: 18, marginTop: 10, color: '#aaaaaa', }}>
-                  만들어진 지갑이 없습니다.
+                  만들어진 지갑이 없습니다..
                 </Text>
               </View>
             )
@@ -107,11 +107,7 @@ const styles = StyleSheet.create({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  addAccount: (db, account) => dispatch(actions.addAccount(db, account)),
-  generateAccount: (db, currency) => dispatch(actions.generateAccount(db, currency)),
   getWalletFromNetwork: (db, wallet) => dispatch(actions.getWalletFromNetwork(db, wallet)),
-  getAccountFromNetwork: (account) => dispatch(actions.getAccountFromNetwork(account)),
-
 })
 
 export default connect(null, mapDispatchToProps)(WalletPage)

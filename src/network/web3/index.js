@@ -38,7 +38,7 @@ client.on('error', (message => {
 }))
 
 
-const getBalance = async (walletIndex) => {
+const getBalance = async () => {
   try {
     // await mainnet.eth.getBalance(address).then(console.log)
     // await mainnet.eth.getBalance(address)

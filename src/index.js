@@ -4,21 +4,16 @@ import { Root } from 'native-base'
 // import Modal from 'react-native-modal'
 import { RippleLoader, TextLoader } from 'react-native-indicator'
 import './global';
-import {SecureStore, Util} from "expo";
+import {SecureStore, Updates} from "expo";
 import Modal from 'react-native-modal'
 import {actions, LockPage} from "./pages";
 import { withDB, withLock, AppNavigator } from './system'
 
-// import i18n from './utils/i18n'
+import i18n from './utils/i18n'
 
 // const WatcherManager = withLock(withDB(Watcher))
 
 import connect from "react-redux/es/connect/connect";
-const Web3 = require('web3');
-
-const web3 = new Web3(
-  new Web3.providers.HttpProvider('https://mainnet.infura.io/'),
-);
 
 class Main extends React.Component {
   constructor(props) {
@@ -34,7 +29,7 @@ class Main extends React.Component {
     await SecureStore.deleteItemAsync('mnemonic')
     await this.props.db.destroy()
     this.props.saveMnemonic(undefined)
-    await Util.reload()
+    await Updates.reload()
     const { dispatch } = this.props
 
     // dispatch(NavigationActions.reset({
@@ -66,8 +61,7 @@ class Main extends React.Component {
         <LockPage isVisible={ this.props.unlocked !== true }/>
         <StatusBar barStyle='light-content' />
         {/*<NotificationSystem ref={ el => this.notificationSystem = el } />*/}
-        {/*<AppNavigator screenProps={{ t: i18n.getFixedT() }} />*/}
-        <AppNavigator />
+        <AppNavigator screenProps={{ t: i18n.getFixedT() }} />
         {/*<WatcherManager*/}
           {/*onTokenInvalid={ this._onTokenInvalid }*/}
           {/*notificationSystem={ this.notificationSystem }*/}

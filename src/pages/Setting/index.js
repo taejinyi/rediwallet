@@ -3,7 +3,7 @@ import React from 'react'
 import { View, Text } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Container, Content, Body, Left, List, ListItem, Icon, Separator, Right } from 'native-base'
-import { Util, SecureStore } from 'expo'
+import { Updates, SecureStore } from 'expo'
 import { Header } from 'rediwallet/src/components'
 import {actions} from "../index";
 import connect from "react-redux/es/connect/connect";
@@ -20,7 +20,7 @@ class SettingPage extends React.Component {
     await SecureStore.deleteItemAsync('mnemonic')
     await this.props.db.destroy()
     this.props.saveMnemonic(undefined)
-    await Util.reload()
+    await Updates.reload()
     const { dispatch } = this.props
 
     dispatch(NavigationActions.reset({

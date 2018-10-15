@@ -21,22 +21,22 @@ import {saveProfileInformationToDB} from "../AccountDetail/sagas";
 export function* getInformation(action) {
   console.log("in getInformation")
   const { db } = action
-
-  try {
-    const fetchedResult = yield call(() => db.get('wallet'))
-    const wallet = fetchedResult.data
-    yield call(getWalletFromNetwork, {db:db, wallet:wallet})
-  } catch (error) {
-    const { status } = error
-    if(status === 404) {
-      yield call(generateAccount, {db: db, currency: "ETH"})
-      yield call(generateAccount, {db: db, currency: "IFUM"})
-      yield call(generateAccount, {db: db, currency: "KRWT"})
-      const fetchedResult = yield call(() => db.get('wallet'))
-      const wallet = fetchedResult.data
-      yield call(getWalletFromNetwork, {db:db, wallet:wallet})
-    }
-  }
+  //
+  // try {
+  //   const fetchedResult = yield call(() => db.get('wallet'))
+  //   const wallet = fetchedResult.data
+  //   yield call(getWalletFromNetwork, {db:db, wallet:wallet})
+  // } catch (error) {
+  //   const { status } = error
+  //   if(status === 404) {
+  //     yield call(generateAccount, {db: db, currency: "ETH"})
+  //     yield call(generateAccount, {db: db, currency: "IFUM"})
+  //     yield call(generateAccount, {db: db, currency: "KRWT"})
+  //     const fetchedResult = yield call(() => db.get('wallet'))
+  //     const wallet = fetchedResult.data
+  //     yield call(getWalletFromNetwork, {db:db, wallet:wallet})
+  //   }
+  // }
 
   yield put({
     type: SAVE_SPLASH_STATE,

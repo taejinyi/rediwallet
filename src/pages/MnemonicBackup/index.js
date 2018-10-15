@@ -15,6 +15,29 @@ class MnemonicBackupPage extends React.Component {
     })
     dispatch(resetAction)
   }
+  async componentDidMount() {
+    if (await Expo.Fingerprint.hasHardwareAsync()) {
+      if(await Expo.Fingerprint.isEnrolledAsync()) {
+        const result = await Expo.Fingerprint.authenticateAsync()
+        if (result.success) {
+          this.props.saveUnlocked(true)
+        } else {
+
+        }
+
+      } else {
+        this.setState({
+          showPinNumberDialog: true
+        })
+      }
+    }
+    else {
+      this.setState({
+        showPinNumberDialog: true
+      })
+    }
+  }
+
   render() {
     const { mnemonic } = this.props
     return (

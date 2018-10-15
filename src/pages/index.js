@@ -13,11 +13,10 @@ import appStateReducer from '../reducers'
 import splashStateReducer from './Splash/reducers'
 import walletReducer from './Wallet/reducers'
 
-import { addAccount, generateAccount, getAccountFromNetwork, getWalletFromNetwork } from './Wallet/actions'
+import { getWalletFromNetwork } from './Wallet/actions'
 import { getInformation } from './Splash/actions'
 import {
   saveUnlocked,
-  saveMnemonic,
   showProcessingModal,
   hideProcessingModal,
 } from '../actions'
@@ -41,13 +40,9 @@ import splashSaga from './Splash/sagas'
 // import unlockStateReducer from './Unlock/reducers'
 
 const actions = {
-  saveMnemonic,
   getInformation,
   saveUnlocked,
-  generateAccount,
-  getAccountFromNetwork,
   getWalletFromNetwork,
-  addAccount,
   showProcessingModal,
   hideProcessingModal,
   // lockWithFingerprint,
