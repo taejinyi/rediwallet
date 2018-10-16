@@ -11,7 +11,7 @@ import { call, put, take, takeEvery } from 'redux-saga/effects'
 import connect from "react-redux/es/connect/connect";
 // import { NavigationActions } from 'react-navigation'
 import {SecureStore} from "expo";
-
+import {generateWallet, Currency} from '../../utils'
 class WalletPage extends React.Component {
   constructor(props) {
     super(props)
@@ -26,6 +26,11 @@ class WalletPage extends React.Component {
     const { db, dispatch, wallet } = this.props
     console.log('button')
     await this.props.getWalletFromNetwork(db, wallet)
+  }
+
+  addWallet = async (currency) => {
+    const wallet = await generateWallet(currency)
+    console.log(wallet)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -47,6 +52,45 @@ class WalletPage extends React.Component {
           />
         </View>
         <Content style={{ backgroundColor: 'white', }}>
+          <ListItem
+            onPress={ () => this.addWallet(Currency.IFUM) }
+            icon last>
+            <Left>
+              <Icon style={{ color: '#666666', }} name='ios-megaphone' />
+            </Left>
+            <Body>
+              <Text>Generate IFUM Wallet</Text>
+            </Body>
+            <Right>
+              <Icon name='arrow-forward' />
+            </Right>
+          </ListItem>
+          <ListItem
+            onPress={ () => this.addWallet(Currency.ETH) }
+            icon last>
+            <Left>
+              <Icon style={{ color: '#666666', }} name='ios-megaphone' />
+            </Left>
+            <Body>
+              <Text>Generate ETH Wallet</Text>
+            </Body>
+            <Right>
+              <Icon name='arrow-forward' />
+            </Right>
+          </ListItem>
+          <ListItem
+            onPress={ () => this.addWallet(Currency.KRWT) }
+            icon last>
+            <Left>
+              <Icon style={{ color: '#666666', }} name='ios-megaphone' />
+            </Left>
+            <Body>
+              <Text>Generate KRWT Wallet</Text>
+            </Body>
+            <Right>
+              <Icon name='arrow-forward' />
+            </Right>
+          </ListItem>
           <ListItem
             onPress={ this.getWalletFromNetwork }
             icon last>

@@ -31,9 +31,9 @@ class SplashPage extends React.Component {
 
 		setTimeout(async () => {
 		  console.log('turned on')
-      const publicAddress = await SecureStore.getItemAsync('publicAddress')
+      const seed = await SecureStore.getItemAsync('seed')
 
-			if(publicAddress == null) {
+			if(seed == null) {
 				this.navigateTo('Landing', nav)
 			} else {
         this.navigateTo('Main', nav)

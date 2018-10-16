@@ -18,7 +18,8 @@ export function* generateWallet(action) {
 export function* getWalletFromNetwork(action) {
   console.log('in getWalletFromNetwork')
   let { db } = action
-  const response = yield call(() => network.getBalance(0))
+  const response = yield call(() => network.getBalance())
+  console.log("balance => ", response)
 
   // yield put({
   //   type: SAVE_WALLET,

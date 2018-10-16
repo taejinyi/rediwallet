@@ -1,15 +1,15 @@
-import { 
-  parseContactsData, 
-  parseContactsToRequestData,
-  insertContactsIntoContactData, 
-  checkMobileNumberExistInContacts 
-} from './contactsData'
-
+import {
+  generateWallet,
+  Currency,
+  fromHexString,
+  toHexString,
+} from './crypto'
 import './format'
 
 export {
-  parseContactsData,
-  parseContactsToRequestData,
-  insertContactsIntoContactData,
-  checkMobileNumberExistInContacts,
+  generateWallet,
+  Currency,
+  fromHexString,
+  toHexString,
+
 }
