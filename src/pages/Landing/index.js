@@ -53,9 +53,12 @@ class LandingPage extends React.Component {
 		try {
 	  	seed = await ethers.utils.randomBytes(16)
 			await SecureStore.setItemAsync('seed', toHexString(seed))
-			await SecureStore.setItemAsync('nonce', "0")
- 			let wallet = generateWallet(Currency.IFUM)
-			console.log(wallet)
+ 			const wallet = await generateWallet(Currency.IFUM)
+			if (wallet) {
+	  		await addWallet(wallet)
+			} else {
+	  		// raise error
+			}
  			// wallet = generateWallet(Currency.ETH)
 			// wallet = generateWallet(Currency.KRWT)
 			this.debounceNavigate('MnemonicBackup')

@@ -18,6 +18,7 @@ class WalletPage extends React.Component {
 
     this.state = {
       wallet: props.wallet,
+      wallets: props.wallets,
     }
 
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
@@ -30,18 +31,21 @@ class WalletPage extends React.Component {
 
   addWallet = async (currency) => {
     const wallet = await generateWallet(currency)
+    const { db } = this.props
+    this.props.addWallet(db, wallet)
     console.log(wallet)
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       wallet: nextProps.wallet,
+      wallets: nextProps.wallets,
     })
   }
 
   render() {
     const { navigation } = this.props
-    const { wallet } = this.state
+    const { wallets } = this.state
 
     return (
       <View style={{ flex: 1, }}>
@@ -107,10 +111,10 @@ class WalletPage extends React.Component {
           <Separator />
 
           {
-            wallet ? (
+            wallets ? (
               <View style={ styles.WalletAccountListContainer }>
                 <WalletAccountList
-                  wallet={ wallet }
+                  wallet={ wallets }
                   navigation={ navigation }
                 />
               </View>
@@ -152,6 +156,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => ({
   getWalletFromNetwork: (db, wallet) => dispatch(actions.getWalletFromNetwork(db, wallet)),
+  addWallet: (db, wallet) => dispatch(actions.addWallet(db, wallet)),
 })
 
 export default connect(null, mapDispatchToProps)(WalletPage)

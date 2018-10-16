@@ -2,9 +2,12 @@ export const SAVE_WALLET = 'SAVE_WALLET'
 export const GENERATE_ACCOUNT = 'GENERATE_ACCOUNT'
 export const ADD_ACCOUNT = 'ADD_ACCOUNT'
 export const SAVE_DEFAULT_ACCOUNT = 'SAVE_DEFAULT_ACCOUNT'
-export const GET_WALLET_FROM_NETWORK = 'GET_WALLET_FROM_NETWORK'
 export const GET_ACCOUNT_FROM_NETWORK = 'GET_ACCOUNT_FROM_NETWORK'
 export const SAVE_WALLET_TO_DB = 'SAVE_WALLET_TO_DB'
+
+export const ADD_WALLET = 'ADD_WALLET'
+export const SET_DEFAULT_WALLET = 'SET_DEFAULT_WALLET'
+export const GET_WALLET_FROM_NETWORK = 'GET_WALLET_FROM_NETWORK'
 
 // export const GET_WALLETS_FROM_DB = 'GET_WALLETS_FROM_DB'
 // export const GET_WALLETS_FROM_SERVER = 'GET_WALLETS_FROM_SERVER'
@@ -54,6 +57,19 @@ export const SAVE_WALLET_TO_DB = 'SAVE_WALLET_TO_DB'
 //   defaultAccount: defaultAccount,
 //   type: SAVE_DEFAULT_ACCOUNT,
 // })
+
+
+export const setDefaultWallet = (db, wallet) => ({
+  db: db,
+  wallet: wallet,
+  type: SET_DEFAULT_WALLET,
+})
+
+export const addWallet = (db, wallet) => ({
+  db: db,
+  wallet: wallet,
+  type: ADD_WALLET,
+})
 
 export const getWalletFromNetwork = (db, wallet) => ({
   db: db,
