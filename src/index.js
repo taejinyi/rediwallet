@@ -28,7 +28,7 @@ class Main extends React.Component {
   _onTokenInvalid = async () => {
     await SecureStore.deleteItemAsync('mnemonic')
     await this.props.db.destroy()
-    this.props.saveMnemonic(undefined)
+    this.props.saveSeed(undefined)
     await Updates.reload()
     const { dispatch } = this.props
 

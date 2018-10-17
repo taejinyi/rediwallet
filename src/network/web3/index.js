@@ -2,7 +2,7 @@ const KRWT = "KRWT"
 const IFUM = "IFUM"
 const ETH = "ETH"
 
-
+import { Currency } from '../../utils/crypto'
 import Web3 from 'web3'
 import {Alert} from "react-native";
 import {SecureStore} from "expo";
@@ -31,52 +31,44 @@ client.on('error', (message => {
   console.log('Hard to find - message : ', message)
 }))
 
+const mainnet = new Web3(
+  new Web3.providers.HttpProvider('https://mainnet.infura.io/'),
+);
 
-    // // await mainnet.eth.getBalance(address).then(console.log)
-    // const publicKey = loomjs.CryptoUtils.publicKeyFromPrivateKey(privateKey)
-    // const from = loomjs.LocalAddress.fromPublicKey(publicKey).toString()
-
-const getBalance = async (address) => {
-  try {
-    const privateKeyHex = await SecureStore.getItemAsync(address)
-    if (privateKeyHex === null) {
+const getBalance = async (wallet) => {
+  console.log('in getBalance wallet = ', wallet)
+  if (wallet.currency === Currency.ETH) {
+    try {
+      const balance = await mainnet.eth.getBalance(wallet.address)
+      return balance
+    } catch (error) {
+      console.log(error)
       return null
     }
-    const privateKey = fromHexString(privateKeyHex)
-    const loom = new Web3(
-      new loomjs.LoomProvider(client, privateKey),
-    );
-    const abi = infleumContract.abi
-    const contract = new loom.eth.Contract(abi, infleumAddress)
-    return await contract.methods.balanceOf(address).call({address})
-  } catch (error) {
-    console.log(error)
-    return null
+  } else {
+    try {
+      const privateKeyHex = await SecureStore.getItemAsync(wallet.address)
+      console.log('in getBalance', privateKeyHex)
+      if (privateKeyHex === null) {
+        return null
+      }
+      const privateKey = fromHexString(privateKeyHex)
+      if (privateKey === null) {
+        return null
+      }
+      console.log('in getBalance', privateKey)
+      const loom = new Web3(
+        new loomjs.LoomProvider(client, privateKey),
+      );
+      const abi = infleumContract.abi
+      const contract = new loom.eth.Contract(abi, infleumAddress)
+      return await contract.methods.balanceOf(wallet.address).call({from: wallet.address})
+    } catch (error) {
+      console.log(error)
+      return null
+    }
   }
 }
-
-
-  //
-  //
-  // const getBalance = async () => {
-  //   try {
-  //     const response = await axios({
-  //       method: 'POST',
-  //       url: globals.API_UNION_TRANSACTIONS.format(slug),
-  //       data: {
-  //         offset: offset,
-  //         count: count,
-  //       },
-  //       headers: {
-  //         Authorization: `Token ${token}`,
-  //       }
-  //     })
-  //
-  //     return response
-  //   } catch (error) {
-  //     return error.response
-  //   }
-  // }
 
 export {
   getBalance,

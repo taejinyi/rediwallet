@@ -17,9 +17,8 @@ class SettingPage extends React.Component {
   }
 
   deleteMnemonic = async () => {
-    await SecureStore.deleteItemAsync('mnemonic')
+    await SecureStore.deleteItemAsync('seed')
     await this.props.db.destroy()
-    this.props.saveMnemonic(undefined)
     await Updates.reload()
     const { dispatch } = this.props
 
@@ -76,7 +75,6 @@ class SettingPage extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  saveMnemonic: (mnemonic) => dispatch(actions.saveMnemonic(mnemonic)),
 })
 
 export default connect(null, mapDispatchToProps)(SettingPage)

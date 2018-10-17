@@ -42,6 +42,12 @@ class WalletPage extends React.Component {
       wallets: nextProps.wallets,
     })
   }
+  async componentDidMount() {
+    const { db, wallets } = this.props
+    await this.props.getWalletsFromDB(db)
+    this.props.getWalletsFromNetwork(db)
+  }
+
 
   render() {
     const { navigation } = this.props
@@ -155,7 +161,8 @@ const styles = StyleSheet.create({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  getWalletFromNetwork: (db, wallet) => dispatch(actions.getWalletFromNetwork(db, wallet)),
+  getWalletsFromNetwork: (db) => dispatch(actions.getWalletsFromNetwork(db)),
+  getWalletsFromDB: (db) => dispatch(actions.getWalletsFromDB(db)),
   addWallet: (db, wallet) => dispatch(actions.addWallet(db, wallet)),
 })
 

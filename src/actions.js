@@ -1,12 +1,12 @@
-export const SAVE_MNEMONIC = 'SAVE_MNEMONIC'
+export const SAVE_SEED = 'SAVE_SEED'
 export const SAVE_UNLOCKED = 'SAVE_UNLOCKED'
 
 export const SHOW_PROCESSING_MODAL = 'SHOW_PROCESSING_MODAL'
 export const HIDE_PROCESSING_MODAL = 'HIDE_PROCESSING_MODAL'
 
-export const saveMnemonic = (mnemonic) => ({
-  mnemonic: mnemonic,
-  type: SAVE_MNEMONIC,
+export const saveSeed = (seed) => ({
+  seed: seed,
+  type: SAVE_SEED,
 })
 
 export const saveUnlocked = (unlocked) => ({

@@ -85,6 +85,7 @@ const generateWallet = async (currency) => {
 
       const publicKey = loomjs.CryptoUtils.publicKeyFromPrivateKey(privateKey)
       const address = loomjs.LocalAddress.fromPublicKey(publicKey).toString()
+      console.log('setItemAsync', address, toHexString(privateKey))
       await SecureStore.setItemAsync(address, toHexString(privateKey))
 
       wallet = {
@@ -95,6 +96,7 @@ const generateWallet = async (currency) => {
       }
       return wallet
     } else {
+      console.log('setItemAsync', _newAccount.address, _newAccount.privateKey)
       await SecureStore.setItemAsync(_newAccount.address, _newAccount.privateKey)
 
       wallet = {

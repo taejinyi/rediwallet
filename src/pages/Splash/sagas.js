@@ -6,7 +6,7 @@ import {SecureStore} from "expo";
 
 import {addAccount, generateAccount, getWalletFromNetwork} from "../Wallet/sagas";
 import {actions} from "../index";
-import {saveProfileInformationToDB} from "../AccountDetail/sagas";
+import {saveProfileInformationToDB} from "../WalletDetail/sagas";
 
 // import { getUnionsFromServer, getUnionsFromDB } from '../Unions/sagas'
 // import { getPayablesFromServer, getPayablesFromDB } from '../Repay/sagas'

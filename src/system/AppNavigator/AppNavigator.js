@@ -11,7 +11,7 @@ import {
   LockPage,
   UnlockPage,
   WalletPage,
-  AccountDetailPage,
+  WalletDetailPage,
   SettingPage
 } from 'rediwallet/src/pages'
 
@@ -92,13 +92,24 @@ const MainNavigator = StackNavigator({
       headerBackTitle: 'Lock',
     }
   },
-  AccountDetail: {
-    screen: withDB(withWallet(AccountDetailPage)),
-    navigationOptions: {
-      header: null,
-      headerBackTitle: 'Account Detail',
-    }
-  }
+  WalletDetail: {
+    screen: withDB(withWallet(WalletDetailPage)),
+    navigationOptions: ({ navigation }) => ({
+      headerTitle: 'Invite',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#10b5bc',
+        borderBottomWidth: 0,
+      },
+      headerLeft: (
+        <HeaderBackButton
+          tintColor='white'
+          title='Wallet'  // TODO onPress
+          onPress={() => navigation.goBack(null)} // TODO Alert
+        />
+      )
+    })
+  },
   // QRCodeScan: {
   //   screen: QRCodeScan,
   //   navigationOptions: {

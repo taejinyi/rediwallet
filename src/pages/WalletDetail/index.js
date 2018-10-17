@@ -9,7 +9,7 @@ import {actions} from "../index";
 import connect from "react-redux/es/connect/connect";
 import { NavigationActions } from 'react-navigation'
 
-class AccountDetailPage extends React.Component {
+class WalletDetailPage extends React.Component {
   constructor(props) {
     super(props)
 
@@ -23,7 +23,7 @@ class AccountDetailPage extends React.Component {
   componentWillMount() {
     // console.log(infleumContract.abi)
     // const { address } = this.props.navigation.state.params
-    // const { db, mnemonic, getWalletDetail } = this.props
+    // const { db, SAVE_SEED, getWalletDetail } = this.props
 
   }
 
@@ -31,7 +31,7 @@ class AccountDetailPage extends React.Component {
 
     const { navigation } = this.props
     const { account } = this.props.navigation.state.params
-    console.log("AccountDetailPage")
+    console.log("WalletDetailPage")
     console.log(account)
 
     return (
@@ -53,7 +53,7 @@ class AccountDetailPage extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  // saveMnemonic: (mnemonic) => dispatch(actions.saveMnemonic(mnemonic)),
+  // saveSeed: (seed) => dispatch(actions.saveSeed(seed)),
 })
 
-export default connect(null, mapDispatchToProps)(AccountDetailPage)
+export default connect(null, mapDispatchToProps)(WalletDetailPage)

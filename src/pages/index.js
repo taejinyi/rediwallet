@@ -7,15 +7,25 @@ import UnlockPage from './Unlock'
 import MnemonicBackupPage from './MnemonicBackup'
 import MnemonicImportPage from './MnemonicImport'
 import WalletPage from './Wallet'
-import AccountDetailPage from './AccountDetail'
+import WalletDetailPage from './WalletDetail'
 import SettingPage from './Setting'
 import appStateReducer from '../reducers'
 import splashStateReducer from './Splash/reducers'
 import walletReducer from './Wallet/reducers'
 
-import { getWalletFromNetwork, addWallet, setDefaultWallet } from './Wallet/actions'
+import {
+  getWalletFromNetwork,
+  getWalletsFromNetwork,
+  getWalletFromDB,
+  getWalletsFromDB,
+  saveWalletToDB,
+  saveWalletsToDB,
+  addWallet,
+  setDefaultWallet
+} from './Wallet/actions'
 import { getInformation } from './Splash/actions'
 import {
+  saveSeed,
   saveUnlocked,
   showProcessingModal,
   hideProcessingModal,
@@ -40,11 +50,17 @@ import splashSaga from './Splash/sagas'
 // import unlockStateReducer from './Unlock/reducers'
 
 const actions = {
+  saveSeed,
   getInformation,
   saveUnlocked,
   addWallet,
   setDefaultWallet,
+  getWalletFromDB,
+  getWalletsFromDB,
   getWalletFromNetwork,
+  getWalletsFromNetwork,
+  saveWalletToDB,
+  saveWalletsToDB,
   showProcessingModal,
   hideProcessingModal,
   // lockWithFingerprint,
@@ -76,7 +92,7 @@ export {
   MnemonicBackupPage,
   MnemonicImportPage,
   WalletPage,
-  AccountDetailPage,
+  WalletDetailPage,
   SettingPage,
 
   actions,

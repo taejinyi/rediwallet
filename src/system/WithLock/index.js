@@ -11,7 +11,7 @@ const withLock = (Component) => {
   }
 
   const mapStateToProps = (state) => ({
-    mnemonic: state.appStateReducer.mnemonic,
+    seed: state.appStateReducer.seed,
   })
 
   return connect(mapStateToProps)(WrapperComponent)

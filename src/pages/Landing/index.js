@@ -55,7 +55,7 @@ class LandingPage extends React.Component {
 			await SecureStore.setItemAsync('seed', toHexString(seed))
  			const wallet = await generateWallet(Currency.IFUM)
 			if (wallet) {
-	  		await addWallet(wallet)
+	  		await this.props.addWallet(this.props.db, wallet)
 			} else {
 	  		// raise error
 			}
@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => ({
   showProcessingModal: (message) => dispatch(actions.showProcessingModal(message)),
   hideProcessingModal: () => dispatch(actions.hideProcessingModal()),
+  addWallet: (db, wallet) => dispatch(actions.addWallet(db, wallet)),
 })
 
 export default connect(null, mapDispatchToProps)(LandingPage)
