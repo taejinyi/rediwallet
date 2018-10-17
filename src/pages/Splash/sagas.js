@@ -6,7 +6,6 @@ import {SecureStore} from "expo";
 
 import {addAccount, generateAccount, getWalletFromNetwork} from "../Wallet/sagas";
 import {actions} from "../index";
-import {saveProfileInformationToDB} from "../WalletDetail/sagas";
 
 // import { getUnionsFromServer, getUnionsFromDB } from '../Unions/sagas'
 // import { getPayablesFromServer, getPayablesFromDB } from '../Repay/sagas'
@@ -21,22 +20,6 @@ import {saveProfileInformationToDB} from "../WalletDetail/sagas";
 export function* getInformation(action) {
   console.log("in getInformation")
   const { db } = action
-  //
-  // try {
-  //   const fetchedResult = yield call(() => db.get('wallet'))
-  //   const wallet = fetchedResult.data
-  //   yield call(getWalletFromNetwork, {db:db, wallet:wallet})
-  // } catch (error) {
-  //   const { status } = error
-  //   if(status === 404) {
-  //     yield call(generateAccount, {db: db, currency: "ETH"})
-  //     yield call(generateAccount, {db: db, currency: "IFUM"})
-  //     yield call(generateAccount, {db: db, currency: "KRWT"})
-  //     const fetchedResult = yield call(() => db.get('wallet'))
-  //     const wallet = fetchedResult.data
-  //     yield call(getWalletFromNetwork, {db:db, wallet:wallet})
-  //   }
-  // }
 
   yield put({
     type: SAVE_SPLASH_STATE,

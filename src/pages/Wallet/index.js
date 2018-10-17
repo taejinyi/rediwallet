@@ -42,12 +42,11 @@ class WalletPage extends React.Component {
       wallets: nextProps.wallets,
     })
   }
-  async componentDidMount() {
+  async componentWillMount() {
     const { db, wallets } = this.props
     await this.props.getWalletsFromDB(db)
     this.props.getWalletsFromNetwork(db)
   }
-
 
   render() {
     const { navigation } = this.props
@@ -120,7 +119,7 @@ class WalletPage extends React.Component {
             wallets ? (
               <View style={ styles.WalletAccountListContainer }>
                 <WalletAccountList
-                  wallet={ wallets }
+                  wallets={ wallets }
                   navigation={ navigation }
                 />
               </View>

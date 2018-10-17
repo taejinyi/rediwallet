@@ -9,14 +9,14 @@ class WalletAccountList extends React.Component {
     super(props)
 
     this.state = {
-      lastWalletIndex: props.wallet ? ((Object.keys(props.wallet).length) - 1) : undefined,
+      lastWalletIndex: props.wallets ? ((Object.keys(props.wallets).length) - 1) : undefined,
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.wallet) {
+    if(nextProps.wallets) {
       this.setState({
-        lastWalletIndex: Object.keys(nextProps.wallet).length - 1,
+        lastWalletIndex: Object.keys(nextProps.wallets).length - 1,
       })
     }
   }
@@ -24,31 +24,31 @@ class WalletAccountList extends React.Component {
   onWalletClicked = (cardIndex) => {
   }
 
-  renderAccountItem = (account) => {
+  renderAccountItem = (wallet) => {
     const { navigation } = this.props
 
-    const accountData = account.item
+    const walletData = wallet.item
 
     return (
       <View style={ styles.walletContainer }>
         <TouchableOpacity onPress={ () => {
-          navigation.navigate('WalletDetail', { account: accountData })
+          navigation.navigate('WalletDetail', { wallet: wallet })
         }}>
-          <Text style={{ fontWeight: 'bold', color: '#10b5bc' }}>{ accountData.nonce.toString() + ": " + accountData.address }</Text>
+          <Text style={{ fontWeight: 'bold', color: '#10b5bc' }}>{ walletData.nonce.toString() + ": " + walletData.address }</Text>
         </TouchableOpacity>
       </View>
     )
   }
 
   render() {
-    const { wallet, } = this.props
+    const { wallets, } = this.props
 
-    if(wallet === null)
+    if(wallets === null)
       return null
 
     return (
       <FlatList
-        data={ _.values(wallet) }
+        data={ _.values(wallets) }
         renderItem={ this.renderAccountItem }
         contentContainerStyle={{ padding: 15 }}
         keyExtractor={( item, index ) => index.toString() }
@@ -58,7 +58,7 @@ class WalletAccountList extends React.Component {
 }
 
 WalletAccountList.propTypes = {
-  wallet: PropTypes.oneOfType([ PropTypes.array, PropTypes.object ]),
+  wallets: PropTypes.oneOfType([ PropTypes.array, PropTypes.object ]),
   navigation: PropTypes.object,
 }
 

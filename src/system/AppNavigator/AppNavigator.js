@@ -12,7 +12,8 @@ import {
   UnlockPage,
   WalletPage,
   WalletDetailPage,
-  SettingPage
+  SettingPage,
+  QRCodeScan
 } from 'rediwallet/src/pages'
 
 import withDB from '../WithDB'
@@ -110,12 +111,12 @@ const MainNavigator = StackNavigator({
       )
     })
   },
-  // QRCodeScan: {
-  //   screen: QRCodeScan,
-  //   navigationOptions: {
-  //     header: null
-  //   }
-  // }
+  QRCodeScan: {
+    screen: QRCodeScan,
+    navigationOptions: {
+      header: null
+    }
+  },
 })
 
 const MnemonicManagementStackNavigator = StackNavigator({
