@@ -18,6 +18,7 @@ class SettingPage extends React.Component {
 
   deleteMnemonic = async () => {
     await SecureStore.deleteItemAsync('seed')
+    await SecureStore.deleteItemAsync('nonce')
     await this.props.db.destroy()
     await Updates.reload()
     const { dispatch } = this.props

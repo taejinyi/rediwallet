@@ -32,7 +32,7 @@ class WalletAccountList extends React.Component {
     return (
       <View style={ styles.walletContainer }>
         <TouchableOpacity onPress={ () => {
-          navigation.navigate('WalletDetail', { wallet: wallet })
+          navigation.navigate('WalletDetail', { wallet: walletData })
         }}>
           <Text style={{ fontWeight: 'bold', color: '#10b5bc' }}>{ walletData.nonce.toString() + ": " + walletData.address }</Text>
         </TouchableOpacity>

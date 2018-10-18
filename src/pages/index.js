@@ -8,6 +8,7 @@ import MnemonicBackupPage from './MnemonicBackup'
 import MnemonicImportPage from './MnemonicImport'
 import WalletPage from './Wallet'
 import WalletDetailPage from './WalletDetail'
+import SendPage from './Send'
 import QRCodeScan from './QRCodeScan'
 import SettingPage from './Setting'
 import appStateReducer from '../reducers'
@@ -94,6 +95,7 @@ export {
   MnemonicImportPage,
   WalletPage,
   WalletDetailPage,
+  SendPage,
   QRCodeScan,
   SettingPage,
 

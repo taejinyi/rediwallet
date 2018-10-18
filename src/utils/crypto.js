@@ -7,49 +7,16 @@ import numeral from 'numeral'
 import ethers from "ethers";
 import {SecureStore} from "expo";
 import * as loomjs from "../network/web3/loom.umd";
-
+import Web3 from 'web3'
 const convertToKRWUnit = (number) => {
   return numeral(number).format('0,000')
 }
-
+import { toChecksumAddress } from 'ethereumjs-util'
 const fromHexString = hexString =>
   new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
 
 const toHexString = bytes =>
   bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
-
-
-const generateAccount = async () => {
-  // const hex = SecureStore.getItemAsync('seed')
-  // if (hex == null) {
-  //   return null
-  // }
-  // const seed = await ethers.utils.randomBytes(16)
-  // console.log(loomjs.CryptoUtils)
-  // // let privateKey = loomjs.CryptoUtils.generatePrivateKeyFromSeed(seed)
-  // let privateKey = new Uint8Array(64)
-  // // TODO: randomize
-  // privateKey.set(seed);
-  // privateKey.set(seed, seed.length);
-  // privateKey.set(seed, seed.length * 2);
-  // privateKey.set(seed, seed.length * 3);
-  // const hex = loomjs.CryptoUtils.bytesToHex(seed)
-  // const mnemonic = await ethers.HDNode.entropyToMnemonic(seed)
-  // const publicKey = loomjs.CryptoUtils.generateKeys(privateKey)
-  // console.log('randoms', privateKey, publicKey)
-  // const publicAddress = loomjs.LocalAddress.fromPublicKey(publicKey).toString()
-  // await SecureStore.setItemAsync('seed', hex)
-  // await SecureStore.setItemAsync('address', hex)
-  // await SecureStore.setItemAsync('privateKey', loomjs.CryptoUtils.bytesToHex(privateKey))
-  // await SecureStore.setItemAsync('mnemonic', mnemonic)
-  // const wallet = {
-  //   address: publicAddress,
-  //   balance: 0,
-  //   seed: hex,
-  //   mnemonic: mnemonic
-  // }
-  // return wallet
-}
 
 
 const generateWallet = async (currency) => {
@@ -61,8 +28,9 @@ const generateWallet = async (currency) => {
     } else {
       nonce = parseInt(nonce, 10)
     }
-    nonce = nonce + 1
-    await SecureStore.setItemAsync('nonce', nonce.toString())
+    const nextNonce = nonce + 1
+    await SecureStore.setItemAsync('nonce', nextNonce.toString())
+    console.log("in generateWallet", nonce, nextNonce)
 
     const hex = await SecureStore.getItemAsync('seed')
     let seed
@@ -84,8 +52,7 @@ const generateWallet = async (currency) => {
       privateKey.set(privateKeySeed, privateKeySeed.length);
 
       const publicKey = loomjs.CryptoUtils.publicKeyFromPrivateKey(privateKey)
-      const address = loomjs.LocalAddress.fromPublicKey(publicKey).toString()
-      console.log('setItemAsync', address, toHexString(privateKey))
+      const address = toChecksumAddress(loomjs.LocalAddress.fromPublicKey(publicKey).toString())
       await SecureStore.setItemAsync(address, toHexString(privateKey))
 
       wallet = {
@@ -94,6 +61,7 @@ const generateWallet = async (currency) => {
         currency: currency,
         balance: 0
       }
+      console.log("in generateWallet", wallet)
       return wallet
     } else {
       console.log('setItemAsync', _newAccount.address, _newAccount.privateKey)

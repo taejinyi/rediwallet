@@ -50,7 +50,7 @@ class SplashPage extends React.Component {
         backgroundColor: '#555555',
       }}>
         <StatusBar barStyle='light-content' />
-				<Image style={{ width: 160, height: 30, }} source={ require('rediwallet/src/assets/images/logo.png') } />
+				<Image style={{ width: 160, height: 30, }} source={ require('rediwallet/src/assets/images/logo_428x222.png') } />
 			</View>
 		)
 	}

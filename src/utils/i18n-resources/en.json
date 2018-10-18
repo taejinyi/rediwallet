@@ -4,5 +4,9 @@
 	},
 	"wallet": {
 		"accountBalance": "Account Balance"
+	},
+	"main": {
+		"close": "Close",
 	}
+
 }

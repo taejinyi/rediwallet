@@ -8,10 +8,12 @@ import {
   SplashPage,
   LandingPage,
   MnemonicBackupPage,
+  MnemonicImportPage,
   LockPage,
   UnlockPage,
   WalletPage,
   WalletDetailPage,
+  SendPage,
   SettingPage,
   QRCodeScan
 } from 'rediwallet/src/pages'
@@ -96,7 +98,7 @@ const MainNavigator = StackNavigator({
   WalletDetail: {
     screen: withDB(withWallet(WalletDetailPage)),
     navigationOptions: ({ navigation }) => ({
-      headerTitle: 'Invite',
+      headerTitle: 'Wallet Detail',
       headerTintColor: 'white',
       headerStyle: {
         backgroundColor: '#10b5bc',
@@ -116,6 +118,25 @@ const MainNavigator = StackNavigator({
     navigationOptions: {
       header: null
     }
+  },
+  Send: {
+    screen: withDB(withWallet(SendPage)),
+    navigationOptions: ({ navigation }) => ({
+      headerTitle: 'Send',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#10b5bc',
+        borderBottomWidth: 0,
+      },
+      headerLeft: (
+        <HeaderBackButton
+          tintColor='white'
+          title='Wallet Detail'  // TODO onPress
+          onPress={() => navigation.goBack(null)} // TODO Alert
+        />
+      )
+    })
+
   },
 })
 
@@ -169,7 +190,25 @@ const AppNavigator = StackNavigator({
       header: null,
       headerBackTitle: 'Mnemonic Backup',
     }
-  }}, {
+  },
+  MnemonicImport: {
+    screen: withDB(withLock(MnemonicImportPage)),
+    navigationOptions: ({ navigation }) => ({
+      headerTitle: 'Import',
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: '#10b5bc',
+        borderBottomWidth: 0,
+      },
+      headerLeft: (
+        <HeaderBackButton
+          tintColor='white'
+          title='Landing'  // TODO onPress
+          onPress={() => navigation.goBack(null)} // TODO Alert
+        />
+      )
+    })
+  }},{
     initialRouteName: 'Splash',
 })
 

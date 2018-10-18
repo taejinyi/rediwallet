@@ -24,6 +24,7 @@ import * as loomjs from '../../network/web3/loom.umd'
 import Math from '../../library/seedrandom.min'
 import ethers from 'ethers'
 import { generateWallet, toHexString, Currency } from '../../utils'
+import {fromHexString} from "../../utils/crypto";
 
 class LandingPage extends React.Component {
  	constructor(props) {
@@ -59,9 +60,8 @@ class LandingPage extends React.Component {
 			} else {
 	  		// raise error
 			}
- 			// wallet = generateWallet(Currency.ETH)
-			// wallet = generateWallet(Currency.KRWT)
-			this.debounceNavigate('MnemonicBackup')
+			const mnemonic = await ethers.HDNode.entropyToMnemonic(seed)
+			this.debounceNavigate('MnemonicBackup', {mnemonic: mnemonic})
 		} catch(error) {
     	console.log(error)
 			// Alert.alert(

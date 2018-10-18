@@ -14,10 +14,12 @@
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
+    "ethereumjs-util": "^6.0.0",
     "ethers": "^3.0.26",
     "expo": "^27.0.1",
     "hangul-js": "^0.2.4",
     "i18next": "^11.2.2",
+    "immutability-helper": "^2.6.6",
     "loom-js": "^1.26.0",
     "native-base": "^2.4.2",
     "node-libs-browser": "2.1.0",

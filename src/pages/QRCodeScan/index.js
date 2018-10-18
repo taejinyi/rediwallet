@@ -2,7 +2,9 @@ import React from 'react'
 import Modal from 'react-native-modal'
 import { BarCodeScanner, Permissions } from 'expo'
 import { Text, Dimensions, StatusBar, View, TouchableOpacity } from 'react-native'
+import {translate} from "react-i18next";
 
+@translate(['main'], { wait: true })
 class QRCodeScan extends React.Component {
   constructor() {
     super()
@@ -31,6 +33,7 @@ class QRCodeScan extends React.Component {
       showModal: false,
     }, () => {
       this.props.navigation.goBack()
+      this.props.navigation.state.params.returnData("Returned");
     })
   }
 
@@ -41,7 +44,8 @@ class QRCodeScan extends React.Component {
       showModal: false,
     }, () => {
       const { navigation } = this.props
-      navigation.goBack({ scannedAddress: data })
+      this.props.navigation.goBack();
+      this.props.navigation.state.params.returnData(data);
     })
   }
 
@@ -54,7 +58,7 @@ class QRCodeScan extends React.Component {
   render() {
     const { showModal, hasCameraPermission } = this.state
     const { width, height } = Dimensions.get('window')
-
+    const { t, i18n } = this.props
     const scannerStyle = {
       width: width,
       height: height,
@@ -80,7 +84,7 @@ class QRCodeScan extends React.Component {
                 <View style={{ flex: 1, }}>
                   <View style={{ zIndex: 999, position: 'absolute', }}>
                     <TouchableOpacity onPress={ this._onPageClose }>
-                      <Text style={{ color: 'white', fontSize: 16, }}>닫기</Text>
+                      <Text style={{ color: 'white', fontSize: 16, }}>{ t('close', { lng: i18n.language }) }</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>

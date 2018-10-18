@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View} from 'react-native'
+import {Text, View, Clipboard} from 'react-native'
 import {Button, Container, Content, Left, Right} from 'native-base'
 import { TextLoader } from 'react-native-indicator'
 import { NavigationActions } from 'react-navigation'
@@ -15,35 +15,21 @@ class MnemonicBackupPage extends React.Component {
     })
     dispatch(resetAction)
   }
-  async componentDidMount() {
-    if (await Expo.Fingerprint.hasHardwareAsync()) {
-      if(await Expo.Fingerprint.isEnrolledAsync()) {
-        const result = await Expo.Fingerprint.authenticateAsync()
-        if (result.success) {
-          this.props.saveUnlocked(true)
-        } else {
-
-        }
-
-      } else {
-        this.setState({
-          showPinNumberDialog: true
-        })
-      }
-    }
-    else {
-      this.setState({
-        showPinNumberDialog: true
-      })
-    }
+  copyToClipboard = () => {
+    Clipboard.setString(this.props.navigation.state.params.mnemonic)
   }
-
   render() {
-    const { mnemonic } = this.props
+    const { mnemonic } = this.props.navigation.state.params
+
     return (
       <Container>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
           <TextLoader text={mnemonic} textStyle={{ marginTop: 15, color: '#10b5bc', fontSize: 17, }} />
+          <Button
+            onPress={this.copyToClipboard}
+            transparent>
+            <Text style={{ fontWeight: 'bold', color: '#10b5bc' }}>Copy to Clipboard</Text>
+          </Button>
           <Button
             onPress={this.closePage}
             transparent>

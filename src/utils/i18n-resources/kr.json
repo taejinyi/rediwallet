@@ -19,4 +19,7 @@
 		"confirm": "확인",
 		"myWalletQRCode": "내 지갑의 QRCode"
 	},
+	"main": {
+		"close": "닫기",
+	}
 }
