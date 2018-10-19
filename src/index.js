@@ -8,12 +8,11 @@ import {SecureStore, Updates} from "expo";
 import Modal from 'react-native-modal'
 import {actions, LockPage} from "./pages";
 import { withDB, withLock, AppNavigator } from './system'
-
 import i18n from './utils/i18n'
+import connect from "react-redux/es/connect/connect";
 
 // const WatcherManager = withLock(withDB(Watcher))
 
-import connect from "react-redux/es/connect/connect";
 
 class Main extends React.Component {
   constructor(props) {

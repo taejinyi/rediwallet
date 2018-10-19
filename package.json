@@ -10,7 +10,8 @@
     "test": "node ./node_modules/jest/bin/jest.js --watchAll"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "transformIgnorePatterns": ["node_modules/(?!((jest-)?react-native|react-native-indicator|native-base-shoutem-theme|native-base|react-clone-referenced-element|expo(nent)?|@expo(nent)?/.*|react-navigation))"]
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
@@ -48,10 +49,14 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.6.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
     "jest-expo": "27.0.0",
     "react-native-scripts": "1.14.0",
-    "react-test-renderer": "16.3.1"
+    "react-test-renderer": "16.3.1",
+    "regenerator-runtime": "^0.12.1"
   }
 }

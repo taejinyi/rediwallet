@@ -8,3 +8,6 @@ it('renders correctly', () => {
 
   expect(tree).toMatchSnapshot();
 });
+it('works', () => {
+  expect(1).toBe(1);
+});

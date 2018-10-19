@@ -47,9 +47,12 @@ if (module.hot) {
 
 
 export default class App extends React.Component {
-  state = {
-    isLoadingComplete: false,
-  };
+  constructor(props) {
+    super(props)
+    this.state = {
+      isLoadingComplete: false,
+    };
+  }
 
   render() {
     if (!this.state.isLoadingComplete) {

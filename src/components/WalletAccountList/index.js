@@ -3,11 +3,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { FlatList, Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 import {Button} from "native-base";
+import { send } from '../../network/web3'
+import SimpleStorageContract from '../../network/web3/simpleStorageContract'
 
 class WalletAccountList extends React.Component {
   constructor(props) {
     super(props)
-
+    this.contract = new SimpleStorageContract()
     this.state = {
       lastWalletIndex: props.wallets ? ((Object.keys(props.wallets).length) - 1) : undefined,
     }
@@ -20,7 +22,9 @@ class WalletAccountList extends React.Component {
       })
     }
   }
-
+  async componentDidMount() {
+    await this.contract.start(this.props.wallets['0x7E6c154e8A292046dB86ed162761E5d28F7673da'])
+  }
   onWalletClicked = (cardIndex) => {
   }
 
@@ -31,8 +35,10 @@ class WalletAccountList extends React.Component {
 
     return (
       <View style={ styles.walletContainer }>
-        <TouchableOpacity onPress={ () => {
-          navigation.navigate('WalletDetail', { wallet: walletData })
+        <TouchableOpacity onPress={ async () => {
+          // navigation.navigate('WalletDetail', { wallet: walletData })
+          this.contract.send(wallet.item, "0x922EAdCEBf7B0318eC80cd0c51Ef2EF6652b2beA",1)
+          // await send(wallet.item,"0x922EAdCEBf7B0318eC80cd0c51Ef2EF6652b2beA",1)
         }}>
           <Text style={{ fontWeight: 'bold', color: '#10b5bc' }}>{ walletData.nonce.toString() + ": " + walletData.address }</Text>
         </TouchableOpacity>
