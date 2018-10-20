@@ -24,7 +24,17 @@ function getClient(privateKey, publicKey) {
     new NonceTxMiddleware(publicKey, client),
     new SignedTxMiddleware(privateKey)
   ]
-
+  const contractAddr = await client.getContractAddressAsync('BluePrint')
+    if (!contractAddr) {
+      throw new Error('Failed to resolve contract address')
+  }
+  const callerAddr = new Address(client.chainId, LocalAddress.fromPublicKey(publicKey))
+  console.log(callerAddr)
+  return new Contract({
+    contractAddr,
+    callerAddr,
+    client
+  })
   return client
 }
 
@@ -55,14 +65,14 @@ export default class SimpleStorateContract {
     this._contract = new web3.eth.Contract(abi, simpleStorageAddress, {from: wallet.address})
 
     console.log('in send = ', this._contract.methods)
-    const retM = await this._contract.methods.set(29).send({from: wallet.address})
+    // const retM = await this._contract.methods.set(29).send({from: wallet.address})
 
     //
     // const ABI = [{"constant":false,"inputs":[{"name":"_postId","type":"uint256"},{"name":"_text","type":"string"}],"name":"newComment","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"posts","outputs":[{"name":"text","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"commentFromAccount","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_text","type":"string"}],"name":"newPost","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"hasPosts","outputs":[{"name":"_hasPosts","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"comments","outputs":[{"name":"text","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"postsFromAccount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"name":"commentsFromPost","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"postId","type":"uint256"},{"indexed":false,"name":"owner","type":"address"}],"name":"NewPostAdded","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"postId","type":"uint256"},{"indexed":false,"name":"commentId","type":"uint256"},{"indexed":false,"name":"owner","type":"address"}],"name":"NewCommentAdded","type":"event"}]
     // const loomContractAddress = await client.getContractAddressAsync('SimpleSocialNetwork')
     // const contractAddress = CryptoUtils.bytesToHexAddr(loomContractAddress.local.bytes)
 
-    this._contract = new web3.eth.Contract(ABI, contractAddress, {from})
+    // this._contract = new web3.eth.Contract(ABI, contractAddress, {from})
     this.ready = true
   }
   async send(wallet, toAddress, amount) {
