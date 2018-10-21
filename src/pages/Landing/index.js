@@ -52,15 +52,18 @@ class LandingPage extends React.Component {
 			return
 		}
 		try {
-	  	seed = await ethers.utils.randomBytes(16)
-			await SecureStore.setItemAsync('seed', toHexString(seed))
- 			const wallet = await generateWallet(Currency.IFUM)
-			if (wallet) {
-	  		await this.props.addWallet(this.props.db, wallet)
-			} else {
-	  		// raise error
-			}
+      seed = await ethers.utils.randomBytes(16)
+      const hex = toHexString(seed)
+      console.log("generated HEX: ", hex)
+      await SecureStore.setItemAsync('seed', hex)
 			const mnemonic = await ethers.HDNode.entropyToMnemonic(seed)
+			const wallet = await generateWallet(Currency.ETH.ticker)
+			await this.props.addWallet(this.props.db, wallet)
+			// const wallet1 = await generateWallet(Currency.IFUM.ticker)
+			// await this.props.addWallet(this.props.db, wallet1)
+			// const wallet2 = await generateWallet(Currency.KRWT.ticker)
+			// await this.props.addWallet(this.props.db, wallet2)
+
 			this.debounceNavigate('MnemonicBackup', {mnemonic: mnemonic})
 		} catch(error) {
     	console.log(error)

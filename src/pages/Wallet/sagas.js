@@ -46,17 +46,22 @@ export function* setDefaultWallet(action) {
       _rev: fetchResult._rev,
     }))
   } catch (e) {
+    console.log(e)
     yield call(() => db.put({
       _id: 'wallet',
       data: wallet,
     }))
   }
 
-  yield put({
-    type: SAVE_WALLET_TO_DB,
-    db: db,
-    wallet: wallet,
-  })
+  try {
+    yield put({
+      type: SAVE_WALLET_TO_DB,
+      db: db,
+      wallet: wallet,
+    })
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 export function* saveWalletToDB(action) {
@@ -150,6 +155,7 @@ export function* getWalletsFromNetwork(action) {
     const addresses = Object.keys(fetchResult.data)
     let i
     let wallets = fetchResult.data
+    console.log('in getWalletsFromNetwork wallets:', wallets)
     for (i = 0; i < addresses.length; i++) {
       const balance = yield network.getBalance(wallets[addresses[i]])
       const updatedWallet = {
@@ -201,6 +207,7 @@ export function* getWalletsFromDB(action) {
   let { db } = action
   try {
     const fetchResult = yield call(() => db.get('wallets'))
+    console.log('in getWalletsFromDB', fetchResult.data)
     yield put({
       type: SAVE_WALLETS,
       wallets: fetchResult.data,

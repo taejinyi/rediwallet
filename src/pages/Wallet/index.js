@@ -12,6 +12,7 @@ import connect from "react-redux/es/connect/connect";
 // import { NavigationActions } from 'react-navigation'
 import {SecureStore} from "expo";
 import {generateWallet, Currency} from '../../utils'
+import nacl from "tweetnacl/nacl";
 class WalletPage extends React.Component {
   constructor(props) {
     super(props)
@@ -62,7 +63,7 @@ class WalletPage extends React.Component {
         </View>
         <Content style={{ backgroundColor: 'white', }}>
           <ListItem
-            onPress={ () => this.addWallet(Currency.IFUM) }
+            onPress={ () => this.addWallet(Currency.IFUM.ticker) }
             icon last>
             <Left>
               <Icon style={{ color: '#666666', }} name='ios-megaphone' />
@@ -75,7 +76,7 @@ class WalletPage extends React.Component {
             </Right>
           </ListItem>
           <ListItem
-            onPress={ () => this.addWallet(Currency.ETH) }
+            onPress={ () => this.addWallet(Currency.ETH.ticker) }
             icon last>
             <Left>
               <Icon style={{ color: '#666666', }} name='ios-megaphone' />
@@ -88,7 +89,7 @@ class WalletPage extends React.Component {
             </Right>
           </ListItem>
           <ListItem
-            onPress={ () => this.addWallet(Currency.KRWT) }
+            onPress={ () => this.addWallet(Currency.KRWT.ticker) }
             icon last>
             <Left>
               <Icon style={{ color: '#666666', }} name='ios-megaphone' />

@@ -33,6 +33,7 @@ import {NavigationActions} from "react-navigation";
 import {fromHexString} from "../../utils/crypto";
 import {actions} from "../index";
 import {connect} from "react-redux";
+import nacl from "tweetnacl/nacl";
 
 
 
@@ -163,6 +164,7 @@ class MnemonicImportPage extends React.Component {
     dispatch(resetAction)
   }
   importMnemonic = async (mnemonic) => {
+    console.log("in importMnemonic")
     let seed = await SecureStore.getItemAsync('seed')
     if(seed && seed.length > 10) {
     	 Alert.alert(
@@ -178,18 +180,31 @@ class MnemonicImportPage extends React.Component {
 			return
 		}
 		try {
+      console.log('mnemonic = ', mnemonic)
 			const entropy = await ethers.HDNode.mnemonicToEntropy(mnemonic)
       const hex = entropy.substr(entropy.length - 32)
-      console.log(entropy, hex)
-      // const privateKeySeed = fromHexString(privateKeyHex.substr(privateKeyHex.length - 64))
-
+      console.log("in import", entropy, hex)
 			await SecureStore.setItemAsync('seed', hex)
- 			const wallet = await generateWallet(Currency.IFUM)
-			if (wallet) {
-	  		await this.props.addWallet(this.props.db, wallet)
-			} else {
-	  		// raise error
-			}
+      const wallet = await generateWallet(Currency.IFUM.ticker)
+			await this.props.addWallet(this.props.db, wallet)
+
+			// const wallet1 = await generateWallet(Currency.IFUM.ticker)
+			// await this.props.addWallet(this.props.db, wallet1)
+			// const wallet2 = await generateWallet(Currency.KRWT.ticker)
+			// await this.props.addWallet(this.props.db, wallet2)
+      const privateKeySeed = fromHexString(hex)
+      let privateKey = new Uint8Array(32)
+      privateKey.set(privateKeySeed);
+      privateKey.set(privateKeySeed, privateKeySeed.length);
+      console.log("in SimpleStorateContract.start, privateKey: ", privateKey)
+
+      console.log("in importMnemonic", wallet)
+      const pair = nacl.sign.keyPair.fromSeed(privateKey)
+      console.log('in importMnemonic, pair = ', pair)
+
+
+
+
 			this.navigateTo('Main')
 		} catch(error) {
     	console.log(error)
