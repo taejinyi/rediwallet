@@ -161,7 +161,7 @@ Header.propTypes = {
 
 Header.defaultProps = {
   renderContent: true,
-  backgroundColor: '#10b5bc',
+  backgroundColor: '#303140',
   renderBackButton: null,
 }
 

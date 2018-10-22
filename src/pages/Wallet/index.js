@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
-import {StyleSheet, View, Text, Alert} from 'react-native'
+import {StyleSheet, View, Text, Image, Alert} from 'react-native'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 import { Container, Content, Body, Left, List, ListItem, Icon, Separator, Right } from 'native-base'
 // import { Util, SecureStore } from 'expo'
@@ -48,15 +48,9 @@ class WalletPage extends React.Component {
   }
   async componentWillMount() {
     const { db, wallets, wallet } = this.props
-    const wallets_g = await this.props.getWalletsFromDB(db)
-    console.log(wallets, wallet)
-    // await this._wallet.start(wallets_g)
-    // console.log("wallets = ", wallets_g)
-    // console.log("address = ", this._wallet.address)
-    // console.log("ETH = ", await this._wallet.getBalance("ETH"))
-    // console.log("IFUM = ", await this._wallet.getBalance("IFUM"))
-    // console.log("KRWT = ", await this._wallet.getBalance("KRWT"))
+    await this.props.getWalletsFromDB(db)
     this.props.getWalletsFromNetwork(db)
+    this.logo = require('rediwallet/src/assets/images/logo_400x400.png')
   }
 
   render() {
@@ -64,14 +58,29 @@ class WalletPage extends React.Component {
     const { wallets } = this.state
 
     return (
-      <View style={{ flex: 1, }}>
+      <View style={{ flex: 1, backgroundColor: '#303140',}}>
         <View style={{ flex: 0.3, }}>
-          <Header
-            headerTitle='Wallet'
-            renderContent={ false }
-          />
+            <View style={{ flex: 0.5 }}>
+            </View>
+            <View style={{ color: 'white', flex: 0.5 }}>
+              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View style={{flex: 0.5}} >
+                  <Image style={{ height: 150, width: 150 }} source={ this.logo } />
+                </View>
+                <View style={{flex: 0.5}} >
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.TotalAsset}>TOTAL ASSET</Text>
+                    <Text style={styles._137500}>
+                      <Text>￦</Text>{'\n'}
+                      <Text>137,500</Text>{'\n'}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+
         </View>
-        <Content style={{ backgroundColor: 'white', }}>
+        <Content style={{ backgroundColor: '#303140', }}>
           <ListItem
             onPress={ () => this.addWallet(Currency.IFUM.ticker) }
             icon last>
@@ -150,12 +159,54 @@ class WalletPage extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  walletsPageContainer: {
-    flex: 1,
-  },
-
   headerContainer: {
     flex: 0.3,
+    height: '100%',
+    flexDirection: 'column',
+  },
+
+  actionsWrapper: {
+    flex: 0.4,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    width: '100%',
+  },
+
+  iconsWrapper: {
+    width: '30%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+
+  titleTextWrapper: {
+    flex: 0.3,
+  },
+
+  titleText: {
+    fontSize: 24,
+    color: 'white',
+    marginLeft: '4%',
+  },
+  TotalAsset: {
+    backgroundColor: 'transparent',
+    fontSize: 32,
+    fontWeight: 'normal',
+    color: '#D2D2D2',
+    textAlign: 'right'
+  },
+  _137500: {
+    backgroundColor: 'transparent',
+    fontSize: 78,
+    fontWeight: 'normal',
+    color: '#FFFFFF',
+    textAlign: 'left'
+  },
+  searchContainer: {
+    flex: 0.3,
+    alignItems: 'center',
+  },
+  walletsPageContainer: {
+    flex: 1,
   },
 
   walletsContainer: {
