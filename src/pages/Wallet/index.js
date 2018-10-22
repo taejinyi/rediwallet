@@ -12,7 +12,9 @@ import connect from "react-redux/es/connect/connect";
 // import { NavigationActions } from 'react-navigation'
 import {SecureStore} from "expo";
 import {generateWallet, Currency} from '../../utils'
-import nacl from "tweetnacl/nacl";
+
+import Wallet from "../../system/Wallet"
+
 class WalletPage extends React.Component {
   constructor(props) {
     super(props)
@@ -23,6 +25,7 @@ class WalletPage extends React.Component {
     }
 
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
+    this._wallet = new Wallet()
   }
   getWalletFromNetwork = async () => {
     const { db, dispatch, wallet } = this.props
@@ -31,7 +34,7 @@ class WalletPage extends React.Component {
   }
 
   addWallet = async (currency) => {
-    const wallet = await generateWallet(currency)
+    const wallet = await Wallet.generateWallet(currency)
     const { db } = this.props
     this.props.addWallet(db, wallet)
     console.log(wallet)
@@ -44,8 +47,15 @@ class WalletPage extends React.Component {
     })
   }
   async componentWillMount() {
-    const { db, wallets } = this.props
-    await this.props.getWalletsFromDB(db)
+    const { db, wallets, wallet } = this.props
+    const wallets_g = await this.props.getWalletsFromDB(db)
+    console.log(wallets, wallet)
+    // await this._wallet.start(wallets_g)
+    // console.log("wallets = ", wallets_g)
+    // console.log("address = ", this._wallet.address)
+    // console.log("ETH = ", await this._wallet.getBalance("ETH"))
+    // console.log("IFUM = ", await this._wallet.getBalance("IFUM"))
+    // console.log("KRWT = ", await this._wallet.getBalance("KRWT"))
     this.props.getWalletsFromNetwork(db)
   }
 

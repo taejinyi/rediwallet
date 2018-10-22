@@ -25,11 +25,11 @@ import Math from '../../library/seedrandom.min'
 import ethers from 'ethers'
 import { generateWallet, toHexString, Currency } from '../../utils'
 import {fromHexString} from "../../utils/crypto";
+import Wallet from "../../system/Wallet";
 
 class LandingPage extends React.Component {
  	constructor(props) {
 		super(props)
-
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
 	}
   createAccount = async () => {
@@ -57,13 +57,8 @@ class LandingPage extends React.Component {
       console.log("generated HEX: ", hex)
       await SecureStore.setItemAsync('seed', hex)
 			const mnemonic = await ethers.HDNode.entropyToMnemonic(seed)
-			const wallet = await generateWallet(Currency.ETH.ticker)
+			const wallet = await Wallet.generateWallet()
 			await this.props.addWallet(this.props.db, wallet)
-			// const wallet1 = await generateWallet(Currency.IFUM.ticker)
-			// await this.props.addWallet(this.props.db, wallet1)
-			// const wallet2 = await generateWallet(Currency.KRWT.ticker)
-			// await this.props.addWallet(this.props.db, wallet2)
-
 			this.debounceNavigate('MnemonicBackup', {mnemonic: mnemonic})
 		} catch(error) {
     	console.log(error)

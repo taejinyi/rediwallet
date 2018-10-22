@@ -2,180 +2,189 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Animated, View, Text, PanResponder } from 'react-native'
 import nacl from 'tweetnacl'
-class Wallet extends React.Component {
-  constructor(props) {
-    super(props)
+import HDWalletProvider from "truffle-hdwallet-provider";
+import Web3 from "web3";
+import {fromHexString} from "../../utils/crypto";
+import ethers from "ethers";
+import {SecureStore} from "expo";
 
-    this.state = {
-      notificationContent: null,
-      showMoreContentIndicator: false,
-      showMoreContent: false,
+const debug = true
+
+const kovanURL = "https://kovan.infura.io"
+const mainnetURL = "https://mainnet.infura.io"
+// const kovanURL = "https://kovan.infura.io/v3/5f559ee7fbf849c5a63c5a272dfe2530"
+
+async function getMnemonic() {
+  if (debug) {
+    return "pilot soft lottery source duty sentence exist wonder leaf same middle allow"
+  }
+  const hex = await SecureStore.getItemAsync('seed')
+  let seed
+  if (hex === null) {
+    console.log("TODO: Error! seed is empty!")
+    return "pilot soft lottery source duty sentence exist wonder leaf same middle allow"
+  } else {
+    seed = fromHexString(hex)
+  }
+  const mnemonic = await ethers.HDNode.entropyToMnemonic(seed)
+  return mnemonic
+  // const mnemonic = "logic eyebrow ship sell artist whale fade inside sentence magnet prefer render"
+}
+
+export default class Wallet {
+  constructor() {
+    this.ready = false
+    this.currency = "KRWT"
+    this.nonce = 0
+    this.address = undefined
+    this.balances = {
+      ETH: 0,
+      IFUM: 0,
+      KRWT: 0,
     }
-
-    this.containerHeight = new Animated.Value(0)
-    this.innerContainerOpacity = this.containerHeight.interpolate({
-      inputRange: [0, props.height],
-      outputRange: [0, 1],
-    })
-
-    this.dismissTimer = null
-  }
-
-  _clearTimeout = (timer) => {
-    if(timer) {
-      clearTimeout(timer)
-      timer = null
+    this._contracts = {
+      IFUM: undefined,
+      KRWT: undefined,
     }
+    this._web3 = undefined
+    this._contract = undefined
   }
 
-  doDismiss = () => {
-    Animated.timing(this.containerHeight, {
-      toValue: 0,
-      duration: 150,
-    }).start(() => {
-      this.setState({
-        notificationContent: null
-      })
-    })
-  }
-
-  setDismiss = (dismissTime) => {
-    let _dismissTime = dismissTime == undefined ? 5 : dismissTime
-    this.dismissTimer = setTimeout(this.doDismiss, dismissTime * 1000)
-  }
-
-  initNotification = () => {
-    this.setState({
-      notificationContent: null,
-      showMoreContentIndicator: false,
-      showMoreContent: false,
-    })
-  }
-
-  addNotification = (notificationContent) => {
-    this.initNotification()
-
-    const { moreHeight } = this.props
-    const { autoDismiss, moreContent, ... restOfContent } = notificationContent
-
-    if(moreContent) {
-      this.panResponder = PanResponder.create({
-        onMoveShouldSetPanResponder: (evt, gestureState) => true,
-        onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
-        onPanResponderRelease: (evt, { dy }) => {
-          const { height, moreHeight } = this.props
-
-          if(dy < 0 && height / 2 < Math.abs(dy)) { // 내려 버리면
-            this._clearTimeout(this.dismissTimer)
-            this.doDismiss()
-          } else if(dy > 0 && ((moreHeight - height) / 2) < dy) { // 위로 올려버리면
-            this.setDismiss(autoDismiss)
-            Animated.timing(this.containerHeight, {
-              toValue: moreHeight,
-              duration: 100,
-            }).start(() => {
-              this.setState({
-                showMoreContent: true
-              })
-            })
-          } else { // 그외에 경우에는 원래 위치로 돌아가야 됨.
-            this.setDismiss(autoDismiss)
-            Animated.timing(this.containerHeight, {
-              toValue: height,
-              duration: 100,
-            }).start()
-          }
-        },
-      })
-
+  getWeb3 = async (mnemonic, nonce=0) => {
+    if (debug) {
+      const provider = new HDWalletProvider(mnemonic, kovanURL, nonce)
+      return new Web3(provider);
     } else {
-      this.panResponder = PanResponder.create({
-        onMoveShouldSetPanResponder: (evt, gestureState) => true,
-        onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
-        onPanResponderRelease: (evt, { dy }) => {
-          const { height, moreHeight } = this.props
-
-          if(dy < 0 && height / 2 < Math.abs(dy)) { // 내려 버리면
-            this._clearTimeout(this.dismissTimer)
-            this.doDismiss()
-          }
-        }
-      })
+      const provider = new HDWalletProvider(mnemonic, mainnetURL, nonce)
+      return new Web3(provider);
     }
-
-    this.setState({
-      notificationContent: {
-        moreContent: moreContent,
-        ... restOfContent
-      },
-      showMoreContentIndicator: true,
-    }, () => {
-      const { height } = this.props
-
-      Animated.timing(this.containerHeight, {
-        toValue: height,
-        duration: 700,
-      }).start(() => this.setDismiss(autoDismiss))
-    })
   }
 
-  editNotification = () => {
-    return null
+  getABIAsync = async () => {
+    return require("rediwallet/src/contracts/KRWT.json").abi
+  }
+  getContractAddressAsync = async (currency) => {
+    if (debug) {
+      if (currency === "KRWT") {
+        return "0xd5a23575d32849b7430dcd44d28c9fef3954068a"
+      } else if (currency === "IFUM") {
+        return "0xf337f6821b18b2eb24c44d74f3fa91128ead23f4"
+      } else {
+        return "0x"
+      }
+    } else {
+      if (currency === "KRWT") {
+        return "0x"
+      } else if (currency === "IFUM") {
+        return "0x"
+      } else {
+        return "0x"
+      }
+    }
+  }
+  getJson = () => {
+    return {
+      address: this.address,
+      nonce: this.nonce,
+      currency: this.currency,
+      balances: {
+        ETH: this.balances["ETH"],
+        IFUM: this.balances["IFUM"],
+        KRWT: this.balances["KRWT"],
+      }
+    }
+  }
+  static async generateWallet(currency="KRWT") {
+    let nonce = await SecureStore.getItemAsync('nonce')
+    if (!nonce) {
+      nonce = 0
+    } else {
+      nonce = parseInt(nonce, 10)
+    }
+    const nextNonce = nonce + 1
+    await SecureStore.setItemAsync('nonce', nextNonce.toString())
+
+    const hex = await SecureStore.getItemAsync('seed')
+    let seed
+    if (hex === null) {
+      return null
+    } else {
+      seed = fromHexString(hex)
+    }
+    const mnemonic = await ethers.HDNode.entropyToMnemonic(seed)
+    const path = "m/44'/60'/0'/0/" + nonce
+    const _newAccount = await ethers.Wallet.fromMnemonic(mnemonic, path);
+
+    const wallet = {
+      address: _newAccount.address,
+      nonce: nonce,
+      currency: currency,
+      balances: {
+        ETH: 0,
+        IFUM: 0,
+        KRWT: 0,
+      }
+    }
+    const _wallet = new Wallet()
+    await _wallet.start(wallet)
+    await _wallet.getFromNetwork()
+    const newWallet = _wallet.getJson()
+    console.log('in generateWallet, new ! ', newWallet)
+    return newWallet
   }
 
-  clearNotification = () => {
-    this.setState({
-      notificationContent: null
-    })
+  async start(wallet) {
+    this.nonce = wallet.nonce
+    this.address = wallet.address
+    this.currency = wallet.currency
+    this.balances = wallet.balances
+
+    this._web3 = await this.getWeb3(this.nonce)
+    const ABI = await this.getABIAsync("KRWT")
+    const KRWTContractAddress = await this.getContractAddressAsync('KRWT')
+    const IFUMContractAddress = await this.getContractAddressAsync('IFUM')
+
+    this._contracts = {
+      IFUM: new this._web3.eth.Contract(ABI, IFUMContractAddress, {from: this.address}),
+      KRWT: new this._web3.eth.Contract(ABI, KRWTContractAddress, {from: this.address}),
+    }
+    this.ready = true
   }
-  render() {
-    const { showMoreContent, showMoreContentIndicator, notificationContent } = this.state
-    if(notificationContent === null) return null
+  async getFromNetwork() {
+    if (!this.ready) {
+      return null
+    }
+    this.balances = {
+      ETH: await this.getBalance("ETH"),
+      IFUM: await this.getBalance("IFUM"),
+      KRWT: await this.getBalance("KRWT"),
+    }
+  }
 
-    const { moreContent } = notificationContent
+  async getBalance(currency) {
+    if (currency === "ETH") {
+      return await this._web3.eth.getBalance(this.address)
+    }
+    return await this._contracts[currency].methods.balanceOf(this.address).call()
+  }
 
-    return (
-      <Animated.View style={{ zIndex: 1000, paddingBottom: 5, position: 'absolute', width: '100%', height: this.containerHeight, flex: 1, backgroundColor: '#6341d3', }}>
-        <Animated.View style={{ flex: 1, opacity: this.innerContainerOpacity, justifyContent: 'space-around', alignItems: 'center', padding: 10, paddingLeft: 15, paddingRight: 15, marginTop: 15, flexDirection: 'row', }}>
-          <View style={{ flex: 0.9, }}>
-            <Text style={{ color: 'white', fontWeight: 'bold', marginBottom: 5, }}>{ notificationContent.title }</Text>
-            <Text style={{ color: 'white', }}>{ notificationContent.message }</Text>
-          </View>
-          <View style={{ alignItems: 'flex-end', justifyContent: 'flex-end', flex: 0.1 }}>
-            { notificationContent.icon }
-          </View>
-        </Animated.View>
-        {
-          showMoreContentIndicator === true && showMoreContent === false ? (
-            <Animated.View style={{ position: 'absolute', bottom: 0, justifyContent: 'center', width: '100%', height: 13, opacity: this.innerContainerOpacity, alignItems: 'center', }} { ... this.panResponder.panHandlers }>
-              <View style={{ width: 50, height: 5, borderRadius: 10, backgroundColor: 'rgba(255, 255, 255, 0.3)', }} />
-            </Animated.View>
-          ) : (
-            null
-          )
-        }
-        {
-          showMoreContent === true ? (
-            <View style={{ width: '100%', }}>
-              { moreContent }
-            </View>
-          ) : (
-            null
-          )
-        }
-      </Animated.View>
-    )
+  getUser() {
+    return this.user
+  }
+
+  async newPost(text) {
+    return await this._contract.methods.newPost(text).send()
+  }
+
+  async newComment(postId, text) {
+    return await this._contract.methods.newComment(postId, text).send()
+  }
+
+  async hasPosts() {
+    return await this._contract.methods.hasPosts().call()
+  }
+
+  async getPosts(index) {
+    return await this._contract.methods.posts().call()
   }
 }
-
-Wallet.propTypes = {
-  height: PropTypes.number,
-  moreHeight: PropTypes.number,
-}
-
-Wallet.defaultProps = {
-  height: 100,
-  moreHeight: 150,
-}
-
-export default Wallet

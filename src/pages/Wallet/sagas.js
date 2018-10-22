@@ -12,6 +12,7 @@ import {
   SET_DEFAULT_WALLET,
 } from './actions'
 import * as network from 'rediwallet/src/network/web3'
+import Wallet from "../../system/Wallet"
 
 export function* addWallet(action) {
   const { db, wallet } = action
@@ -96,7 +97,7 @@ export function* saveWalletToDB(action) {
       address: wallet.address,
       nonce: wallet.nonce,
       currency: wallet.currency,
-      balance: wallet.balance
+      balances: wallet.balances
     }
   }
   let wallets = null
@@ -141,8 +142,23 @@ export function* saveWalletsToDB(action) {
 
 
 export function* getWalletFromNetwork(action) {
-  console.log('in getWalletFromNetwork')
   let { db, wallet } = action
+  console.log('in getWalletFromNetwork', wallet)
+  try {
+    const _wallet = new Wallet()
+    yield _wallet.start(wallet)
+    yield _wallet.getFromNetwork()
+    const newWallet = _wallet.getJson()
+    console.log('in getWalletFromNetwork, new ! ', newWallet)
+
+    yield put({
+      type: SAVE_WALLET_TO_DB,
+      db: db,
+      wallet: newWallet,
+    })
+  } catch (e) {
+    console.log(e)
+  }
   return true
 }
 
@@ -157,22 +173,12 @@ export function* getWalletsFromNetwork(action) {
     let wallets = fetchResult.data
     console.log('in getWalletsFromNetwork wallets:', wallets)
     for (i = 0; i < addresses.length; i++) {
-      const balance = yield network.getBalance(wallets[addresses[i]])
-      const updatedWallet = {
-        [addresses[i]]  : {
-          'address': addresses[i],
-          'nonce': fetchResult.data[addresses[i]].nonce,
-          'currency': fetchResult.data[addresses[i]].currency,
-          'balance': balance
-        }
-      }
-      wallets = Object.assign({}, wallets, updatedWallet)
+      yield put({
+        type: GET_WALLET_FROM_NETWORK,
+        db: db,
+        wallet: wallets[addresses[i]],
+      })
     }
-    yield put({
-      type: SAVE_WALLETS_TO_DB,
-      db: db,
-      wallets: wallets,
-    })
   } catch (e) {
     console.log(e)
     return false
