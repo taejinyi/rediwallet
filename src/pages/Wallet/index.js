@@ -14,6 +14,7 @@ import {SecureStore} from "expo";
 import {generateWallet, Currency} from '../../utils'
 
 import Wallet from "../../system/Wallet"
+import Color from "../../constants/Colors";
 
 class WalletPage extends React.Component {
   constructor(props) {
@@ -47,99 +48,69 @@ class WalletPage extends React.Component {
     })
   }
   async componentWillMount() {
-    const { db, wallets, wallet } = this.props
+    const { db, wallet } = this.props
+    await this.props.getWalletFromDB(db)
     await this.props.getWalletsFromDB(db)
     this.props.getWalletsFromNetwork(db)
-    this.logo = require('rediwallet/src/assets/images/logo_400x400.png')
+    this.logo = require('rediwallet/src/assets/images/logo_428x222.png')
   }
 
   render() {
     const { navigation } = this.props
-    const { wallets } = this.state
+    const { wallet } = this.state
+
+    let currencyIcon, currencyName, totalAssetAmount = 0
+
+    if (wallet){
+      if (wallet.currency === "ETH") {
+        currencyIcon = "ETH"
+        currencyName = "Ethereum"
+      } else if (wallet.currency === "IFUM") {
+        currencyIcon = "IFUM"
+        currencyName = "Infleum"
+      } else if (wallet.currency === "KRWT") {
+        currencyIcon = "￦"
+        currencyName = "KRW Tether"
+      } else {
+        currencyIcon = "?"
+        currencyName = "Unknown"
+      }
+      totalAssetAmount = wallet.accounts.ETH.balance * 230500 + wallet.accounts.IFUM.balance * 22 + wallet.accounts.KRWT.balance
+    }
+
+
 
     return (
-      <View style={{ flex: 1, backgroundColor: '#303140',}}>
-        <View style={{ flex: 0.3, }}>
-            <View style={{ flex: 0.5 }}>
-            </View>
-            <View style={{ color: 'white', flex: 0.5 }}>
-              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <View style={{flex: 0.5}} >
-                  <Image style={{ height: 150, width: 150 }} source={ this.logo } />
+      <View style={{ flex: 1, backgroundColor: '#303140', alignItems: 'center'}}>
+        <View style={{ flex: 0.3, width:'92%'}}>
+            <View style={{ flex: 1, alignItems: 'flex-end', }}>
+              <View style={{flexDirection: 'row', height: '100%', justifyContent: 'space-between', alignItems: 'flex-end', }}>
+                <View style={{flex: 0.5, flexDirection: 'column'}} >
+                  <Image style={{ height: 78, width: 150, alignItems: 'flex-end',  }} source={ this.logo } />
                 </View>
-                <View style={{flex: 0.5}} >
-                  <View style={{flexDirection: 'row'}}>
-                    <Text style={styles.TotalAsset}>TOTAL ASSET</Text>
-                    <Text style={styles._137500}>
-                      <Text>￦</Text>{'\n'}
-                      <Text>137,500</Text>{'\n'}
-                    </Text>
+                <View style={{flex: 0.5, flexDirection: 'column'}} >
+                  <View style={{alignItems: 'flex-end', }}>
+                    <View>
+                      <Text style={styles.TotalAsset}>TOTAL ASSET</Text>
+                    </View>
+                    <View>
+                      <Text numberOfLines={1} >
+                        <Text style={styles.Currency}>{currencyIcon}</Text>
+                        <Text numberOfLines={1} style={styles.TotalAssetAmount}>{totalAssetAmount.toString()}</Text>{'\n'}
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </View>
             </View>
 
         </View>
-        <Content style={{ backgroundColor: '#303140', }}>
-          <ListItem
-            onPress={ () => this.addWallet(Currency.IFUM.ticker) }
-            icon last>
-            <Left>
-              <Icon style={{ color: '#666666', }} name='ios-megaphone' />
-            </Left>
-            <Body>
-              <Text>Generate IFUM Wallet</Text>
-            </Body>
-            <Right>
-              <Icon name='arrow-forward' />
-            </Right>
-          </ListItem>
-          <ListItem
-            onPress={ () => this.addWallet(Currency.ETH.ticker) }
-            icon last>
-            <Left>
-              <Icon style={{ color: '#666666', }} name='ios-megaphone' />
-            </Left>
-            <Body>
-              <Text>Generate ETH Wallet</Text>
-            </Body>
-            <Right>
-              <Icon name='arrow-forward' />
-            </Right>
-          </ListItem>
-          <ListItem
-            onPress={ () => this.addWallet(Currency.KRWT.ticker) }
-            icon last>
-            <Left>
-              <Icon style={{ color: '#666666', }} name='ios-megaphone' />
-            </Left>
-            <Body>
-              <Text>Generate KRWT Wallet</Text>
-            </Body>
-            <Right>
-              <Icon name='arrow-forward' />
-            </Right>
-          </ListItem>
-          <ListItem
-            onPress={ this.getWalletFromNetwork }
-            icon last>
-            <Left>
-              <Icon style={{ color: '#666666', }} name='ios-megaphone' />
-            </Left>
-            <Body>
-              <Text>Get Wallet From Network</Text>
-            </Body>
-            <Right>
-              <Icon name='arrow-forward' />
-            </Right>
-          </ListItem>
-          <Separator />
-
+        <Content style={{ backgroundColor: '#303140', width:'100%'}}>
           {
-            wallets ? (
+            wallet ? (
               <View style={ styles.WalletAccountListContainer }>
                 <WalletAccountList
-                  wallets={ wallets }
+                  wallet={ wallet }
                   navigation={ navigation }
                 />
               </View>
@@ -189,17 +160,26 @@ const styles = StyleSheet.create({
   },
   TotalAsset: {
     backgroundColor: 'transparent',
-    fontSize: 32,
+    fontSize: 20,
     fontWeight: 'normal',
     color: '#D2D2D2',
-    textAlign: 'right'
+    textAlign: 'right',
   },
-  _137500: {
+  Currency: {
+    flex: 1,
     backgroundColor: 'transparent',
-    fontSize: 78,
+    fontSize: 26,
     fontWeight: 'normal',
     color: '#FFFFFF',
-    textAlign: 'left'
+    textAlign: 'right',
+  },
+  TotalAssetAmount: {
+    flex: 1,
+    backgroundColor: 'transparent',
+    fontSize: 36,
+    fontWeight: 'normal',
+    color: '#FFFFFF',
+    textAlign: 'right',
   },
   searchContainer: {
     flex: 0.3,
@@ -222,6 +202,8 @@ const styles = StyleSheet.create({
 })
 
 const mapDispatchToProps = (dispatch) => ({
+  getWalletFromDB: (db) => dispatch(actions.getWalletFromDB(db)),
+  getWalletFromNetwork: (db, wallet) => dispatch(actions.getWalletFromNetwork(db, wallet)),
   getWalletsFromNetwork: (db) => dispatch(actions.getWalletsFromNetwork(db)),
   getWalletsFromDB: (db) => dispatch(actions.getWalletsFromDB(db)),
   addWallet: (db, wallet) => dispatch(actions.addWallet(db, wallet)),

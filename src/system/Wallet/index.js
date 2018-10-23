@@ -37,10 +37,19 @@ export default class Wallet {
     this.currency = "KRWT"
     this.nonce = 0
     this.address = undefined
-    this.balances = {
-      ETH: 0,
-      IFUM: 0,
-      KRWT: 0,
+    this.accounts = {
+      ETH: {
+        balance: 0,
+        currency: "ETH"
+      },
+      IFUM: {
+        balance: 0,
+        currency: "IFUM"
+      },
+      KRWT: {
+        balance: 0,
+        currency: "KRWT"
+      },
     }
     this._contracts = {
       IFUM: undefined,
@@ -48,6 +57,11 @@ export default class Wallet {
     }
     this._web3 = undefined
     this._contract = undefined
+    this.decimals = {
+      ETH: 1000000000000000000,
+      IFUM: 1,
+      KRWT: 1,
+    }
   }
 
   getWeb3 = async (mnemonic, nonce=0) => {
@@ -87,10 +101,10 @@ export default class Wallet {
       address: this.address,
       nonce: this.nonce,
       currency: this.currency,
-      balances: {
-        ETH: this.balances["ETH"],
-        IFUM: this.balances["IFUM"],
-        KRWT: this.balances["KRWT"],
+      accounts: {
+        ETH: this.accounts["ETH"],
+        IFUM: this.accounts["IFUM"],
+        KRWT: this.accounts["KRWT"],
       }
     }
   }
@@ -119,10 +133,19 @@ export default class Wallet {
       address: _newAccount.address,
       nonce: nonce,
       currency: currency,
-      balances: {
-        ETH: 0,
-        IFUM: 0,
-        KRWT: 0,
+      accounts: {
+        ETH: {
+          balance: 0,
+          currency: "ETH"
+        },
+        IFUM: {
+          balance: 0,
+          currency: "IFUM"
+        },
+        KRWT: {
+          balance: 0,
+          currency: "KRWT"
+        },
       }
     }
     const _wallet = new Wallet()
@@ -137,7 +160,7 @@ export default class Wallet {
     this.nonce = wallet.nonce
     this.address = wallet.address
     this.currency = wallet.currency
-    this.balances = wallet.balances
+    this.accounts = wallet.accounts
 
     this._web3 = await this.getWeb3(this.nonce)
     const ABI = await this.getABIAsync("KRWT")
@@ -154,10 +177,19 @@ export default class Wallet {
     if (!this.ready) {
       return null
     }
-    this.balances = {
-      ETH: await this.getBalance("ETH"),
-      IFUM: await this.getBalance("IFUM"),
-      KRWT: await this.getBalance("KRWT"),
+    this.accounts = {
+      ETH: {
+        balance: (await this.getBalance("ETH")) / this.decimals.ETH,
+        currency: "ETH"
+      },
+      IFUM: {
+        balance: (await this.getBalance("IFUM")) / this.decimals.IFUM,
+        currency: "IFUM"
+      },
+      KRWT: {
+        balance: (await this.getBalance("KRWT")) / this.decimals.KRWT,
+        currency: "KRWT"
+      },
     }
   }
 

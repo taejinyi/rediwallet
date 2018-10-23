@@ -70,7 +70,7 @@ export function* saveWalletToDB(action) {
   console.log('in saveWalletToDB', wallet)
   try {
     const fetchResult = yield call(() => db.get('wallet'))
-    console.log("in saveWalletToDB, fetchResult => ", fetchResult)
+    console.log("in saveWalletToDB, wallet fetchResult => ", fetchResult)
     if (fetchResult.data.address === wallet.address) {
       yield call(() => db.put({
         _id: 'wallet',
@@ -97,31 +97,27 @@ export function* saveWalletToDB(action) {
       address: wallet.address,
       nonce: wallet.nonce,
       currency: wallet.currency,
-      balances: wallet.balances
+      accounts: wallet.accounts
     }
   }
   let wallets = null
   try {
     const fetchResult = yield call(() => db.get('wallets'))
-    console.log("in saveWalletToDB 2, fetchResult => ", fetchResult)
+    console.log("in saveWalletToDB 2, wallets fetchResult => ", fetchResult)
     wallets = Object.assign({}, fetchResult.data, newWallet)
   } catch (e) {
     wallets = newWallet
   }
-  yield put({
-    type: SAVE_WALLETS_TO_DB,
-    db: db,
-    wallets: wallets,
-  })
-
+  yield call(saveWalletsToDB, {db: db, wallets: wallets})
 }
 
 export function* saveWalletsToDB(action) {
-  console.log('in saveWalletsToDB')
+  console.log('in saveWalletsToDB to save')
   let { db, wallets } = action
   console.log(wallets)
   try {
     const fetchResult = yield call(() => db.get('wallets'))
+    console.log('in saveWalletsToDB wallets fetchResult = ', fetchResult)
     yield call(() => db.put({
       _id: 'wallets',
       data: wallets,
@@ -150,12 +146,7 @@ export function* getWalletFromNetwork(action) {
     yield _wallet.getFromNetwork()
     const newWallet = _wallet.getJson()
     console.log('in getWalletFromNetwork, new ! ', newWallet)
-
-    yield put({
-      type: SAVE_WALLET_TO_DB,
-      db: db,
-      wallet: newWallet,
-    })
+    yield call(saveWalletToDB, {db: db, wallet: newWallet})
   } catch (e) {
     console.log(e)
   }
@@ -173,11 +164,7 @@ export function* getWalletsFromNetwork(action) {
     let wallets = fetchResult.data
     console.log('in getWalletsFromNetwork wallets:', wallets)
     for (i = 0; i < addresses.length; i++) {
-      yield put({
-        type: GET_WALLET_FROM_NETWORK,
-        db: db,
-        wallet: wallets[addresses[i]],
-      })
+      yield call(getWalletFromNetwork, {db: db, wallet: wallets[addresses[i]]})
     }
   } catch (e) {
     console.log(e)
@@ -190,14 +177,13 @@ export function* getWalletsFromNetwork(action) {
 
 export function* getWalletFromDB(action) {
   console.log('in getWalletFromDB')
-  let { db, wallet } = action
+  let { db } = action
   try {
-    const fetchResult = yield call(() => db.get('wallets'))
-    const data = fetchResult.data[wallet.address]
-    if (data) {
+    const fetchResult = yield call(() => db.get('wallet'))
+    if (fetchResult.data) {
       yield put({
         type: SAVE_WALLET,
-        wallet: data,
+        wallet: fetchResult.data,
       })
     }
   } catch (e) {

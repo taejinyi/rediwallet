@@ -202,7 +202,7 @@ class WalletDetailPage extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  getWalletFromDB: (db, wallet) => dispatch(actions.getWalletFromDB(db, wallet)),
+  getWalletFromDB: (db) => dispatch(actions.getWalletFromDB(db)),
   getWalletFromNetwork: (db, wallet) => dispatch(actions.getWalletFromNetwork(db, wallet)),
 })
 

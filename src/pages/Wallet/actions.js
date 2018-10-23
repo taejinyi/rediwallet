@@ -55,9 +55,8 @@ export const getWalletsFromNetwork = (db) => ({
   type: GET_WALLETS_FROM_NETWORK,
 })
 
-export const getWalletFromDB = (db, wallet) => ({
+export const getWalletFromDB = (db) => ({
   db: db,
-  wallet: wallet,
   type: GET_WALLET_FROM_DB,
 })
 
