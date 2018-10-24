@@ -24,16 +24,16 @@ class MnemonicBackupPage extends React.Component {
     return (
       <Container>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-          <TextLoader text={mnemonic} textStyle={{ marginTop: 15, color: '#10b5bc', fontSize: 17, }} />
+          <TextLoader text={mnemonic} textStyle={{ marginTop: 15, color: '#303140', fontSize: 17, }} />
           <Button
             onPress={this.copyToClipboard}
             transparent>
-            <Text style={{ fontWeight: 'bold', color: '#10b5bc' }}>Copy to Clipboard</Text>
+            <Text style={{ fontWeight: 'bold', color: '#303140' }}>Copy to Clipboard</Text>
           </Button>
           <Button
             onPress={this.closePage}
             transparent>
-            <Text style={{ fontWeight: 'bold', color: '#10b5bc' }}>Close</Text>
+            <Text style={{ fontWeight: 'bold', color: '#303140' }}>Close</Text>
           </Button>
         </View>
       </Container>

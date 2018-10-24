@@ -15,7 +15,7 @@ import {generateWallet, Currency} from '../../utils'
 
 import Wallet from "../../system/Wallet"
 import Color from "../../constants/Colors";
-
+import {convertToMoney} from '../../utils'
 class WalletPage extends React.Component {
   constructor(props) {
     super(props)
@@ -31,7 +31,7 @@ class WalletPage extends React.Component {
   getWalletFromNetwork = async () => {
     const { db, dispatch, wallet } = this.props
     console.log('button')
-    await this.props.getWalletFromNetwork(db, wallet)
+    await this.props.getWalletFromNetwork(db, this._wallet)
   }
 
   addWallet = async (currency) => {
@@ -49,8 +49,10 @@ class WalletPage extends React.Component {
   }
   async componentWillMount() {
     const { db, wallet } = this.props
+    await this._wallet.start(wallet)
     await this.props.getWalletFromDB(db)
     await this.props.getWalletsFromDB(db)
+    this.props.getWalletFromNetwork(db, this._wallet)
     this.props.getWalletsFromNetwork(db)
     this.logo = require('rediwallet/src/assets/images/logo_428x222.png')
   }
@@ -83,27 +85,23 @@ class WalletPage extends React.Component {
     return (
       <View style={{ flex: 1, backgroundColor: '#303140', alignItems: 'center'}}>
         <View style={{ flex: 0.3, width:'92%'}}>
-            <View style={{ flex: 1, alignItems: 'flex-end', }}>
-              <View style={{flexDirection: 'row', height: '100%', justifyContent: 'space-between', alignItems: 'flex-end', }}>
-                <View style={{flex: 0.5, flexDirection: 'column'}} >
-                  <Image style={{ height: 78, width: 150, alignItems: 'flex-end',  }} source={ this.logo } />
-                </View>
-                <View style={{flex: 0.5, flexDirection: 'column'}} >
-                  <View style={{alignItems: 'flex-end', }}>
-                    <View>
-                      <Text style={styles.TotalAsset}>TOTAL ASSET</Text>
-                    </View>
-                    <View>
-                      <Text numberOfLines={1} >
-                        <Text style={styles.Currency}>{currencyIcon}</Text>
-                        <Text numberOfLines={1} style={styles.TotalAssetAmount}>{totalAssetAmount.toString()}</Text>{'\n'}
-                      </Text>
-                    </View>
+          <View style={{ flex: 1, alignItems: 'flex-end', }}>
+            <View style={{flexDirection: 'row', height: '100%', justifyContent: 'space-between', alignItems: 'flex-end', }}>
+              <View style={{flex: 0.5, flexDirection: 'column'}} >
+                <Image style={{ height: 78, width: 150, alignItems: 'flex-end',  }} source={ this.logo } />
+              </View>
+              <View style={{flex: 0.5, flexDirection: 'column'}} >
+                <View style={{alignItems: 'flex-end', width: '100%' }}>
+                  <View>
+                    <Text style={styles.TotalAsset}>TOTAL ASSET</Text>
+                  </View>
+                  <View style={{ alignItems: 'flex-end' }}>
+                    <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ fontWeight: 'bold', color: 'white', marginBottom: 8,fontSize: 26 }}>{currencyIcon + " " + convertToMoney(Math.floor(totalAssetAmount))}</Text>
                   </View>
                 </View>
               </View>
             </View>
-
+          </View>
         </View>
         <Content style={{ backgroundColor: '#303140', width:'100%'}}>
           {
@@ -166,20 +164,16 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   Currency: {
-    flex: 1,
+    fontSize:26,
+    textAlign: "right",
     backgroundColor: 'transparent',
-    fontSize: 26,
     fontWeight: 'normal',
     color: '#FFFFFF',
-    textAlign: 'right',
   },
   TotalAssetAmount: {
-    flex: 1,
     backgroundColor: 'transparent',
-    fontSize: 36,
     fontWeight: 'normal',
     color: '#FFFFFF',
-    textAlign: 'right',
   },
   searchContainer: {
     flex: 0.3,
@@ -203,7 +197,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => ({
   getWalletFromDB: (db) => dispatch(actions.getWalletFromDB(db)),
-  getWalletFromNetwork: (db, wallet) => dispatch(actions.getWalletFromNetwork(db, wallet)),
+  getWalletFromNetwork: (db, _wallet) => dispatch(actions.getWalletFromNetwork(db, _wallet)),
   getWalletsFromNetwork: (db) => dispatch(actions.getWalletsFromNetwork(db)),
   getWalletsFromDB: (db) => dispatch(actions.getWalletsFromDB(db)),
   addWallet: (db, wallet) => dispatch(actions.addWallet(db, wallet)),

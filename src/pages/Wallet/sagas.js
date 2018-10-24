@@ -9,7 +9,7 @@ import {
   GET_WALLET_FROM_DB,
   GET_WALLETS_FROM_DB,
   ADD_WALLET,
-  SET_DEFAULT_WALLET,
+  SET_DEFAULT_WALLET, GET_TRANSACTIONS_FROM_DB, GET_TRANSACTIONS_FROM_NETWORK,
 } from './actions'
 import * as network from 'rediwallet/src/network/web3'
 import Wallet from "../../system/Wallet"
@@ -138,8 +138,8 @@ export function* saveWalletsToDB(action) {
 
 
 export function* getWalletFromNetwork(action) {
-  let { db, wallet } = action
-  console.log('in getWalletFromNetwork', wallet)
+  let { db, _wallet } = action
+  console.log('in getWalletFromNetwork _wallet', _wallet)
   try {
     const _wallet = new Wallet()
     yield _wallet.start(wallet)
@@ -210,6 +210,44 @@ export function* getWalletsFromDB(action) {
   }
   return true
 }
+
+
+export function* getTransactionsFromDB(action) {
+  console.log('in getTransactionsFromDB')
+  let { db, wallet, account } = action
+  try {
+    // const fetchResult = yield call(() => db.get('wallets'))
+    // console.log('in getWalletsFromDB', fetchResult.data)
+    // yield put({
+    //   type: SAVE_WALLETS,
+    //   wallets: fetchResult.data,
+    // })
+  } catch (e) {
+    console.log(e)
+    return false
+  }
+  return true
+}
+
+
+export function* getTransactionsFromNetwork(action) {
+  let { db, wallet, account } = action
+
+  try {
+    const _wallet = new Wallet()
+    yield _wallet.start(wallet)
+    yield _wallet.getTransactionsFromNetwork(account)
+    const newWallet = _wallet.getJson()
+    console.log('in getTransactionsFromNetwork, new ! ', newWallet)
+
+
+
+  } catch (e) {
+    console.log(e)
+    return false
+  }
+  return true
+}
 const walletSaga = [
   takeEvery(ADD_WALLET, addWallet),
   takeEvery(SET_DEFAULT_WALLET, setDefaultWallet),
@@ -218,7 +256,9 @@ const walletSaga = [
   takeEvery(GET_WALLET_FROM_DB, getWalletFromDB),
   takeEvery(GET_WALLETS_FROM_DB, getWalletsFromDB),
   takeEvery(SAVE_WALLET_TO_DB, saveWalletToDB),
-  takeEvery(SAVE_WALLETS_TO_DB, saveWalletsToDB)
+  takeEvery(SAVE_WALLETS_TO_DB, saveWalletsToDB),
+  takeEvery(GET_TRANSACTIONS_FROM_DB, getTransactionsFromDB),
+  takeEvery(GET_TRANSACTIONS_FROM_NETWORK, getTransactionsFromNetwork)
 ]
 
 export default walletSaga

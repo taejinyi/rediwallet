@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
 
 	descContainer: {
     height: 70,
-    backgroundColor: '#10b5bc',
+    backgroundColor: '#303140',
 	},
 
 	textContainer: {
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
 	},
 
 	textDesc: {
-		color: '#10b5bc',
+		color: '#303140',
 		fontSize: 14,
 		fontWeight: 'bold',
 	},
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
 		right: 0,
 		bottom: 3,
 		height: 'auto',
-		color: '#10b5bc',
+		color: '#303140',
 	},
 
 	buttonSubmit: {

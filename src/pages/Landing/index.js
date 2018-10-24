@@ -86,14 +86,14 @@ class LandingPage extends React.Component {
               style={{ marginTop: 200 }}
               onPress={this.createAccount}
               transparent>
-              <Text style={{ fontWeight: 'bold', color: '#10b5bc' }}>Create New Account</Text>
+              <Text style={{ fontWeight: 'bold', color: '#303140' }}>Create New Account</Text>
             </Button>
           </Left>
           <Right>
             <Button
               onPress={this.importMnemonic}
               transparent>
-              <Text style={{ fontWeight: 'bold', color: '#10b5bc' }}>Import Account</Text>
+              <Text style={{ fontWeight: 'bold', color: '#303140' }}>Import Account</Text>
             </Button>
           </Right>
         </View>
@@ -106,7 +106,7 @@ class LandingPage extends React.Component {
 const styles = StyleSheet.create({
 	rootWrapper: {
 		flex: 1,
-		backgroundColor: '#10b5bc',
+		backgroundColor: '#303140',
 		flexDirection: 'column',
 	},
 
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
 	},
 
 	formItemDesc: {
-		color: '#10b5bc',
+		color: '#303140',
 		fontWeight: 'bold'
 	},
 

@@ -21,6 +21,7 @@ import {
 import withDB from '../WithDB'
 import withLock from '../WithLock'
 import withWallet from '../WithWallet'
+import Color from "../../constants/Colors";
 
 const MainTabNavigator = TabNavigator({
   Wallet: {
@@ -60,26 +61,62 @@ const MainTabNavigator = TabNavigator({
             activeIcon: (
               <Image
                 source={ require('../../assets/images/wallet-selected.png') }
-                style={{ tintColor: '#10b5bc', }}
+                style={{ tintColor: '#303140', }}
               />
             ),
-            activeLabelColor: '#10b5bc',
+            activeLabelColor: '#303140',
           },
           Settings: {
             activeIcon: (
               <Image
                 source={ require('../../assets/images/settings-selected.png') }
-                style={{ tintColor: '#10b5bc', }}
+                style={{ tintColor: '#303140', }}
               />
             ),
-            activeLabelColor: '#10b5bc',
+            activeLabelColor: '#303140',
           },
         },
       },
     },
     swipeEnabled: false,
-    activeTintColor: '#10b5bc'
+    activeTintColor: '#303140'
 })
+
+const getHeaderTitle = (account) => {
+  let currencyName
+  if (account.currency) {
+    if (account.currency === "ETH") {
+      currencyName = "Ethereum"
+    } else if (account.currency === "IFUM") {
+      currencyName = "Infleum"
+    } else if (account.currency === "KRWT") {
+      currencyName = "KRW Tether"
+    } else {
+      currencyName = "Unknown"
+    }
+  } else {
+    currencyName = "Loading..."
+  }
+  return currencyName
+}
+
+const getHeaderBackgroundColor = (account) => {
+  let headerBackgroundColor
+  if (account.currency) {
+    if (account.currency === "ETH") {
+      headerBackgroundColor = Color.ethereumColor
+    } else if (account.currency === "IFUM") {
+      headerBackgroundColor = Color.infleumColor
+    } else if (account.currency === "KRWT") {
+      headerBackgroundColor = Color.krwtColor
+    } else {
+      headerBackgroundColor = Color.backgroundColor
+    }
+  } else {
+    headerBackgroundColor = Color.backgroundColor
+  }
+  return headerBackgroundColor
+}
 
 const MainNavigator = StackNavigator({
   MainTab: {
@@ -98,10 +135,10 @@ const MainNavigator = StackNavigator({
   WalletDetail: {
     screen: withDB(withWallet(WalletDetailPage)),
     navigationOptions: ({ navigation }) => ({
-      headerTitle: 'Wallet Detail',
+      headerTitle: navigation.state.params ? getHeaderTitle(navigation.state.params.account) : "Loading...",
       headerTintColor: 'white',
       headerStyle: {
-        backgroundColor: '#10b5bc',
+        backgroundColor: navigation.state.params ? getHeaderBackgroundColor(navigation.state.params.account) : "#303140",
         borderBottomWidth: 0,
       },
       headerLeft: (
@@ -125,7 +162,7 @@ const MainNavigator = StackNavigator({
       headerTitle: 'Send',
       headerTintColor: 'white',
       headerStyle: {
-        backgroundColor: '#10b5bc',
+        backgroundColor: '#303140',
         borderBottomWidth: 0,
       },
       headerLeft: (
@@ -197,7 +234,7 @@ const AppNavigator = StackNavigator({
       headerTitle: 'Import',
       headerTintColor: 'white',
       headerStyle: {
-        backgroundColor: '#10b5bc',
+        backgroundColor: '#303140',
         borderBottomWidth: 0,
       },
       headerLeft: (

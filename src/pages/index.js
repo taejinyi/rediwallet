@@ -23,7 +23,10 @@ import {
   saveWalletToDB,
   saveWalletsToDB,
   addWallet,
-  setDefaultWallet
+  setDefaultWallet,
+  getTransactionsFromDB,
+  getTransactionsFromNetwork
+
 } from './Wallet/actions'
 import { getInformation } from './Splash/actions'
 import {
@@ -61,6 +64,8 @@ const actions = {
   getWalletsFromDB,
   getWalletFromNetwork,
   getWalletsFromNetwork,
+  getTransactionsFromDB,
+  getTransactionsFromNetwork,
   saveWalletToDB,
   saveWalletsToDB,
   showProcessingModal,

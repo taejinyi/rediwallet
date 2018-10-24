@@ -8,7 +8,7 @@ class UnlockPage extends React.Component {
     return (
       <Container>
         <View style={{ flex: 1, }}>
-          <TextLoader text='잠금해제페이지를 불러오는 중' textStyle={{ marginTop: 15, color: '#10b5bc', fontSize: 17, }} />
+          <TextLoader text='잠금해제페이지를 불러오는 중' textStyle={{ marginTop: 15, color: '#303140', fontSize: 17, }} />
         </View>
       </Container>
     )

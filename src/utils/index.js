@@ -5,11 +5,13 @@ import {
   toHexString,
 } from './crypto'
 import './format'
+import { convertToMoney } from './money'
 
 export {
   generateWallet,
   Currency,
   fromHexString,
   toHexString,
+  convertToMoney
 
 }

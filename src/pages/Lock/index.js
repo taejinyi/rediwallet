@@ -63,7 +63,7 @@ class LockPage extends React.Component {
         isVisible={ this.props.unlocked !== true }
         hideModalContentWhileAnimating={ true }>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-          <TextLoader text='잠금페이지를 불러오는 중' textStyle={{ marginTop: 15, color: '#10b5bc', fontSize: 17, }} />
+          <TextLoader text='잠금페이지를 불러오는 중' textStyle={{ marginTop: 15, color: '#303140', fontSize: 17, }} />
         </View>
         <DialogInput isDialogVisible={this.state.showPinNumberDialog &&  this.props.unlocked !== true}
           title={"Locked"}

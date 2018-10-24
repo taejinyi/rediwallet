@@ -193,6 +193,107 @@ export default class Wallet {
     }
   }
 
+  async getTransactionsByAccount(myaccount, startBlockNumber, endBlockNumber) {
+    if (endBlockNumber == null) {
+      endBlockNumber = eth.blockNumber;
+      console.log("Using endBlockNumber: " + endBlockNumber);
+    }
+    if (startBlockNumber == null) {
+      startBlockNumber = endBlockNumber - 1000;
+      console.log("Using startBlockNumber: " + startBlockNumber);
+    }
+    console.log("Searching for transactions to/from account \"" + myaccount + "\" within blocks "  + startBlockNumber + " and " + endBlockNumber);
+
+    for (let i = startBlockNumber; i <= endBlockNumber; i++) {
+      if (i % 1000 === 0) {
+        console.log("Searching block " + i);
+      }
+      let block = eth.getBlock(i, true);
+      if (block != null && block.transactions != null) {
+        block.transactions.forEach( function(e) {
+          if (myaccount === "*" || myaccount === e.from || myaccount === e.to) {
+            console.log("  tx hash          : " + e.hash + "\n"
+              + "   nonce           : " + e.nonce + "\n"
+              + "   blockHash       : " + e.blockHash + "\n"
+              + "   blockNumber     : " + e.blockNumber + "\n"
+              + "   transactionIndex: " + e.transactionIndex + "\n"
+              + "   from            : " + e.from + "\n"
+              + "   to              : " + e.to + "\n"
+              + "   value           : " + e.value + "\n"
+              + "   time            : " + block.timestamp + " " + new Date(block.timestamp * 1000).toString() + "\n"
+              + "   gasPrice        : " + e.gasPrice + "\n"
+              + "   gas             : " + e.gas + "\n"
+              + "   input           : " + e.input);
+          }
+        })
+      }
+    }
+  }
+  async getTransactionsFromNetwork(account) {
+    if (account.currency === "ETH") {
+
+
+
+
+
+      return await this._web3.eth.getBalance(this.address)
+    }
+    try {
+      const outgoingPastEvents = await this._contracts[account.currency].getPastEvents('Transfer', {filter: {from: this.address}})
+      console.log("outgoingPastEvents", outgoingPastEvents)
+      const incomingPastEvents = await this._contracts[account.currency].getPastEvents('Transfer', {filter: {to: this.address}})
+      console.log("incomingPastEvents", incomingPastEvents)
+
+
+      return await this._contracts[account.currency].methods.balanceOf(this.address).call()
+
+    } catch (e) {
+      console.error("Error in getTransactionsFromNetwork ", e);
+    }
+  }
+  // async getTransactionsFromNetwork(account) {
+  //   console.log('in getTransactionsFromNetwork account= ', account)
+  //   // const ret = await this._contracts[account.currency].methods.a
+  //   let n, bal, currentBlock, myAddr, i
+  //   try {
+  //     myAddr = this.address
+  //     console.log('in getTransactionsFromNetwork myAddr= ', myAddr)
+  //     currentBlock = await this._web3.eth.getBlockNumber();
+  //     console.log('in getTransactionsFromNetwork currentBlock= ', currentBlock)
+  //     n = await this._web3.eth.getTransactionCount(this.address, currentBlock);
+  //     console.log('in getTransactionsFromNetwork n= ', n)
+  //     console.log('in getTransactionsFromNetwork', myAddr, currentBlock, n)
+  //     bal = await this.getBalance(account.currency, currentBlock);
+  //     console.log('in getTransactionsFromNetwork', myAddr, currentBlock, n, bal)
+  //     const eth = this._web3.eth
+  //     for (i = currentBlock; i >= 0 && (n > 0 || bal > 0); --i) {
+  //       try {
+  //         const block = await eth.getBlock(i, true);
+  //         console.log('in getTransactionsFromNetwork, block', i)
+  //         if (block && block.transactions) {
+  //           block.transactions.forEach(function (e) {
+  //             if (myAddr === e.from) {
+  //               if (e.from !== e.to)
+  //                 bal = bal + e.value
+  //               console.log(i, e.from, e.to, e.value.toString(10));
+  //               --n;
+  //             }
+  //             if (myAddr === e.to) {
+  //               if (e.from !== e.to)
+  //                 bal = bal - e.value
+  //               console.log(i, e.from, e.to, e.value.toString(10));
+  //             }
+  //           });
+  //         }
+  //       } catch (e) {
+  //         console.error("Error in block " + i, e);
+  //       }
+  //     }
+  //   } catch (e) {
+  //     console.error("Error in getTransactionsFromNetwork ", e);
+  //   }
+  // }
+
   async getBalance(currency) {
     if (currency === "ETH") {
       return await this._web3.eth.getBalance(this.address)
