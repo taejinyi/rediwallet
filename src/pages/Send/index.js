@@ -6,7 +6,20 @@ import update from 'immutability-helper'
 import { RippleLoader} from 'react-native-indicator'
 import { Ionicons, EvilIcons } from '@expo/vector-icons'
 import { Toast, Container, Content, Footer, FooterTab, Button, Icon, Spinner, Card, CardItem, Body } from 'native-base'
-import { Animated, Platform, StyleSheet, Text, ScrollView, Clipboard, KeyboardAvoidingView, View, Keyboard, TouchableWithoutFeedback, TouchableHighlight } from 'react-native'
+import {
+  Animated,
+  Platform,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Clipboard,
+  KeyboardAvoidingView,
+  View,
+  Keyboard,
+  TouchableWithoutFeedback,
+  TouchableHighlight,
+  Alert
+} from 'react-native'
 import { LoadingButton, Header, DismissKeyboardViewHOC, Input } from '../../components'
 import {translate} from "react-i18next";
 
@@ -59,7 +72,6 @@ class SendPage extends React.Component {
   }
 
   returnData = (data) => {
-	  console.log(data, this.state)
 	  const newFormValue = update(this.state.formValue, {
       address: { $set: data }
     })
@@ -193,17 +205,75 @@ class SendPage extends React.Component {
 	}
 
   confirm = async () => {
+	  const account = this.props.navigation.state.params.account
 	  const wallet = this.props.navigation.state.params.wallet
+	  const _wallet = this.props.navigation.state.params._wallet
+    this.setState({
+      confirmModalShow: false
+    })
 
-	  console.log("Confirmed", this.sendData)
     if (this.sendData) {
-
-      const tx = await network.send(wallet, this.sendData.address, this.sendData.amount)
+	    const tx = await _wallet.transfer(account, this.sendData.address, this.sendData.amount)
       console.log(tx)
+      Alert.alert(
+				 	'Transfer Requested',
+          'Transfer is successfully requested',
+          [
+            { text: 'OK', onPress: () => this.props.navigation.goBack(null)}
+          ],
+          { cancelable: false}
+        )
+    }
+    /*
+    {
+      "blockHash": "0x2e0f42210094e4a644e4a4c0f008cff7df4fb11bab3b3405e2a9cee1a7fd5940",
+      "blockNumber": 9178627,
+      "contractAddress": null,
+      "cumulativeGasUsed": 376874,
+      "events": Object {
+        "Transfer": Object {
+          "address": "0xF337f6821B18B2eB24C44D74F3Fa91128EAD23f4",
+          "blockHash": "0x2e0f42210094e4a644e4a4c0f008cff7df4fb11bab3b3405e2a9cee1a7fd5940",
+          "blockNumber": 9178627,
+          "event": "Transfer",
+          "id": "log_ab33753b",
+          "logIndex": 3,
+          "raw": Object {
+            "data": "0x000000000000000000000000000000000000000000000000000000000000c350",
+            "topics": Array [
+              "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+              "0x00000000000000000000000018effda3d2f0ef936dbbad3dc85daf2ba6540c81",
+              "0x000000000000000000000000f06e8a47bbc430423ec1ed2e5c86b47048a2b1b9",
+            ],
+          },
+          "removed": false,
+          "returnValues": Result {
+            "0": "0x18EfFDa3D2F0Ef936dbBaD3dC85dAF2ba6540C81",
+            "1": "0xf06e8a47BBC430423EC1ed2E5C86B47048A2B1B9",
+            "2": "50000",
+            "from": "0x18EfFDa3D2F0Ef936dbBaD3dC85dAF2ba6540C81",
+            "to": "0xf06e8a47BBC430423EC1ed2E5C86B47048A2B1B9",
+            "value": "50000",
+          },
+          "signature": "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+          "transactionHash": "0x02c23d6fed912beac741e6f69b9e5249594e626af387e941f42994a79315c8a4",
+          "transactionIndex": 2,
+          "transactionLogIndex": "0x0",
+          "type": "mined",
+        },
+      },
+      "from": "0x18effda3d2f0ef936dbbad3dc85daf2ba6540c81",
+      "gasUsed": 36633,
+      "logsBloom": "0x00000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000008000000000000000000000000010000000000000000000000000000000001000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000800000000000000000000000080000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000001000000000240000000000000000000000000000000000000000000000000000000000000000000000",
+      "root": null,
+      "status": true,
+      "to": "0xf337f6821b18b2eb24c44d74f3fa91128ead23f4",
+      "transactionHash": "0x02c23d6fed912beac741e6f69b9e5249594e626af387e941f42994a79315c8a4",
+      "transactionIndex": 2,
     }
 
+    * */
   }
-
 
 	render() {
     const {

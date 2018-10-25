@@ -23,24 +23,24 @@ class TransactionList extends React.Component {
     }
   }
 
-  renderAccountItem = (account) => {
-    const { navigation, wallet } = this.props
-    const accountData = account.item
+  renderTransactionItem = (transaction) => {
+    const { navigation, wallet, account } = this.props
+    const accountData = transaction.item
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
 
-    if (accountData.currency === "ETH") {
+    if (account.currency === "ETH") {
       accountColor = Color.ethereumColor
       currencyIcon = "￦"
       currencyTicker = "ETH"
       currencyName = "Ethereum"
       fxRate = 230500
-    } else if (accountData.currency === "IFUM") {
+    } else if (account.currency === "IFUM") {
       accountColor = Color.infleumColor
       currencyIcon = "￦"
       currencyTicker = "IFUM"
       currencyName = "Infleum"
       fxRate = 22
-    } else if (accountData.currency === "KRWT") {
+    } else if (account.currency === "KRWT") {
       accountColor = Color.krwtColor
       currencyIcon = "￦"
       currencyTicker = "KRWT"
@@ -54,18 +54,18 @@ class TransactionList extends React.Component {
       fxRate = 1
     }
     let moneyStr
-    const fraction = accountData.balance - Math.floor(accountData.balance)
+    const fraction = account.balance - Math.floor(account.balance)
     const strFraction = fraction.toString()
     if (fraction > 0) {
-      moneyStr = convertToMoney(Math.floor(accountData.balance)) + strFraction.substr(1)
+      moneyStr = convertToMoney(Math.floor(account.balance)) + strFraction.substr(1)
     } else {
-      moneyStr = convertToMoney(accountData.balance)
+      moneyStr = convertToMoney(account.balance)
     }
 
     return (
       <View style={ styles.walletContainer }>
         <TouchableOpacity onPress={ () => {
-          navigation.navigate('WalletDetail', { wallet: wallet, account: accountData })
+          navigation.navigate('WalletDetail', { wallet: wallet, account: account, _wallet: this.props._wallet })
         }}>
           <View style={{ height: 90, width: '100%' ,backgroundColor: accountColor, flexDirection: "row"}}>
             <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
@@ -97,7 +97,7 @@ class TransactionList extends React.Component {
     return (
       <FlatList
         data={ _.values(account.transactions) }
-        renderItem={ this.renderAccountItem }
+        renderItem={ this.renderTransactionItem }
         contentContainerStyle={{ padding: 15 }}
         keyExtractor={( item, index ) => index.toString() }
       />

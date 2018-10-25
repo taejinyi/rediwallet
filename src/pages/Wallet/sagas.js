@@ -138,8 +138,7 @@ export function* saveWalletsToDB(action) {
 
 
 export function* getWalletFromNetwork(action) {
-  let { db, _wallet } = action
-  console.log('in getWalletFromNetwork _wallet', _wallet)
+  let { db, wallet } = action
   try {
     const _wallet = new Wallet()
     yield _wallet.start(wallet)

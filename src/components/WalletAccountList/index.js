@@ -10,26 +10,30 @@ class WalletAccountList extends React.Component {
     super(props)
 
     this.state = {
-      lastWalletIndex: props.wallets ? ((Object.keys(props.wallets).length) - 1) : undefined,
+      lastAccountIndex: props.wallet.accounts ? ((Object.keys(props.wallet.accounts).length) - 1) : undefined,
     }
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.wallets) {
+    if(nextProps.wallet) {
       this.setState({
-        lastWalletIndex: Object.keys(nextProps.wallets).length - 1,
+        lastAccountIndex: Object.keys(nextProps.wallet.accounts).length - 1,
       })
     }
   }
 
   onWalletClicked = (cardIndex) => {
   }
+  componentWillMount(){
+    const { wallet, _wallet } = this.props
 
+  }
   renderAccountItem = (account) => {
-    const { navigation, wallet } = this.props
+    const { navigation, wallet, _wallet } = this.props
     const accountData = account.item
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
+
 
     if (accountData.currency === "ETH") {
       accountColor = Color.ethereumColor
@@ -58,7 +62,7 @@ class WalletAccountList extends React.Component {
     }
     let moneyStr
     const fraction = accountData.balance - Math.floor(accountData.balance)
-    const strFraction = fraction.toString()
+    const strFraction = fraction.toFixed(8)
     if (fraction > 0) {
       moneyStr = convertToMoney(Math.floor(accountData.balance)) + strFraction.substr(1)
     } else {
@@ -68,7 +72,7 @@ class WalletAccountList extends React.Component {
     return (
       <View style={ styles.walletContainer }>
         <TouchableOpacity onPress={ () => {
-          this.debounceNavigate('WalletDetail', { wallet: wallet, account: accountData })
+          this.debounceNavigate('WalletDetail', { account: accountData, wallet: wallet, _wallet: _wallet })
         }}>
           <View style={{ height: 90, width: '100%' ,backgroundColor: accountColor, flexDirection: "row"}}>
             <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
@@ -92,7 +96,6 @@ class WalletAccountList extends React.Component {
 
   render() {
     const { wallet, } = this.props
-
     if(wallet === null)
       return null
 

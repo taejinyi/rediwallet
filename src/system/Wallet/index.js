@@ -4,9 +4,10 @@ import { Animated, View, Text, PanResponder } from 'react-native'
 import nacl from 'tweetnacl'
 import HDWalletProvider from "truffle-hdwallet-provider";
 import Web3 from "web3";
-import {fromHexString} from "../../utils/crypto";
+import {Currency, fromHexString} from "../../utils/crypto";
 import ethers from "ethers";
 import {SecureStore} from "expo";
+import * as loomjs from "../../network/web3/loom.umd";
 
 const debug = true
 
@@ -151,29 +152,37 @@ export default class Wallet {
     const _wallet = new Wallet()
     await _wallet.start(wallet)
     await _wallet.getFromNetwork()
-    const newWallet = _wallet.getJson()
-    console.log('in generateWallet, new ! ', newWallet)
-    return newWallet
+    return _wallet.getJson()
   }
 
-  async start(wallet) {
+  start = async (wallet) => {
+    if (this.ready) {
+      return
+    }
     this.nonce = wallet.nonce
     this.address = wallet.address
     this.currency = wallet.currency
     this.accounts = wallet.accounts
 
-    this._web3 = await this.getWeb3(this.nonce)
     const ABI = await this.getABIAsync("KRWT")
     const KRWTContractAddress = await this.getContractAddressAsync('KRWT')
     const IFUMContractAddress = await this.getContractAddressAsync('IFUM')
-
+    this._web3 = await this.getWeb3(await getMnemonic())
     this._contracts = {
       IFUM: new this._web3.eth.Contract(ABI, IFUMContractAddress, {from: this.address}),
       KRWT: new this._web3.eth.Contract(ABI, KRWTContractAddress, {from: this.address}),
     }
     this.ready = true
   }
-  async getFromNetwork() {
+
+  getBalance = async (currency) => {
+    if (currency === "ETH") {
+      return await this._web3.eth.getBalance(this.address)
+    }
+    return await this._contracts[currency].methods.balanceOf(this.address).call()
+  }
+
+  getFromNetwork = async () => {
     if (!this.ready) {
       return null
     }
@@ -193,7 +202,7 @@ export default class Wallet {
     }
   }
 
-  async getTransactionsByAccount(myaccount, startBlockNumber, endBlockNumber) {
+  getTransactionsByAccount = async (myaccount, startBlockNumber, endBlockNumber) => {
     if (endBlockNumber == null) {
       endBlockNumber = eth.blockNumber;
       console.log("Using endBlockNumber: " + endBlockNumber);
@@ -229,13 +238,8 @@ export default class Wallet {
       }
     }
   }
-  async getTransactionsFromNetwork(account) {
+  getTransactionsFromNetwork = async (account) => {
     if (account.currency === "ETH") {
-
-
-
-
-
       return await this._web3.eth.getBalance(this.address)
     }
     try {
@@ -249,6 +253,25 @@ export default class Wallet {
 
     } catch (e) {
       console.error("Error in getTransactionsFromNetwork ", e);
+    }
+  }
+
+  transfer = async (account, to, amount) => {
+    if (account.currency === Currency.ETH.ticker) {
+      try {
+        const tx = await this._web3.eth.sendTransaction({to:to, from:this.address, value:this._web3.utils.toWei(amount.toString(), "ether")})
+        return tx
+      } catch (error) {
+        console.log(error)
+        return null
+      }
+    } else {
+      try {
+        return await this._contracts[account.currency].methods.transfer(to, amount).send()
+      } catch (error) {
+        console.log(error)
+        return null
+      }
     }
   }
   // async getTransactionsFromNetwork(account) {
@@ -294,30 +317,5 @@ export default class Wallet {
   //   }
   // }
 
-  async getBalance(currency) {
-    if (currency === "ETH") {
-      return await this._web3.eth.getBalance(this.address)
-    }
-    return await this._contracts[currency].methods.balanceOf(this.address).call()
-  }
 
-  getUser() {
-    return this.user
-  }
-
-  async newPost(text) {
-    return await this._contract.methods.newPost(text).send()
-  }
-
-  async newComment(postId, text) {
-    return await this._contract.methods.newComment(postId, text).send()
-  }
-
-  async hasPosts() {
-    return await this._contract.methods.hasPosts().call()
-  }
-
-  async getPosts(index) {
-    return await this._contract.methods.posts().call()
-  }
 }

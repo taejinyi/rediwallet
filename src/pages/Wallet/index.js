@@ -4,7 +4,7 @@ import {StyleSheet, View, Text, Image, Alert} from 'react-native'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 import { Container, Content, Body, Left, List, ListItem, Icon, Separator, Right } from 'native-base'
 // import { Util, SecureStore } from 'expo'
-import { Header, WalletAccountList } from 'rediwallet/src/components'
+import { Header, WalletAccountList } from '../../components'
 import {actions, sagas} from "../index";
 import { call, put, take, takeEvery } from 'redux-saga/effects'
 
@@ -16,6 +16,10 @@ import {generateWallet, Currency} from '../../utils'
 import Wallet from "../../system/Wallet"
 import Color from "../../constants/Colors";
 import {convertToMoney} from '../../utils'
+import {saveWalletToDB} from "./sagas";
+import {SAVE_WALLET} from "./actions";
+
+
 class WalletPage extends React.Component {
   constructor(props) {
     super(props)
@@ -27,11 +31,6 @@ class WalletPage extends React.Component {
 
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
     this._wallet = new Wallet()
-  }
-  getWalletFromNetwork = async () => {
-    const { db, dispatch, wallet } = this.props
-    console.log('button')
-    await this.props.getWalletFromNetwork(db, this._wallet)
   }
 
   addWallet = async (currency) => {
@@ -47,19 +46,33 @@ class WalletPage extends React.Component {
       wallets: nextProps.wallets,
     })
   }
+
   async componentWillMount() {
     const { db, wallet } = this.props
-    await this._wallet.start(wallet)
     await this.props.getWalletFromDB(db)
     await this.props.getWalletsFromDB(db)
-    this.props.getWalletFromNetwork(db, this._wallet)
-    this.props.getWalletsFromNetwork(db)
     this.logo = require('rediwallet/src/assets/images/logo_428x222.png')
+  }
+
+  async componentDidMount() {
+    const { db } = this.props
+    try {
+      const fetchResult = await db.get('wallet')
+      if (fetchResult.data) {
+        await this._wallet.start(fetchResult.data)
+        await this._wallet.getFromNetwork()
+        const newWallet = this._wallet.getJson()
+        await this.props.saveWalletToDB(db, newWallet)
+      }
+    } catch (e) {
+      console.log(e)
+      return false
+    }
   }
 
   render() {
     const { navigation } = this.props
-    const { wallet } = this.state
+    const { wallet } = this.props
 
     let currencyIcon, currencyName, totalAssetAmount = 0
 
@@ -79,8 +92,6 @@ class WalletPage extends React.Component {
       }
       totalAssetAmount = wallet.accounts.ETH.balance * 230500 + wallet.accounts.IFUM.balance * 22 + wallet.accounts.KRWT.balance
     }
-
-
 
     return (
       <View style={{ flex: 1, backgroundColor: '#303140', alignItems: 'center'}}>
@@ -109,6 +120,7 @@ class WalletPage extends React.Component {
               <View style={ styles.WalletAccountListContainer }>
                 <WalletAccountList
                   wallet={ wallet }
+                  _wallet={this._wallet}
                   navigation={ navigation }
                 />
               </View>
@@ -197,9 +209,10 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => ({
   getWalletFromDB: (db) => dispatch(actions.getWalletFromDB(db)),
-  getWalletFromNetwork: (db, _wallet) => dispatch(actions.getWalletFromNetwork(db, _wallet)),
+  getWalletFromNetwork: (db) => dispatch(actions.getWalletFromNetwork(db)),
   getWalletsFromNetwork: (db) => dispatch(actions.getWalletsFromNetwork(db)),
   getWalletsFromDB: (db) => dispatch(actions.getWalletsFromDB(db)),
+  saveWalletToDB: (db, wallet) => dispatch(actions.saveWalletToDB(db, wallet)),
   addWallet: (db, wallet) => dispatch(actions.addWallet(db, wallet)),
 })
 

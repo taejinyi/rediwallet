@@ -46,9 +46,9 @@ export const saveWalletsToDB = (db, wallets) => ({
   type: SAVE_WALLETS_TO_DB,
 })
 
-export const getWalletFromNetwork = (db, _wallet) => ({
+export const getWalletFromNetwork = (db, wallet) => ({
   db: db,
-  _wallet: _wallet,
+  wallet: wallet,
   type: GET_WALLET_FROM_NETWORK,
 })
 

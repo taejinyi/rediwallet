@@ -83,7 +83,15 @@ class WalletDetailPage extends React.Component {
   }
 
   showSendPage = () => {
-    this.debounceNavigate('Send', {wallet: this.props.navigation.state.params.wallet})
+    const account = this.props.navigation.state.params.account
+	  const wallet = this.props.navigation.state.params.wallet
+	  const _wallet = this.props.navigation.state.params._wallet
+
+    this.debounceNavigate('Send', {
+      wallet: wallet,
+      account: account,
+      _wallet: _wallet
+    })
   }
   showReceiveModal = () => {
     this.setState({
@@ -93,6 +101,14 @@ class WalletDetailPage extends React.Component {
   copyAddressToClipboard = () => {
     Clipboard.setString(this.props.navigation.state.params.wallet.address)
   }
+
+  getTransactionsFromNetwork = async () => {
+    await this.props.navigation.state.params._wallet.getTransactionsFromNetwork(this.props.navigation.state.params.account)
+
+
+  }
+
+
   async componentWillMount() {
     const currency = this.props.navigation.state.params.account.currency
     let currencyIcon, currencyName, headerBackgroundColor, headerTitle
@@ -123,17 +139,15 @@ class WalletDetailPage extends React.Component {
       'headerTitle': currencyName
     })
     this.headerBackgroundColor = headerBackgroundColor
-
-    const { db, wallet, account } = this.props
     // await this.props.getTransactionsFromDB(db, this.props.navigation.state.params.wallet, this.props.navigation.state.params.account)
-    await this.props.getTransactionsFromNetwork(db, this.props.navigation.state.params.wallet, this.props.navigation.state.params.account)
+    await this.getTransactionsFromNetwork()
   }
 
 
   render() {
 
     const { navigation } = this.props
-    const { wallet, account } = this.props.navigation.state.params
+    const { wallet, account, _wallet } = this.props.navigation.state.params
     const { targetAddress, amount, currency } = this.state
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
 
@@ -164,8 +178,8 @@ class WalletDetailPage extends React.Component {
     }
 
     let moneyStr
-    const fraction = account.balance - Math.floor(account.balance)
-    const strFraction = fraction.toString()
+    const fraction = (account.balance - Math.floor(account.balance))
+    const strFraction = fraction.toFixed(8)
     if (fraction > 0) {
       moneyStr = convertToMoney(Math.floor(account.balance)) + strFraction.substr(1)
     } else {
@@ -250,6 +264,7 @@ class WalletDetailPage extends React.Component {
                 <TransactionList
                   wallet={ wallet }
                   account={ account }
+                  _wallet={ _wallet}
                   navigation={ navigation }
                 />
               </View>
