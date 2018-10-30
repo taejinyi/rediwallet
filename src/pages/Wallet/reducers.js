@@ -8,7 +8,10 @@ import {
   SAVE_WALLET_TO_DB,
   SAVE_WALLETS_TO_DB,
   GET_WALLET_FROM_DB,
-  GET_WALLETS_FROM_DB
+  GET_WALLETS_FROM_DB,
+  GET_TRANSACTIONS_FROM_DB,
+  SAVE_TRANSACTIONS_TO_DB,
+  SAVE_TRANSACTIONS,
 } from './actions'
 
 const walletReducer = (state = {}, action) => {

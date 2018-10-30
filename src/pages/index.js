@@ -14,7 +14,7 @@ import SettingPage from './Setting'
 import appStateReducer from '../reducers'
 import splashStateReducer from './Splash/reducers'
 import walletReducer from './Wallet/reducers'
-
+import transactionsReducer from './WalletDetail/reducers'
 import {
   getWalletFromNetwork,
   getWalletsFromNetwork,
@@ -24,10 +24,16 @@ import {
   saveWalletsToDB,
   addWallet,
   setDefaultWallet,
-  getTransactionsFromDB,
-  getTransactionsFromNetwork
-
 } from './Wallet/actions'
+
+import {
+  saveTransactionsToDB,
+  getTransactionsFromDB,
+  getTransactionsFromServer,
+  saveOneTransaction,
+  getNextTransactionsOnlyState,
+} from './WalletDetail/actions'
+
 import { getInformation } from './Splash/actions'
 import {
   saveSeed,
@@ -47,6 +53,7 @@ import {
 // } from './Unlock/actions'
 import walletSaga from './Wallet/sagas'
 import splashSaga from './Splash/sagas'
+import transactionsSaga from './WalletDetail/sagas'
 
 // import lockSaga from './Lock/sagas'
 // import unlockSaga from './Unlock/sagas'
@@ -65,7 +72,8 @@ const actions = {
   getWalletFromNetwork,
   getWalletsFromNetwork,
   getTransactionsFromDB,
-  getTransactionsFromNetwork,
+  getTransactionsFromServer,
+  getNextTransactionsOnlyState,
   saveWalletToDB,
   saveWalletsToDB,
   showProcessingModal,
@@ -79,6 +87,7 @@ const actions = {
 const sagas = [
     ... walletSaga,
     ... splashSaga,
+    ... transactionsSaga
 
   // ... lockSaga,
   // ... unlockSaga,
@@ -88,6 +97,7 @@ const reducers = {
   splashStateReducer,
   appStateReducer,
   walletReducer,
+  transactionsReducer
 }
 // walletReducer: walletInfoReducer,
 

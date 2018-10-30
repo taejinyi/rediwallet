@@ -82,7 +82,6 @@ class SendPage extends React.Component {
 
   pasteClipboard = async () => {
 	  const data = await Clipboard.getString()
-	  console.log(data)
 	  const newFormValue = update(this.state.formValue, {
       address: { $set: data }
     })

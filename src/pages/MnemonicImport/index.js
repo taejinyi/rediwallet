@@ -85,7 +85,6 @@ class MnemonicImportPage extends React.Component {
 
   pasteClipboard = async () => {
 	  const data = await Clipboard.getString()
-	  console.log(data)
 	  const newFormValue = update(this.state.formValue, {
       mnemonic: { $set: data }
     })

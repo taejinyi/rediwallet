@@ -7,13 +7,17 @@ import Web3 from "web3";
 import {Currency, fromHexString} from "../../utils/crypto";
 import ethers from "ethers";
 import {SecureStore} from "expo";
-import * as loomjs from "../../network/web3/loom.umd";
-
+import axios from 'axios'
 const debug = true
 
 const kovanURL = "https://kovan.infura.io"
 const mainnetURL = "https://mainnet.infura.io"
+const etherscanAPIKey = "X9ITJBMCCS6RDC96RB4AKV37KBEWBWSYWW"
+const etherscanAPIURL = "https://api-kovan.etherscan.io/api"
 // const kovanURL = "https://kovan.infura.io/v3/5f559ee7fbf849c5a63c5a272dfe2530"
+
+const krwtAddress = "0xd5a23575d32849b7430dcd44d28c9fef3954068a"
+const infleumAddress = "0xf337f6821b18b2eb24c44d74f3fa91128ead23f4"
 
 async function getMnemonic() {
   if (debug) {
@@ -41,15 +45,21 @@ export default class Wallet {
     this.accounts = {
       ETH: {
         balance: 0,
-        currency: "ETH"
+        currency: "ETH",
+        address: "0x",
+        decimals: 1000000000000000000,
       },
       IFUM: {
         balance: 0,
-        currency: "IFUM"
+        currency: "IFUM",
+        address: infleumAddress,
+        decimals: 1,
       },
       KRWT: {
         balance: 0,
-        currency: "KRWT"
+        currency: "KRWT",
+        address: krwtAddress,
+        decimals: 1,
       },
     }
     this._contracts = {
@@ -137,15 +147,21 @@ export default class Wallet {
       accounts: {
         ETH: {
           balance: 0,
-          currency: "ETH"
+          currency: "ETH",
+          address: "0x",
+          decimals: 1000000000000000000,
         },
         IFUM: {
           balance: 0,
-          currency: "IFUM"
+          currency: "IFUM",
+          address: infleumAddress,
+          decimals: 1,
         },
         KRWT: {
           balance: 0,
-          currency: "KRWT"
+          currency: "KRWT",
+          address: krwtAddress,
+          decimals: 1,
         },
       }
     }
@@ -189,15 +205,21 @@ export default class Wallet {
     this.accounts = {
       ETH: {
         balance: (await this.getBalance("ETH")) / this.decimals.ETH,
-        currency: "ETH"
+        currency: "ETH",
+        address: "0x",
+        decimals: 1000000000000000000,
       },
       IFUM: {
         balance: (await this.getBalance("IFUM")) / this.decimals.IFUM,
-        currency: "IFUM"
+        currency: "IFUM",
+        address: infleumAddress,
+        decimals: 1,
       },
       KRWT: {
         balance: (await this.getBalance("KRWT")) / this.decimals.KRWT,
-        currency: "KRWT"
+        currency: "KRWT",
+        address: krwtAddress,
+        decimals: 1,
       },
     }
   }
@@ -240,13 +262,181 @@ export default class Wallet {
   }
   getTransactionsFromNetwork = async (account) => {
     if (account.currency === "ETH") {
+      try {
+        const module = "account"
+        const action = "txlist"
+        const address = this.address
+        const startblock = 0
+        const endblock = 99999999
+        const page = 1
+        const offset = 0
+        const sort = "desc"
+        const url = etherscanAPIURL + "?module=" + module +
+          "&action=" + action +
+          "&address=" + address +
+          "&startblock=" + startblock +
+          "&endblock=" + endblock +
+          "&page=" + page +
+          "&offset=" + offset +
+          "&sort=" + sort +
+          "&apiKey=" + etherscanAPIKey;
+        try {
+          const result = await axios({
+            method: "GET",
+            url: url
+          })
+          return result.data
+        } catch(e) {
+          console.log(e)
+          return e
+        }
+
+
+        // const options = {
+        //   fromBlock: "0x0",
+        //   toBlock: 'latest',
+        //   address: "0x0",
+        // }
+        // const pastLogs = await this._web3.eth.getPastLogs(options)
+        // console.log("pastLogs", pastLogs)
+        // const outgoingPastEvents = await this._contracts[account.currency].getPastEvents('Transfer', {filter: {from: this.address}}, {fromBlock: 0, toBlock: 'latest'})
+        // console.log("outgoingPastEvents", outgoingPastEvents)
+        //
+        //
+        // console.log('address: ', this.address)
+        // this._web3.eth.getPastLogs({
+        //     address: this.address,
+        // })
+        // .then(console.log);
+        /*
+
+        // Total Iteration
+
+        let n, bal, currentBlock, myAddr, i
+        myAddr = this.address
+        console.log('in getTransactionsFromNetwork myAddr= ', myAddr)
+        currentBlock = await this._web3.eth.getBlockNumber();
+        console.log('in getTransactionsFromNetwork currentBlock= ', currentBlock)
+        n = await this._web3.eth.getTransactionCount(this.address, currentBlock);
+        console.log('in getTransactionsFromNetwork n= ', n)
+        console.log('in getTransactionsFromNetwork', myAddr, currentBlock, n)
+        bal = await this.getBalance(account.currency, currentBlock);
+        console.log('in getTransactionsFromNetwork', myAddr, currentBlock, n, bal)
+        currentBlock = 9179625
+        const eth = this._web3.eth
+        for (i = currentBlock; i >= 0 && (n > 0 || bal > 0); --i) {
+          try {
+            const block = await eth.getBlock(i, true);
+            if (i % 10 === 0)
+              console.log('in getTransactionsFromNetwork, block', i)
+            if (block && block.transactions) {
+              block.transactions.forEach(function (e) {
+                if (myAddr === e.from) {
+                  if (e.from !== e.to)
+                    bal = bal + e.value
+                  console.log(i, e.from, e.to, e.value.toString(10));
+                  console.log("Outgoing", e);
+                  --n;
+                }
+                if (myAddr === e.to) {
+                  if (e.from !== e.to)
+                    bal = bal - e.value
+                  console.log(i, e.from, e.to, e.value.toString(10));
+                  console.log("Incoming: ", e);
+                }
+              });
+            }
+          } catch (e) {
+            console.error("Error in block " + i, e);
+          }
+        }
+        */
+      } catch (e) {
+        console.error("Error in getTransactionsFromNetwork ", e);
+      }
       return await this._web3.eth.getBalance(this.address)
     }
+    /*
+    Outgoing Object {
+      "blockHash": "0x4629ddd657ec1f907e505542aeea7153614c59f5dfb3060647f54209f3c631ea",
+      "blockNumber": 9179600,
+      "chainId": null,
+      "condition": null,
+      "creates": null,
+      "from": "0x18EfFDa3D2F0Ef936dbBaD3dC85dAF2ba6540C81",
+      "gas": 21000,
+      "gasPrice": "20000000000",
+      "hash": "0x525ca56bed576ed19fec8eeb984ce43ecf6809faa0f34d1f19d302de882bd25e",
+      "input": "0x",
+      "nonce": 27,
+      "publicKey": "0x3bb51c854d362929f41988b42e3acd9fb1179efd2c71363e5df259a743c12bc016c1021caa9a04843be17055fd8b993b087b82f2b8af727c99b8b93d6816f916",
+      "r": "0xba200c086aa141a6ff0154aa14c7236ceee295d2c83d44a22833230a023f8e17",
+      "raw": "0xf86c1b8504a817c80082520894d4eaef1fa90267697e9a7a3d056a2a6c9e79a42288016345785d8a0000801ba0ba200c086aa141a6ff0154aa14c7236ceee295d2c83d44a22833230a023f8e17a03deda39034f9705356ef81fd76777800ceba5402ea6e0a633fda53e751e4ae54",
+      "s": "0x3deda39034f9705356ef81fd76777800ceba5402ea6e0a633fda53e751e4ae54",
+      "standardV": "0x0",
+      "to": "0xd4eAeF1FA90267697e9A7a3D056a2A6C9E79a422",
+      "transactionIndex": 4,
+      "v": "0x1b",
+      "value": "100000000000000000",
+    }
+    */
     try {
-      const outgoingPastEvents = await this._contracts[account.currency].getPastEvents('Transfer', {filter: {from: this.address}})
+      // const subscription = this._web3.eth.subscribe('logs', {
+      //     address: this.address,
+      // }, function(error, result){
+      //     if (!error)
+      //         console.log(result);
+      //     else
+      //       console.log(error)
+      // });
+      const outgoingPastEvents = await this._contracts[account.currency].getPastEvents('Transfer', {filter: {from: this.address}}, {fromBlock: 0, toBlock: 'latest'})
       console.log("outgoingPastEvents", outgoingPastEvents)
-      const incomingPastEvents = await this._contracts[account.currency].getPastEvents('Transfer', {filter: {to: this.address}})
-      console.log("incomingPastEvents", incomingPastEvents)
+      // const incomingPastEvents = await this._contracts[account.currency].getPastEvents('Transfer', {filter: {to: this.address}}, {fromBlock: 0, toBlock: 'latest'})
+      // console.log("incomingPastEvents", incomingPastEvents)
+      // const outgoingPastEvents = await this._contracts[account.currency].events.Transfer({filter: {to: this.address}}, {fromBlock: 0})
+      // console.log("outgoingPastEvents", outgoingPastEvents)
+      //
+      // const incomingPastEvents = await this._contracts[account.currency].events.Transfer({filter: {to: this.address}}, {fromBlock: 0})
+      // console.log("incomingPastEvents", incomingPastEvents)
+      // const incomingPastEvents = await this._contracts[account.currency].events.Transfer({
+      //     filter: {to: this.address}, // Using an array means OR: e.g. 20 or 23
+      //     fromBlock: 0
+      // })
+      // console.log("incomingPastEvents", incomingPastEvents)
+      // const outgoingPastEvents = this._contracts[account.currency].events.Transfer({
+      //     filter: {from: this.address}, // Using an array means OR: e.g. 20 or 23
+      //     fromBlock: 0
+      // }, function(error, event){ console.log('callback 1: ', event); })
+      // .on('data', function(event){
+      //     console.log('callback 2: ', event); // same results as the optional callback above
+      // })
+      // .on('changed', function(event){
+      //     // remove event from local database
+      //     console.log('callback 3: ', event); // same results as the optional callback above
+      // })
+      // .on('error', console.error)
+      // console.log("outgoingPastEvents", outgoingPastEvents)
+
+      // event output example
+      // > {
+      //     returnValues: {
+      //         myIndexedParam: 20,
+      //         myOtherIndexedParam: '0x123456789...',
+      //         myNonIndexParam: 'My String'
+      //     },
+      //     raw: {
+      //         data: '0x7f9fade1c0d57a7af66ab4ead79fade1c0d57a7af66ab4ead7c2c2eb7b11a91385',
+      //         topics: ['0xfd43ade1c09fade1c0d57a7af66ab4ead7c2c2eb7b11a91ffdd57a7af66ab4ead7', '0x7f9fade1c0d57a7af66ab4ead79fade1c0d57a7af66ab4ead7c2c2eb7b11a91385']
+      //     },
+      //     event: 'MyEvent',
+      //     signature: '0xfd43ade1c09fade1c0d57a7af66ab4ead7c2c2eb7b11a91ffdd57a7af66ab4ead7',
+      //     logIndex: 0,
+      //     transactionIndex: 0,
+      //     transactionHash: '0x7f9fade1c0d57a7af66ab4ead79fade1c0d57a7af66ab4ead7c2c2eb7b11a91385',
+      //     blockHash: '0xfd43ade1c09fade1c0d57a7af66ab4ead7c2c2eb7b11a91ffdd57a7af66ab4ead7',
+      //     blockNumber: 1234,
+      //     address: '0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe'
+      // }
 
 
       return await this._contracts[account.currency].methods.balanceOf(this.address).call()

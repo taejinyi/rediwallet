@@ -16,11 +16,12 @@ import {
   SendPage,
   SettingPage,
   QRCodeScan
-} from 'rediwallet/src/pages'
+} from '../../pages'
 
 import withDB from '../WithDB'
 import withLock from '../WithLock'
 import withWallet from '../WithWallet'
+import withTransactions from '../WithTransactions'
 import Color from "../../constants/Colors";
 
 const MainTabNavigator = TabNavigator({
@@ -133,7 +134,7 @@ const MainNavigator = StackNavigator({
     }
   },
   WalletDetail: {
-    screen: withDB(withWallet(WalletDetailPage)),
+    screen: withDB(withWallet(withTransactions(WalletDetailPage))),
     navigationOptions: ({ navigation }) => ({
       headerTitle: navigation.state.params ? getHeaderTitle(navigation.state.params.account) : "Loading...",
       headerTintColor: 'white',

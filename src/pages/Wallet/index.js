@@ -37,7 +37,6 @@ class WalletPage extends React.Component {
     const wallet = await Wallet.generateWallet(currency)
     const { db } = this.props
     this.props.addWallet(db, wallet)
-    console.log(wallet)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -51,7 +50,7 @@ class WalletPage extends React.Component {
     const { db, wallet } = this.props
     await this.props.getWalletFromDB(db)
     await this.props.getWalletsFromDB(db)
-    this.logo = require('rediwallet/src/assets/images/logo_428x222.png')
+    this.logo = require('../../assets/images/logo_428x222.png')
   }
 
   async componentDidMount() {
@@ -90,7 +89,9 @@ class WalletPage extends React.Component {
         currencyIcon = "?"
         currencyName = "Unknown"
       }
-      totalAssetAmount = wallet.accounts.ETH.balance * 230500 + wallet.accounts.IFUM.balance * 22 + wallet.accounts.KRWT.balance
+      if (wallet.accounts) {
+        totalAssetAmount = wallet.accounts.ETH.balance * 230500 + wallet.accounts.IFUM.balance * 22 + wallet.accounts.KRWT.balance
+      }
     }
 
     return (

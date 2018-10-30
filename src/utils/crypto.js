@@ -44,7 +44,6 @@ const generateWallet = async (currencyTicker) => {
     }
     const nextNonce = nonce + 1
     await SecureStore.setItemAsync('nonce', nextNonce.toString())
-    console.log("in generateWallet", nonce, nextNonce)
 
     const hex = await SecureStore.getItemAsync('seed')
     let seed
@@ -70,13 +69,11 @@ const generateWallet = async (currencyTicker) => {
       const privateKeyHex = _newAccount.privateKey
       const privateKeySeed = fromHexString(privateKeyHex.substr(privateKeyHex.length - 64))
       const pair = nacl.sign.keyPair.fromSeed(privateKeySeed)
-      console.log('in importMnemonic, pair = ', pair)
 
 
       const publicKey = loomjs.CryptoUtils.publicKeyFromPrivateKey(pair.secretKey)
       const address = toChecksumAddress(loomjs.LocalAddress.fromPublicKey(pair.publicKey).toString())
       await SecureStore.setItemAsync(address, toHexString(pair.secretKey))
-      console.log("in generateWallet address", address, toHexString(pair.secretKey))
 
       wallet = {
         address: address,
@@ -84,10 +81,8 @@ const generateWallet = async (currencyTicker) => {
         currency: currencyTicker,
         balance: 0
       }
-      console.log("in generateWallet", wallet)
       return wallet
     } else {
-      console.log('setItemAsync', _newAccount.address, _newAccount.privateKey)
       await SecureStore.setItemAsync(_newAccount.address, _newAccount.privateKey)
 
       wallet = {

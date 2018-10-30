@@ -42,7 +42,6 @@ function getLoomWeb3(publicKey, privateKey) {
 }
 
 const getBalance = async (wallet) => {
-  console.log('in getBalance wallet = ', wallet)
   const web3 = getWeb3()
 
   if (wallet.currency === Currency.ETH.ticker) {

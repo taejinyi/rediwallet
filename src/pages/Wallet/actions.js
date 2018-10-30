@@ -9,8 +9,6 @@ export const GET_WALLET_FROM_NETWORK = 'GET_WALLET_FROM_NETWORK'
 export const GET_WALLETS_FROM_NETWORK = 'GET_WALLETS_FROM_NETWORK'
 export const GET_WALLET_FROM_DB = 'GET_WALLET_FROM_DB'
 export const GET_WALLETS_FROM_DB = 'GET_WALLETS_FROM_DB'
-export const GET_TRANSACTIONS_FROM_DB = 'GET_TRANSACTIONS_FROM_DB'
-export const GET_TRANSACTIONS_FROM_NETWORK = 'GET_TRANSACTIONS_FROM_NETWORK'
 
 export const setDefaultWallet = (db, wallet) => ({
   db: db,
@@ -66,17 +64,3 @@ export const getWalletsFromDB = (db) => ({
   db: db,
   type: GET_WALLETS_FROM_DB,
 })
-
-export const getTransactionsFromDB = (db, wallet, account) => ({
-  db: db,
-  wallet: wallet,
-  account: account,
-  type: GET_TRANSACTIONS_FROM_DB,
-})
-export const getTransactionsFromNetwork = (db, wallet, account) => ({
-  db: db,
-  wallet: wallet,
-  account: account,
-  type: GET_TRANSACTIONS_FROM_NETWORK,
-})
-

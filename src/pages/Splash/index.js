@@ -30,11 +30,6 @@ class SplashPage extends React.Component {
     // }
 
 		setTimeout(async () => {
-		  console.log('turned on')
-      // await SecureStore.deleteItemAsync('seed')
-      // await SecureStore.deleteItemAsync('nonce')
-      // await this.props.db.destroy()
-
       const seed = await SecureStore.getItemAsync('seed')
 			if(seed == null) {
 				this.navigateTo('Landing', nav)

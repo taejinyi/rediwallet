@@ -2,6 +2,7 @@
 import withDB from './WithDB'
 import withLock from './WithLock'
 import withWallet from './WithWallet'
+import withTransactions from './WithTransactions'
 
 // import Watcher from './Watcher'
 import NotificationSystem from './NotificationSystem'
@@ -25,6 +26,7 @@ export {
   withDB,
   withLock,
   withWallet,
+  withTransactions,
 
   // Watcher,
   NotificationSystem,
