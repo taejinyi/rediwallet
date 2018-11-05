@@ -1,5 +1,3 @@
-import nacl from "tweetnacl/nacl";
-
 const Currency = {
   IFUM: {
     ticker: "IFUM",
@@ -15,10 +13,6 @@ const Currency = {
   },
 }
 import numeral from 'numeral'
-import ethers from "ethers";
-import {SecureStore} from "expo";
-import * as loomjs from "../network/web3/loom.umd";
-import Web3 from 'web3'
 const convertToKRWUnit = (number) => {
   return numeral(number).format('0,000')
 }
@@ -29,81 +23,8 @@ const fromHexString = hexString =>
 const toHexString = bytes =>
   bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
 
-
-const initiate = async () => {
-
-}
-const generateWallet = async (currencyTicker) => {
-  try {
-    let wallet = null
-    let nonce = await SecureStore.getItemAsync('nonce')
-    if (!nonce) {
-      nonce = 0
-    } else {
-      nonce = parseInt(nonce, 10)
-    }
-    const nextNonce = nonce + 1
-    await SecureStore.setItemAsync('nonce', nextNonce.toString())
-
-    const hex = await SecureStore.getItemAsync('seed')
-    let seed
-    if (hex === null) {
-      return null
-    } else {
-      seed = fromHexString(hex)
-    }
-    const mnemonic = await ethers.HDNode.entropyToMnemonic(seed)
-    const path = "m/44'/60'/0'/0/" + nonce
-    const _newAccount = await ethers.Wallet.fromMnemonic(mnemonic, path);
-
-    // await SecureStore.setItemAsync(_newAccount.address, _newAccount.privateKey)
-    // wallet = {
-    //   address: _newAccount.address,
-    //   nonce: nonce,
-    //   currency: currencyTicker,
-    //   balance: 0
-    // }
-    // return wallet
-
-    if (currencyTicker === Currency.KRWT.ticker) {
-      const privateKeyHex = _newAccount.privateKey
-      const privateKeySeed = fromHexString(privateKeyHex.substr(privateKeyHex.length - 64))
-      const pair = nacl.sign.keyPair.fromSeed(privateKeySeed)
-
-
-      const publicKey = loomjs.CryptoUtils.publicKeyFromPrivateKey(pair.secretKey)
-      const address = toChecksumAddress(loomjs.LocalAddress.fromPublicKey(pair.publicKey).toString())
-      await SecureStore.setItemAsync(address, toHexString(pair.secretKey))
-
-      wallet = {
-        address: address,
-        nonce: nonce,
-        currency: currencyTicker,
-        balance: 0
-      }
-      return wallet
-    } else {
-      await SecureStore.setItemAsync(_newAccount.address, _newAccount.privateKey)
-
-      wallet = {
-        address: _newAccount.address,
-        nonce: nonce,
-        currency: currencyTicker,
-        balance: 0
-      }
-      return wallet
-    }
-  }
-  catch(e) {
-    console.log(e)
-  }
-  return null
-}
-
-
 export {
   convertToKRWUnit,
-  generateWallet,
   Currency,
   fromHexString,
   toHexString,

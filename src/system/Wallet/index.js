@@ -20,14 +20,11 @@ const krwtAddress = "0xd5a23575d32849b7430dcd44d28c9fef3954068a"
 const infleumAddress = "0xf337f6821b18b2eb24c44d74f3fa91128ead23f4"
 
 async function getMnemonic() {
-  if (debug) {
-    return "pilot soft lottery source duty sentence exist wonder leaf same middle allow"
-  }
   const hex = await SecureStore.getItemAsync('seed')
   let seed
   if (hex === null) {
     console.log("TODO: Error! seed is empty!")
-    return "pilot soft lottery source duty sentence exist wonder leaf same middle allow"
+    return null
   } else {
     seed = fromHexString(hex)
   }
@@ -192,6 +189,9 @@ export default class Wallet {
   }
 
   getBalance = async (currency) => {
+    if (!this.currency){
+      return 0
+    }
     if (currency === "ETH") {
       return await this._web3.eth.getBalance(this.address)
     }

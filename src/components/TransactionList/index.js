@@ -162,12 +162,29 @@ class TransactionList extends React.Component {
       return null
 
     return (
-      <FlatList
-        data={ _.values(transactions) }
-        renderItem={ this.renderTransactionItem }
-        contentContainerStyle={{ padding: 15 }}
-        keyExtractor={( item, index ) => index.toString() }
-      />
+      <View style={{ width: '100%' }}>
+        <View style={{ height: 40, width: '100%', borderBottomColor: '#aaaaaa', borderBottomWidth: 1, flexDirection: "row"}}>
+          <View style={{ flex: 0.1, justifyContent: 'center', alignItems: 'center' }}>
+          </View>
+          <View style={{ flex: 0.4, justifyContent: 'center', alignItems: 'center', paddingLeft: 0 }}>
+            <Text numberOfLines={1} style={{ color: 'white', fontSize: 12 }}>Receiver / Sender</Text>
+          </View>
+          <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', paddingLeft: 0, paddingRight: 0 }}>
+            <Text numberOfLines={1} style={{ color: 'white', fontSize: 12 }}>Date / Time</Text>
+          </View>
+          <View style={{ flex: 0.25, justifyContent: 'center', alignItems: 'center', paddingLeft: 0, paddingRight: 0 }}>
+            <Text numberOfLines={1} style={{ color: 'white', fontSize: 12 }}>Amount</Text>
+          </View>
+          <View style={{ flex: 0.05, justifyContent: 'center', alignItems: 'flex-end', paddingLeft: 0, paddingRight: 0 }}>
+          </View>
+        </View>
+        <FlatList
+          data={ _.values(transactions) }
+          renderItem={ this.renderTransactionItem }
+          contentContainerStyle={{ padding: 15 }}
+          keyExtractor={( item, index ) => index.toString() }
+        />
+      </View>
     )
   }
 }

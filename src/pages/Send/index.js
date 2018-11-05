@@ -25,7 +25,6 @@ import {translate} from "react-i18next";
 
 const Form = t.form.Form
 const DismissKeyboardAvoidingView = DismissKeyboardViewHOC(KeyboardAvoidingView)
-import * as network from 'rediwallet/src/network/web3'
 
 @translate(['main'], { wait: true })
 class SendPage extends React.Component {

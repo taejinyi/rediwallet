@@ -16,7 +16,7 @@ import {
 
 export function* saveTransactionsToDB(action) {
   const { db, wallet, account, transactions } = action
-  const dbIndex = "tx" + wallet.address + account.currency
+  const dbIndex = "tx" + account.currency
 
   try {
     const fetchResult = yield call(() => db.get(dbIndex))
@@ -51,7 +51,7 @@ export function* saveTransactionsToDB(action) {
 
 export function* getTransactionsFromDB(action) {
   const { db, wallet, account } = action
-  const dbIndex = "tx" + wallet.address + account.currency
+  const dbIndex = "tx" + account.currency
 
   try {
     const fetchResult = yield call(() => db.get(dbIndex))
@@ -68,7 +68,7 @@ export function* getTransactionsFromDB(action) {
 
 export function* getTransactionsFromServer(action) {
   const { db, wallet, account, } = action
-  const dbIndex = "tx" + wallet.address + account.currency
+  const dbIndex = "tx" + account.currency
 
   const response = yield call(() => server.getTransactions(wallet, account))
 
@@ -105,7 +105,7 @@ export function* getTransactionsFromServer(action) {
 
 export function* saveOneTransaction(action) {
   const { db, wallet, account, transaction } = action
-  const dbIndex = "tx" + wallet.address + account.currency
+  const dbIndex = "tx" + account.currency
 
   try {
     let newTransactions
@@ -154,7 +154,7 @@ export function* saveOneTransaction(action) {
 
 export function* getNextTransactionsOnlyState(action) {
   const { db, wallet, account, offset } = action
-  const dbIndex = "tx" + wallet.address + account.currency
+  const dbIndex = "tx" + account.currency
 
   const response = yield call(() => server.getTransactions(wallet, account, offset))
 

@@ -96,7 +96,7 @@ class WalletAccountList extends React.Component {
 
   render() {
     const { wallet, } = this.props
-    if(wallet === null)
+    if(wallet === null || wallet.accounts === undefined)
       return null
 
     return (
@@ -111,7 +111,7 @@ class WalletAccountList extends React.Component {
 }
 
 WalletAccountList.propTypes = {
-  wallets: PropTypes.oneOfType([ PropTypes.array, PropTypes.object ]),
+  // wallets: PropTypes.oneOfType([ PropTypes.array, PropTypes.object ]),
   navigation: PropTypes.object,
 }
 

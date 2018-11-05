@@ -11,7 +11,6 @@ import {
   ADD_WALLET,
   SET_DEFAULT_WALLET,
 } from './actions'
-import * as network from 'rediwallet/src/network/web3'
 import Wallet from "../../system/Wallet"
 
 export function* addWallet(action) {

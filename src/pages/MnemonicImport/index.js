@@ -25,7 +25,6 @@ import {translate} from "react-i18next";
 
 const Form = t.form.Form
 const DismissKeyboardAvoidingView = DismissKeyboardViewHOC(KeyboardAvoidingView)
-import * as network from 'rediwallet/src/network/web3'
 import {Currency, generateWallet, toHexString} from "../../utils";
 import ethers from "ethers";
 import {SecureStore} from "expo";
@@ -162,7 +161,6 @@ class MnemonicImportPage extends React.Component {
     dispatch(resetAction)
   }
   importMnemonic = async (mnemonic) => {
-    console.log("in importMnemonic")
     let seed = await SecureStore.getItemAsync('seed')
     if(seed && seed.length > 10) {
     	 Alert.alert(
@@ -178,10 +176,8 @@ class MnemonicImportPage extends React.Component {
 			return
 		}
 		try {
-      console.log('mnemonic = ', mnemonic)
 			const entropy = await ethers.HDNode.mnemonicToEntropy(mnemonic)
       const hex = entropy.substr(entropy.length - 32)
-      console.log("in import", entropy, hex)
 			await SecureStore.setItemAsync('seed', hex)
       const wallet = await Wallet.generateWallet()
 			await this.props.addWallet(this.props.db, wallet)

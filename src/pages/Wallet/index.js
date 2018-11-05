@@ -11,7 +11,7 @@ import { call, put, take, takeEvery } from 'redux-saga/effects'
 import connect from "react-redux/es/connect/connect";
 // import { NavigationActions } from 'react-navigation'
 import {SecureStore} from "expo";
-import {generateWallet, Currency} from '../../utils'
+import {Currency} from '../../utils'
 
 import Wallet from "../../system/Wallet"
 import Color from "../../constants/Colors";
@@ -57,7 +57,7 @@ class WalletPage extends React.Component {
     const { db } = this.props
     try {
       const fetchResult = await db.get('wallet')
-      if (fetchResult.data) {
+      if (fetchResult.data && fetchResult.data.address !== undefined) {
         await this._wallet.start(fetchResult.data)
         await this._wallet.getFromNetwork()
         const newWallet = this._wallet.getJson()
@@ -117,7 +117,7 @@ class WalletPage extends React.Component {
         </View>
         <Content style={{ backgroundColor: '#303140', width:'100%'}}>
           {
-            wallet ? (
+            (wallet && wallet.address !== undefined) ? (
               <View style={ styles.WalletAccountListContainer }>
                 <WalletAccountList
                   wallet={ wallet }
@@ -129,7 +129,7 @@ class WalletPage extends React.Component {
               <View style={{ justifyContent: 'center', alignItems: 'center', }}>
                 <MaterialCommunityIcons name='close-circle-outline' style={{ fontSize: 84, color: '#aaaaaa', }} />
                 <Text style={{ fontSize: 18, marginTop: 10, color: '#aaaaaa', }}>
-                  만들어진 지갑이 없습니다..
+                  Loading...
                 </Text>
               </View>
             )

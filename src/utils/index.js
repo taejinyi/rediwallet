@@ -1,5 +1,4 @@
 import {
-  generateWallet,
   Currency,
   fromHexString,
   toHexString,
@@ -8,7 +7,6 @@ import './format'
 import { convertToMoney } from './money'
 
 export {
-  generateWallet,
   Currency,
   fromHexString,
   toHexString,

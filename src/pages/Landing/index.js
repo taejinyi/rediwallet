@@ -15,16 +15,9 @@ import {
   Right,
 	Left,
 } from 'native-base'
-import platform from 'rediwallet/src/native-base-theme/variables/platform'
-import getTheme from 'rediwallet/src/native-base-theme/components'
-import {TextLoader} from "react-native-indicator";
 
-import MnemonicPhrase from "../../library/mnemonic-phrase.min";
-import * as loomjs from '../../network/web3/loom.umd'
-import Math from '../../library/seedrandom.min'
 import ethers from 'ethers'
-import { generateWallet, toHexString, Currency } from '../../utils'
-import {fromHexString} from "../../utils/crypto";
+import { toHexString } from '../../utils'
 import Wallet from "../../system/Wallet";
 
 class LandingPage extends React.Component {
