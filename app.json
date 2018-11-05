@@ -21,7 +21,34 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "io.infleum.rediwallet",
+      "icon": "./src/assets/favicon/apple-icon-180x180.png"
+    },
+	"android": {
+		"package": "io.infleum.rediwallet",
+		"versionCode": 2,
+		"icon": "./src/assets/favicon/android-icon-192x192.png",
+		"permissions": [
+			"CAMERA",
+			"USE_FINGERPRINT"
+		]
+	},
+	"androidStatusBar": {
+		"barStyle": "light-content",
+		"backgroundColor": "#303140"
+	},
+  	"hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "elsolcompany",
+            "project": "rediwallet",
+            "authToken": "1a5d9465c7774b3cbf5439603c7e728fffe6ab5a64c14f7d83dc5cd1862ac858"
+          }
+        }
+      ]
     }
   }
 }

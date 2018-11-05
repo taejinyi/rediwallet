@@ -18,6 +18,10 @@ import {sagas} from './src/pages'
 
 import './src/global';
 
+import Sentry from 'sentry-expo';
+// import { SentrySeverity, SentryLog } from 'react-native-sentry';
+Sentry.config('https://af988a17f47c4e7082b40ee4c8687b26@sentry.io/1315592').install();
+
 function* rootSaga() {
   yield all(sagas)
 }
