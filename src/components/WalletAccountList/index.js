@@ -5,6 +5,9 @@ import { FlatList, Text, View, StyleSheet, TouchableOpacity, Image } from 'react
 import {Button} from "native-base";
 import Color from '../../constants/Colors'
 import { convertToMoney } from '../../utils'
+import {actions} from "../../pages";
+import { connect } from 'react-redux'
+
 class WalletAccountList extends React.Component {
   constructor(props) {
     super(props)
@@ -72,6 +75,7 @@ class WalletAccountList extends React.Component {
     return (
       <View style={ styles.walletContainer }>
         <TouchableOpacity onPress={ () => {
+          this.props.showProcessingModal("Loading transaction history")
           this.debounceNavigate('WalletDetail', { account: accountData, wallet: wallet, _wallet: _wallet })
         }}>
           <View style={{ height: 90, width: '100%' ,backgroundColor: accountColor, flexDirection: "row"}}>
@@ -141,5 +145,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 3,
   },
 })
-
-export default WalletAccountList
+const mapDispatchToprops = (dispatch) => ({
+  showProcessingModal: (message) => dispatch(actions.showProcessingModal(message))
+})
+export default connect(null, mapDispatchToprops)(WalletAccountList)

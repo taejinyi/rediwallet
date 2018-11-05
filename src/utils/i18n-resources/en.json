@@ -7,6 +7,16 @@
 	},
 	"main": {
 		"close": "Close",
+		"address": "Address",
+		"amount": "Amount",
+		"confirm_send": "Confirm Transfer",
+		"confirm_send_desc": "Confirm Transfer Description",
+		"cancel": "Cancel",
+		"send": "Send",
+		"paste_clipboard": "Paste Clipboard",
+		"scan_qrcode": "Scan QRCode",
+		"scan_qrcode_completed": "Scan Completed!",
+		"scan_qrcode_please": "Scan QRCode"
 	}
 
 }

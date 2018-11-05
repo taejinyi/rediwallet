@@ -92,11 +92,11 @@ class QRCodeScan extends React.Component {
                       {
                         this.isScanned === true ? (
                           <Text style={{ marginBottom: 80, color: 'white', fontSize: 22, }}>
-                            스캔 되었습니다!
+                            { t('scan_qrcode_completed', { lng: i18n.language }) }
                           </Text>
                         ) : (
                           <Text style={{ marginBottom: 80, color: 'white', fontSize: 22, }}>
-                            QR코드를 스캔해 주세요
+                            { t('scan_qrcode_please', { lng: i18n.language }) }
                           </Text>
                         )
                       }

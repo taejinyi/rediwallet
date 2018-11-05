@@ -12,6 +12,7 @@ import {
   SAVE_PAGE_STATE,
   PAGE_STATE,
 } from './actions'
+import {HIDE_PROCESSING_MODAL} from "../../actions";
 
 
 export function* saveTransactionsToDB(action) {
@@ -96,6 +97,10 @@ export function* getTransactionsFromServer(action) {
       yield put({
         type: SAVE_PAGE_STATE,
         pageState: PAGE_STATE.STATE_LOADING_FINISH,
+      })
+
+      yield put({
+        type: HIDE_PROCESSING_MODAL
       })
     }
   } catch(e) {

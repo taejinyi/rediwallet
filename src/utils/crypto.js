@@ -1,3 +1,5 @@
+import Color from "../constants/Colors";
+
 const Currency = {
   IFUM: {
     ticker: "IFUM",
@@ -23,9 +25,46 @@ const fromHexString = hexString =>
 const toHexString = bytes =>
   bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
 
+const getHeaderTitle = (account) => {
+  let currencyName
+  if (account.currency) {
+    if (account.currency === "ETH") {
+      currencyName = "Ethereum"
+    } else if (account.currency === "IFUM") {
+      currencyName = "Infleum"
+    } else if (account.currency === "KRWT") {
+      currencyName = "KRW Tether"
+    } else {
+      currencyName = "Unknown"
+    }
+  } else {
+    currencyName = "Loading..."
+  }
+  return currencyName
+}
+
+const getHeaderBackgroundColor = (account) => {
+  let headerBackgroundColor
+  if (account.currency) {
+    if (account.currency === "ETH") {
+      headerBackgroundColor = Color.ethereumColor
+    } else if (account.currency === "IFUM") {
+      headerBackgroundColor = Color.infleumColor
+    } else if (account.currency === "KRWT") {
+      headerBackgroundColor = Color.krwtColor
+    } else {
+      headerBackgroundColor = Color.backgroundColor
+    }
+  } else {
+    headerBackgroundColor = Color.backgroundColor
+  }
+  return headerBackgroundColor
+}
 export {
   convertToKRWUnit,
   Currency,
   fromHexString,
   toHexString,
+  getHeaderTitle,
+  getHeaderBackgroundColor
 }

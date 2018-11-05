@@ -21,5 +21,16 @@
 	},
 	"main": {
 		"close": "닫기",
+		"address": "주소",
+		"amount": "금액",
+		"confirm_send": "송금 확정",
+		"confirm_send_desc": "송금을 확정합니다.",
+		"cancel": "취소",
+		"send": "송금",
+		"paste_clipboard": "클립보드 붙여넣기",
+		"scan_qrcode": "QR코드 스캔하기",
+		"scan_qrcode_completed": "스캔이 완료되었습니다!",
+		"scan_qrcode_please": "QR코드를 스캔해 주세요"
+
 	}
 }

@@ -67,6 +67,19 @@ class WalletPage extends React.Component {
       console.log(e)
       return false
     }
+    setInterval( () => {
+      this.refreshWallet()
+    }, 15000);
+  }
+
+  async refreshWallet() {
+    try {
+      await this._wallet.getFromNetwork()
+      const newWallet = this._wallet.getJson()
+      await this.props.saveWalletToDB(this.props.db, newWallet)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   render() {
@@ -215,6 +228,7 @@ const mapDispatchToProps = (dispatch) => ({
   getWalletsFromDB: (db) => dispatch(actions.getWalletsFromDB(db)),
   saveWalletToDB: (db, wallet) => dispatch(actions.saveWalletToDB(db, wallet)),
   addWallet: (db, wallet) => dispatch(actions.addWallet(db, wallet)),
+  showProcessingModal: (message) => dispatch(actions.showProcessingModal(message))
 })
 
 export default connect(null, mapDispatchToProps)(WalletPage)

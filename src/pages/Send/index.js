@@ -5,6 +5,8 @@ import Modal from 'react-native-modal'
 import update from 'immutability-helper'
 import { RippleLoader} from 'react-native-indicator'
 import { Ionicons, EvilIcons } from '@expo/vector-icons'
+import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
+
 import { Toast, Container, Content, Footer, FooterTab, Button, Icon, Spinner, Card, CardItem, Body } from 'native-base'
 import {
   Animated,
@@ -22,6 +24,9 @@ import {
 } from 'react-native'
 import { LoadingButton, Header, DismissKeyboardViewHOC, Input } from '../../components'
 import {translate} from "react-i18next";
+import { getHeaderBackgroundColor, getHeaderTitle } from "../../utils/crypto";
+import {convertToMoney} from "../../utils";
+import Color from "../../constants/Colors";
 
 const Form = t.form.Form
 const DismissKeyboardAvoidingView = DismissKeyboardViewHOC(KeyboardAvoidingView)
@@ -272,7 +277,10 @@ class SendPage extends React.Component {
 
     * */
   }
-
+  async componentWillMount() {
+	  const account = this.props.navigation.state.params.account
+    this.headerBackgroundColor = getHeaderBackgroundColor(account)
+  }
 	render() {
     const {
       formValue,
@@ -284,14 +292,69 @@ class SendPage extends React.Component {
     const targetAddress = formValue.address
     const amount = formValue.amount
 
+
+    const { navigation, transactions } = this.props
+    const { wallet, account, _wallet } = this.props.navigation.state.params
+    let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
+
+    if (account.currency === "ETH") {
+      accountColor = Color.ethereumColor
+      currencyIcon = "￦"
+      currencyTicker = "ETH"
+      currencyName = "Ethereum"
+      fxRate = 230500
+    } else if (account.currency === "IFUM") {
+      accountColor = Color.infleumColor
+      currencyIcon = "￦"
+      currencyTicker = "IFUM"
+      currencyName = "Infleum"
+      fxRate = 22
+    } else if (account.currency === "KRWT") {
+      accountColor = Color.krwtColor
+      currencyIcon = "￦"
+      currencyTicker = "KRWT"
+      currencyName = "KRW Tether"
+      fxRate = 1
+    } else {
+      currencyIcon = "?"
+      currencyTicker = "???"
+      currencyName = "Unknown"
+      accountColor = "#999999"
+      fxRate = 1
+    }
+
+    let moneyStr
+    const fraction = (account.balance - Math.floor(account.balance))
+    const strFraction = fraction.toFixed(8)
+    if (fraction > 0) {
+      moneyStr = convertToMoney(Math.floor(account.balance)) + strFraction.substr(1)
+    } else {
+      moneyStr = convertToMoney(account.balance)
+    }
+
 		return (
 
       <Container>
-        <View style={{ flex: 0.3, }}>
-          <Header
-            headerTitle='Send'
-            renderContent={ false }
-          />
+        {/*<View style={{ flex: 0.3 }}>*/}
+          {/*<Header*/}
+            {/*backgroundColor={this.headerBackgroundColor}*/}
+            {/*headerTitle='Send'*/}
+            {/*renderContent={ false }*/}
+          {/*/>*/}
+        {/*</View>*/}
+        <View style={{ height: 140, width:'100%', backgroundColor: this.headerBackgroundColor, justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{ width:'90%', justifyContent: 'center', alignItems: 'center', borderTopWidth: 1, borderColor: '#aaaaaa' }}>
+            <Button
+              onPress={this.copyAddressToClipboard}
+              transparent
+              style={{ width:'100%', justifyContent: 'center', alignItems: 'center', marginTop:0, marginBottom: 0}}
+            >
+              <Text style={{ textAlign: 'center', color: 'white', fontSize: 12 }}>{ wallet.address }</Text>
+            </Button>
+            <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 14, marginTop: 0 }}>{ currencyIcon + convertToMoney(fxRate) + " per " + currencyTicker }</Text>
+            <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 18, marginTop: 10 }}>{ currencyTicker + " " + moneyStr }</Text>
+            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 28 }}>{ " ~ " + currencyIcon + convertToMoney(Math.floor(account.balance * fxRate)) }</Text>
+          </View>
         </View>
         <Modal
           avoidKeyboard={ true }

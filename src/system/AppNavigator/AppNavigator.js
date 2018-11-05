@@ -3,7 +3,7 @@ import { Image, Text, TouchableOpacity } from 'react-native'
 import { NavigationComponent } from 'react-native-material-bottom-navigation'
 import { NavigationActions, HeaderBackButton, StackNavigator, TabNavigator, TabBarBottom } from 'react-navigation'
 import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
-
+import { getHeaderBackgroundColor, getHeaderTitle } from "../../utils/crypto";
 import {
   SplashPage,
   LandingPage,
@@ -83,42 +83,6 @@ const MainTabNavigator = TabNavigator({
     activeTintColor: '#303140'
 })
 
-const getHeaderTitle = (account) => {
-  let currencyName
-  if (account.currency) {
-    if (account.currency === "ETH") {
-      currencyName = "Ethereum"
-    } else if (account.currency === "IFUM") {
-      currencyName = "Infleum"
-    } else if (account.currency === "KRWT") {
-      currencyName = "KRW Tether"
-    } else {
-      currencyName = "Unknown"
-    }
-  } else {
-    currencyName = "Loading..."
-  }
-  return currencyName
-}
-
-const getHeaderBackgroundColor = (account) => {
-  let headerBackgroundColor
-  if (account.currency) {
-    if (account.currency === "ETH") {
-      headerBackgroundColor = Color.ethereumColor
-    } else if (account.currency === "IFUM") {
-      headerBackgroundColor = Color.infleumColor
-    } else if (account.currency === "KRWT") {
-      headerBackgroundColor = Color.krwtColor
-    } else {
-      headerBackgroundColor = Color.backgroundColor
-    }
-  } else {
-    headerBackgroundColor = Color.backgroundColor
-  }
-  return headerBackgroundColor
-}
-
 const MainNavigator = StackNavigator({
   MainTab: {
     screen: MainTabNavigator,
@@ -160,21 +124,20 @@ const MainNavigator = StackNavigator({
   Send: {
     screen: withDB(withWallet(SendPage)),
     navigationOptions: ({ navigation }) => ({
-      headerTitle: 'Send',
+      headerTitle: "Transfer",
       headerTintColor: 'white',
       headerStyle: {
-        backgroundColor: '#303140',
+        backgroundColor: navigation.state.params ? getHeaderBackgroundColor(navigation.state.params.account) : "#303140",
         borderBottomWidth: 0,
       },
       headerLeft: (
         <HeaderBackButton
           tintColor='white'
-          title='Wallet Detail'  // TODO onPress
+          title={navigation.state.params ? getHeaderTitle(navigation.state.params.account) : "Account"}
           onPress={() => navigation.goBack(null)} // TODO Alert
         />
       )
     })
-
   },
 })
 

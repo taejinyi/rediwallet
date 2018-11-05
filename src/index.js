@@ -44,7 +44,7 @@ class Main extends React.Component {
     // web3.eth.getBlock('latest').then(console.log);
 		const { isProcessingModalShow, processingModalMessage, unlocked } = this.props
     // TODO Comment
-    this.props.saveUnlocked(true)
+    // this.props.saveUnlocked(true)
     return (
       <Root>
         <Modal
@@ -80,6 +80,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   unlocked: state.appStateReducer.unlocked,
+  isProcessingModalShow: state.appStateReducer.isShow,
+  processingModalMessage: state.appStateReducer.message
 })
 
 const mapDispatchToProps = (dispatch) => ({
