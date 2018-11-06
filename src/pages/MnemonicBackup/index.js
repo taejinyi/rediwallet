@@ -3,6 +3,8 @@ import {Text, View, Clipboard} from 'react-native'
 import {Button, Container, Content, Left, Right} from 'native-base'
 import { TextLoader } from 'react-native-indicator'
 import { NavigationActions } from 'react-navigation'
+import {actions} from "../index";
+import connect from "react-redux/es/connect/connect";
 class MnemonicBackupPage extends React.Component {
   closePage = () => {
     const { dispatch } = this.props.navigation
@@ -17,6 +19,10 @@ class MnemonicBackupPage extends React.Component {
   }
   copyToClipboard = () => {
     Clipboard.setString(this.props.navigation.state.params.mnemonic)
+  }
+  async componentDidMount() {
+    this.props.hideProcessingModal()
+
   }
   render() {
     const { mnemonic } = this.props.navigation.state.params
@@ -40,5 +46,8 @@ class MnemonicBackupPage extends React.Component {
     )
   }
 }
+const mapDispatchToProps = (dispatch) => ({
+  hideProcessingModal: () => dispatch(actions.hideProcessingModal()),
+})
 
-export default MnemonicBackupPage
+export default connect(null, mapDispatchToProps)(MnemonicBackupPage)

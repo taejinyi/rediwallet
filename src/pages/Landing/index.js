@@ -27,7 +27,7 @@ class LandingPage extends React.Component {
 	}
   createAccount = async () => {
  		// const { t, i18n } = this.props
- 		this.props.showProcessingModal('잠시만 기다려주세요')
+ 		this.props.showProcessingModal('Please wait a moment')
     let seed = await SecureStore.getItemAsync('seed')
 		console.log("seed", seed)
 

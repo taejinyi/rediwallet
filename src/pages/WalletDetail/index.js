@@ -94,8 +94,8 @@ class WalletDetailPage extends React.Component {
 
 
   render() {
-
     const { navigation, transactions } = this.props
+    console.log(transactions)
     const { wallet, account, _wallet } = this.props.navigation.state.params
     const { targetAddress, amount, currency } = this.state
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
@@ -164,9 +164,9 @@ class WalletDetailPage extends React.Component {
               <QRCode
                 size={ 240 }
                 content={ wallet.address }
-                logoSize={ 32 }
+                logoSize={ 40 }
                 color='black'
-                logo={ require('rediwallet/src/assets/images/logo_428x222.png') }
+                logo={ require('rediwallet/src/assets/images/logo_400x400.png') }
               />
               <Text style={{ color: '#555555', fontSize: 20, fontWeight: 'bold', }}>
                 Show to receive
