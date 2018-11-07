@@ -94,7 +94,7 @@ export function* getTransactionsFromServer(action) {
             ... data[i]
           }
         }
-        transactions = Object.assign({}, newTransaction, transactions)
+        transactions = Object.assign({}, transactions, newTransaction)
         // if(transactions.hasOwnProperty(newTransaction.hash)) {
         //   transactions = Object.assign({}, newTransaction, transactions)
         // } else {
@@ -139,7 +139,7 @@ export function* saveOneTransaction(action) {
     const transactions = fetchResult.data
 
 
-    newTransactions = Object.assign({}, transactionData, transactions, )
+    newTransactions = Object.assign({}, transactions, transactionData)
 
     // if(transactions.hasOwnProperty(transaction.hash)) {
     //   newTransactions = Object.assign({}, transactionData, transactions, )

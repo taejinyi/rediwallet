@@ -93,36 +93,41 @@ export function* saveWalletToDB(action) {
       accounts: wallet.accounts
     }
   }
-  let wallets = null
-  try {
-    const fetchResult = yield call(() => db.get('wallets'))
-    wallets = Object.assign({}, fetchResult.data, newWallet)
-  } catch (e) {
-    wallets = newWallet
-  }
-  yield call(saveWalletsToDB, {db: db, wallets: wallets})
+  // let wallets = null
+  // try {
+  //   const fetchResult = yield call(() => db.get('wallets'))
+  //   wallets = Object.assign({}, fetchResult.data, newWallet)
+  // } catch (e) {
+  //   wallets = newWallet
+  // }
+  // yield call(saveWalletsToDB, {db: db, wallets: wallets})
 }
 
 export function* saveWalletsToDB(action) {
-  let { db, wallets } = action
-  try {
-    const fetchResult = yield call(() => db.get('wallets'))
-    yield call(() => db.put({
-      _id: 'wallets',
-      data: wallets,
-      _rev: fetchResult._rev,
-    }))
-  } catch (e) {
-    console.log(e)
-    yield call(() => db.put({
-      _id: 'wallets',
-      data: wallets,
-    }))
-  }
-  yield put({
-    type: SAVE_WALLETS,
-    wallets: wallets,
-  })
+  // let { db, wallets } = action
+  // try {
+  //   const fetchResult = yield call(() => db.get('wallets'))
+  //   yield call(() => db.put({
+  //     _id: 'wallets',
+  //     data: wallets,
+  //     _rev: fetchResult._rev,
+  //   }))
+  // } catch (e) {
+  //   console.log(e)
+  //   yield call(() => db.put({
+  //     _id: 'wallets',
+  //     data: wallets,
+  //   }))
+  // }
+  // console.log("wallets", wallets)
+  // try {
+  // yield put({
+  //   type: SAVE_WALLETS,
+  //   wallets: wallets,
+  // })
+  //   } catch (e) {
+  //   console.log(e)
+  // }
 }
 
 
