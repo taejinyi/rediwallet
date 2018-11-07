@@ -77,6 +77,15 @@ export function* getTransactionsFromServer(action) {
     if(response && response.status === 200) {
       const data = response.data.result
       let transactions = {}
+      try {
+        const fetchResult = yield call(() => db.get(dbIndex))
+
+        transactions = fetchResult.data
+
+      } catch (error) {
+        console.log()
+      }
+
       let i
 
       for(i=0; i < data.length; i++) {
@@ -85,7 +94,14 @@ export function* getTransactionsFromServer(action) {
             ... data[i]
           }
         }
-        transactions = Object.assign({}, transactions, newTransaction)
+        transactions = Object.assign({}, newTransaction, transactions)
+        // if(transactions.hasOwnProperty(newTransaction.hash)) {
+        //   transactions = Object.assign({}, newTransaction, transactions)
+        // } else {
+        //   transactions = Object.assign(newTransaction, transactions)
+        // }
+
+
       }
       yield call(saveTransactionsToDB, {
         db: db,
@@ -111,23 +127,25 @@ export function* getTransactionsFromServer(action) {
 export function* saveOneTransaction(action) {
   const { db, wallet, account, transaction } = action
   const dbIndex = "tx" + account.currency
+  const transactionData = {
+    [ transaction.hash ]: {
+      ... transaction,
+    }
+  }
   try {
     let newTransactions
 
     const fetchResult = yield call(() => db.get(dbIndex))
     const transactions = fetchResult.data
 
-    const transactionData = {
-      [ transaction.hash ]: {
-        ... transaction,
-      }
-    }
 
-    if(transactions.hasOwnProperty(transaction.hash)) {
-      newTransactions = Object.assign({}, transactions, transactionData)
-    } else {
-      newTransactions = Object.assign(transactionData, transactions)
-    }
+    newTransactions = Object.assign({}, transactionData, transactions, )
+
+    // if(transactions.hasOwnProperty(transaction.hash)) {
+    //   newTransactions = Object.assign({}, transactionData, transactions, )
+    // } else {
+    //   newTransactions = Object.assign(transactionData, transactions)
+    // }
 
     yield call(saveTransactionsToDB, {
       db: db,
@@ -145,7 +163,7 @@ export function* saveOneTransaction(action) {
         db: db,
         wallet: wallet,
         account: account,
-        transactions: transaction
+        transactions: transactionData
       })
     }
   }
@@ -154,35 +172,32 @@ export function* saveOneTransaction(action) {
 export function* getNextTransactionsOnlyState(action) {
   const { db, wallet, account, offset } = action
   const dbIndex = "tx" + account.currency
-
-  const response = yield call(() => server.getTransactions(wallet, account, offset))
-
-  if(response && response.status === 200) {
-    const { transactions, ... rest } = response.data
-
-    try {
-      const fetchResult = yield call(() => db.get(dbIndex))
-      const { transactions: originTransactions } = fetchResult.data
-
-      const newTransactions = {
-        transactions: Object.assign({}, originTransactions, transactions),
-        ... rest,
-      }
-
-      yield put({
-        type: SAVE_TRANSACTIONS,
-        transactions: newTransactions,
-      })
-
-      yield put({
-        type: SAVE_PAGE_STATE,
-        pageState: PAGE_STATE.STATE_LOADING_NEXT_FINISH,
-      })
-    } catch (error) {
-    }
-
-
-  }
+  //
+  // const response = yield call(() => server.getTransactions(wallet, account, offset))
+  //
+  // if(response && response.status === 200) {
+  //   const transactions = response.data
+  //
+  //   try {
+  //     const fetchResult = yield call(() => db.get(dbIndex))
+  //     const { transactions: originTransactions } = fetchResult.data
+  //
+  //     const newTransactions = Object.assign({}, originTransactions, transactions)
+  //
+  //     yield put({
+  //       type: SAVE_TRANSACTIONS,
+  //       transactions: newTransactions,
+  //     })
+  //
+  //     yield put({
+  //       type: SAVE_PAGE_STATE,
+  //       pageState: PAGE_STATE.STATE_LOADING_NEXT_FINISH,
+  //     })
+  //   } catch (error) {
+  //   }
+  //
+  //
+  // }
 }
 
 const transactionsSagas = [

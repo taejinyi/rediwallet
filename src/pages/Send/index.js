@@ -248,7 +248,7 @@ class SendPage extends React.Component {
             ],
             { cancelable: false}
           )
-        }, 300);  //5000 milliseconds
+        }, 100);  //5000 milliseconds
       })
     }, 300);  //5000 milliseconds
   }

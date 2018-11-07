@@ -155,12 +155,18 @@ class TransactionList extends React.Component {
     )
   }
 
+  _compare(a,b) {
+    if (parseInt(a.timeStamp) > parseInt(b.timeStamp))
+      return -1;
+    if (parseInt(a.timeStamp) < parseInt(b.timeStamp))
+      return 1;
+    return 0;
+  }
   render() {
     const { transactions } = this.props
-
     if(transactions === undefined)
       return null
-
+    const dataArray = _.values(transactions)
     return (
       <View style={{ width: '100%' }}>
         <View style={{ height: 40, width: '100%', borderBottomColor: '#aaaaaa', borderBottomWidth: 1, flexDirection: "row"}}>
@@ -179,7 +185,7 @@ class TransactionList extends React.Component {
           </View>
         </View>
         <FlatList
-          data={ _.values(transactions) }
+          data={ dataArray.sort(this._compare) }
           renderItem={ this.renderTransactionItem }
           contentContainerStyle={{ padding: 15 }}
           keyExtractor={( item, index ) => index.toString() }

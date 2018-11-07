@@ -89,8 +89,20 @@ class WalletDetailPage extends React.Component {
     const { db, transactions } = this.props
     const { wallet, account } = this.props.navigation.state.params
     await this.props.getTransactionsFromServer(db, wallet, account)
+    this._interval = setInterval( () => {
+      this.refreshAccount()
+    }, 30000);
+
   }
 
+  async componentWillUnmount() {
+    clearInterval(this._interval);
+  }
+
+  refreshAccount = () => {
+    const { wallet, account, _wallet } = this.props.navigation.state.params
+    this.props.getTransactionsFromServer(this.props.db, wallet, account)
+  }
 
 
   render() {

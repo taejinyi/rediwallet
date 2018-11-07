@@ -67,10 +67,16 @@ class WalletPage extends React.Component {
       console.log(e)
       return false
     }
-    setInterval( () => {
+
+    this._internal = setInterval( () => {
       this.refreshWallet()
     }, 15000);
   }
+
+  async componentWillUnmount() {
+    clearInterval(this._interval);
+  }
+
 
   async refreshWallet() {
     try {
