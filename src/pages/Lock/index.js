@@ -35,7 +35,6 @@ class LockPage extends React.Component {
   }
 
   unlockWithPinNumber = async (inputText) => {
-    console.log(inputText)
     const pinNumber = await SecureStore.getItemAsync('pinNumber')
     if (pinNumber) {
       if(pinNumber === inputText) {

@@ -31,7 +31,7 @@ class TransactionList extends React.Component {
 
     const address = wallet.address.toLowerCase()
 
-    if (transaction.from === address) {
+    if (transaction.from.toLowerCase() === address) {
       if (transaction.to) {
         type = 'send'
         typeIcon = require('../../assets/images/icon_send.png')
@@ -41,7 +41,7 @@ class TransactionList extends React.Component {
         typeIcon = require('../../assets/images/icon_send.png')
         counterAddress = transaction.contractAddress
       }
-    } else if (transaction.to === address) {
+    } else if (transaction.to.toLowerCase() === address) {
       type = 'receive'
       typeIcon = require('../../assets/images/icon_receive.png')
       counterAddress = transaction.from

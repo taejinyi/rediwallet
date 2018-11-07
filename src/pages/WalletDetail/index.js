@@ -95,7 +95,6 @@ class WalletDetailPage extends React.Component {
 
   render() {
     const { navigation, transactions } = this.props
-    console.log(transactions)
     const { wallet, account, _wallet } = this.props.navigation.state.params
     const { targetAddress, amount, currency } = this.state
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate

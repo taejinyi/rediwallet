@@ -390,7 +390,6 @@ export default class Wallet {
       //       console.log(error)
       // });
       const outgoingPastEvents = await this._contracts[account.currency].getPastEvents('Transfer', {filter: {from: this.address}}, {fromBlock: 0, toBlock: 'latest'})
-      console.log("outgoingPastEvents", outgoingPastEvents)
       // const incomingPastEvents = await this._contracts[account.currency].getPastEvents('Transfer', {filter: {to: this.address}}, {fromBlock: 0, toBlock: 'latest'})
       // console.log("incomingPastEvents", incomingPastEvents)
       // const outgoingPastEvents = await this._contracts[account.currency].events.Transfer({filter: {to: this.address}}, {fromBlock: 0})

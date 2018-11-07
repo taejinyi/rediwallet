@@ -111,12 +111,11 @@ export function* getTransactionsFromServer(action) {
 export function* saveOneTransaction(action) {
   const { db, wallet, account, transaction } = action
   const dbIndex = "tx" + account.currency
-
   try {
     let newTransactions
 
     const fetchResult = yield call(() => db.get(dbIndex))
-    const { transactions, ... rest } = fetchResult.data
+    const transactions = fetchResult.data
 
     const transactionData = {
       [ transaction.hash ]: {
@@ -125,15 +124,9 @@ export function* saveOneTransaction(action) {
     }
 
     if(transactions.hasOwnProperty(transaction.hash)) {
-      newTransactions = {
-        transactions: Object.assign({}, transactions, transactionData),
-        ... rest,
-      }
+      newTransactions = Object.assign({}, transactions, transactionData)
     } else {
-      newTransactions = {
-        transactions: Object.assign(transactionData, transactions),
-        ... rest,
-      }
+      newTransactions = Object.assign(transactionData, transactions)
     }
 
     yield call(saveTransactionsToDB, {
@@ -145,6 +138,7 @@ export function* saveOneTransaction(action) {
 
   } catch (error) {
     const { status } = error
+    console.log(error)
 
     if(status === 404) {
       yield call(saveTransactionsToDB, {

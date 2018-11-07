@@ -48,6 +48,7 @@ class Main extends React.Component {
     return (
       <Root>
         <Modal
+          backdropColor='#303140'
           useNativeDriver={ true }
           animationInTiming={ 1 }
           animationOutTiming={ 1 }
@@ -55,7 +56,7 @@ class Main extends React.Component {
           hideModalContentWhileAnimating={ true }>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
             <RippleLoader color='black' size={ 38 } />
-            <TextLoader text={ processingModalMessage } textStyle={{ marginTop: 15, fontSize: 17, color: 'black', }} />
+            <TextLoader text={ processingModalMessage } textStyle={{ marginTop: 15, fontSize: 17, color: 'white', }} />
           </View>
         </Modal>
         <LockPage isVisible={ this.props.unlocked !== true }/>

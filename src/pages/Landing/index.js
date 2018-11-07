@@ -29,7 +29,6 @@ class LandingPage extends React.Component {
  		// const { t, i18n } = this.props
  		this.props.showProcessingModal('Please wait a moment')
     let seed = await SecureStore.getItemAsync('seed')
-		console.log("seed", seed)
 
     if(seed && seed.length > 10) {
     	 Alert.alert(
@@ -47,7 +46,6 @@ class LandingPage extends React.Component {
 		try {
       seed = await ethers.utils.randomBytes(16)
       const hex = toHexString(seed)
-      console.log("generated HEX: ", hex)
       await SecureStore.setItemAsync('seed', hex)
 			const mnemonic = await ethers.HDNode.entropyToMnemonic(seed)
 			const wallet = await Wallet.generateWallet()

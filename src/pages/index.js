@@ -73,6 +73,7 @@ const actions = {
   getWalletsFromNetwork,
   getTransactionsFromDB,
   getTransactionsFromServer,
+  saveOneTransaction,
   getNextTransactionsOnlyState,
   saveWalletToDB,
   saveWalletsToDB,

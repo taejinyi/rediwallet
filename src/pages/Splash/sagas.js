@@ -18,7 +18,6 @@ import {actions} from "../index";
 // } from '../Wallet/sagas'
 
 export function* getInformation(action) {
-  console.log("in getInformation")
   const { db } = action
 
   yield put({

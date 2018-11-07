@@ -217,134 +217,40 @@ class SendPage extends React.Component {
     await this.setState({
       confirmModalShow: false
     })
-    await this.props.showProcessingModal("Please wait a few seconds")
     const account = this.props.navigation.state.params.account
     const wallet = this.props.navigation.state.params.wallet
     const _wallet = this.props.navigation.state.params._wallet
+    const promise = _wallet.transfer(account, this.sendData.address, this.sendData.amount)
 
-    if (this.sendData) {
-	    const tx = await _wallet.transfer(account, this.sendData.address, this.sendData.amount)
-	    this.props.hideProcessingModal()
-      console.log(tx)
-      Alert.alert(
-				 	'Transfer Requested',
-          'Transfer is successfully requested',
-          [
-            { text: 'OK', onPress: () => this.props.navigation.goBack(null)}
-          ],
-          { cancelable: false}
-        )
-    }
-    // {
-    //   "blockHash": "0xe1642ecf4271211b79de213e013bca330a1c9f9507f52e4f3a60d41789c1bf56",
-    //   "blockNumber": 9298153,
-    //   "contractAddress": null,
-    //   "cumulativeGasUsed": 234539,
-    //   "from": "0x18effda3d2f0ef936dbbad3dc85daf2ba6540c81",
-    //   "gasUsed": 21000,
-    //   "logs": Array [],
-    //   "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-    //   "root": null,
-    //   "status": true,
-    //   "to": "0xca2c9936024dd38bb0cd2d7370ae8047673f9010",
-    //   "transactionHash": "0xde1e4be7c3cf2459d929abdedb552dfbe259a10caf3fa17ce98d765068bf75be",
-    //   "transactionIndex": 1,
-    // }
-    /*
-    {
-      "blockHash": "0xa5024a73e4c90f5d7b8f60cbe8f0a00d6a05f836c0baa22fe8d724c6e0083d33",
-      "blockNumber": 9298213,
-      "contractAddress": null,
-      "cumulativeGasUsed": 148063,
-      "events": Object {
-        "Transfer": Object {
-          "address": "0xD5a23575D32849b7430dCd44D28c9FEF3954068A",
-          "blockHash": "0xa5024a73e4c90f5d7b8f60cbe8f0a00d6a05f836c0baa22fe8d724c6e0083d33",
-          "blockNumber": 9298213,
-          "event": "Transfer",
-          "id": "log_5da0b658",
-          "logIndex": 0,
-          "raw": Object {
-            "data": "0x000000000000000000000000000000000000000000000000000000001dcd6500",
-            "topics": Array [
-              "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
-              "0x00000000000000000000000018effda3d2f0ef936dbbad3dc85daf2ba6540c81",
-              "0x000000000000000000000000ca2c9936024dd38bb0cd2d7370ae8047673f9010",
-            ],
-          },
-          "removed": false,
-          "returnValues": Result {
-            "0": "0x18EfFDa3D2F0Ef936dbBaD3dC85dAF2ba6540C81",
-            "1": "0xcA2c9936024Dd38bb0cD2d7370aE8047673f9010",
-            "2": "500000000",
-            "from": "0x18EfFDa3D2F0Ef936dbBaD3dC85dAF2ba6540C81",
-            "to": "0xcA2c9936024Dd38bb0cD2d7370aE8047673f9010",
-            "value": "500000000",
-          },
-          "signature": "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
-          "transactionHash": "0xa21c117fb3167a74be29b73d6029e98551bf2d6ffac18a59b62a6e46926894fe",
-          "transactionIndex": 2,
-          "transactionLogIndex": "0x0",
-          "type": "mined",
-        },
-      },
-      "from": "0x18effda3d2f0ef936dbbad3dc85daf2ba6540c81",
-      "gasUsed": 51697,
-      "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000004000100000000000000000000000020000000000000000008000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000002000000000000000000000000000000000000001000000000040000000000000000000000000000008000000000000000000000000000000001000000",
-      "root": null,
-      "status": true,
-      "to": "0xd5a23575d32849b7430dcd44d28c9fef3954068a",
-      "transactionHash": "0xa21c117fb3167a74be29b73d6029e98551bf2d6ffac18a59b62a6e46926894fe",
-      "transactionIndex": 2,
-    }
-    {
-      "blockHash": "0x2e0f42210094e4a644e4a4c0f008cff7df4fb11bab3b3405e2a9cee1a7fd5940",
-      "blockNumber": 9178627,
-      "contractAddress": null,
-      "cumulativeGasUsed": 376874,
-      "events": Object {
-        "Transfer": Object {
-          "address": "0xF337f6821B18B2eB24C44D74F3Fa91128EAD23f4",
-          "blockHash": "0x2e0f42210094e4a644e4a4c0f008cff7df4fb11bab3b3405e2a9cee1a7fd5940",
-          "blockNumber": 9178627,
-          "event": "Transfer",
-          "id": "log_ab33753b",
-          "logIndex": 3,
-          "raw": Object {
-            "data": "0x000000000000000000000000000000000000000000000000000000000000c350",
-            "topics": Array [
-              "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
-              "0x00000000000000000000000018effda3d2f0ef936dbbad3dc85daf2ba6540c81",
-              "0x000000000000000000000000f06e8a47bbc430423ec1ed2e5c86b47048a2b1b9",
-            ],
-          },
-          "removed": false,
-          "returnValues": Result {
-            "0": "0x18EfFDa3D2F0Ef936dbBaD3dC85dAF2ba6540C81",
-            "1": "0xf06e8a47BBC430423EC1ed2E5C86B47048A2B1B9",
-            "2": "50000",
-            "from": "0x18EfFDa3D2F0Ef936dbBaD3dC85dAF2ba6540C81",
-            "to": "0xf06e8a47BBC430423EC1ed2E5C86B47048A2B1B9",
-            "value": "50000",
-          },
-          "signature": "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
-          "transactionHash": "0x02c23d6fed912beac741e6f69b9e5249594e626af387e941f42994a79315c8a4",
-          "transactionIndex": 2,
-          "transactionLogIndex": "0x0",
-          "type": "mined",
-        },
-      },
-      "from": "0x18effda3d2f0ef936dbbad3dc85daf2ba6540c81",
-      "gasUsed": 36633,
-      "logsBloom": "0x00000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000008000000000000000000000000010000000000000000000000000000000001000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000800000000000000000000000080000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000001000000000240000000000000000000000000000000000000000000000000000000000000000000000",
-      "root": null,
-      "status": true,
-      "to": "0xf337f6821b18b2eb24c44d74f3fa91128ead23f4",
-      "transactionHash": "0x02c23d6fed912beac741e6f69b9e5249594e626af387e941f42994a79315c8a4",
-      "transactionIndex": 2,
-    }
+    setTimeout(async () => {
+      await this.props.showProcessingModal("Please wait a few seconds")
+      promise.then((tx) => {
+        const now = parseInt(Date.now() / 1000)
+        const transactionData = {
+          from: wallet.address,
+          to: this.sendData.address,
+          value: this.sendData.amount * account.decimals,
+          hash: tx.transactionHash,
+          confirmations: 0,
+          timeStamp: now
+        }
 
-    * */
+        const transaction = Object.assign({}, tx, transactionData)
+        this.props.saveOneTransaction(this.props.db, wallet, account, transaction)
+        this.props.hideProcessingModal()
+
+        setTimeout(async () => {
+          Alert.alert(
+            'Transfer Requested',
+            'Transfer is successfully requested',
+            [
+              { text: 'OK', onPress: () => this.props.navigation.goBack(null)}
+            ],
+            { cancelable: false}
+          )
+        }, 300);  //5000 milliseconds
+      })
+    }, 300);  //5000 milliseconds
   }
   async componentWillMount() {
 	  const account = this.props.navigation.state.params.account
@@ -553,6 +459,7 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => ({
   showProcessingModal: (message) => dispatch(actions.showProcessingModal(message)),
   hideProcessingModal: () => dispatch(actions.hideProcessingModal()),
+  saveOneTransaction: (db, wallet, account, transaction) => dispatch(actions.saveOneTransaction(db, wallet, account, transaction)),
 })
 
 export default connect(null, mapDispatchToProps)(SendPage)
