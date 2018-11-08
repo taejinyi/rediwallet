@@ -8,7 +8,9 @@ import { Header } from 'rediwallet/src/components'
 import {actions} from "../index";
 import connect from "react-redux/es/connect/connect";
 import { NavigationActions } from 'react-navigation'
+import {translate} from "react-i18next";
 
+@translate(['main'], { wait: true })
 class SettingPage extends React.Component {
   constructor(props) {
     super(props)
@@ -32,13 +34,13 @@ class SettingPage extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
+    const { navigation, t, i18n } = this.props
 
     return (
       <View style={{ flex: 1, }}>
         <View style={{ flex: 0.3, }}>
           <Header
-            headerTitle='설정'
+            headerTitle={t('setting', { locale: i18n.language })}
             renderContent={ false }
           />
         </View>
@@ -48,7 +50,7 @@ class SettingPage extends React.Component {
               <Icon style={{ color: '#666666', }} name='ios-megaphone' />
             </Left>
             <Body>
-              <Text>공지사항</Text>
+              <Text>{t('notice', { locale: i18n.language })}</Text>
             </Body>
             <Right>
               <Icon name='arrow-forward' />
@@ -63,7 +65,7 @@ class SettingPage extends React.Component {
               <Icon name='ios-contact' style={{ color: '#666666', }} />
             </Left>
             <Body>
-              <Text>Delete Mnemonic</Text>
+              <Text>{t('delete_mnemonic', { locale: i18n.language })}</Text>
             </Body>
             <Right>
               <Icon name='arrow-forward' />

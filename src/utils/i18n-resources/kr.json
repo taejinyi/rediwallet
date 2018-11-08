@@ -30,7 +30,29 @@
 		"paste_clipboard": "클립보드 붙여넣기",
 		"scan_qrcode": "QR코드 스캔하기",
 		"scan_qrcode_completed": "스캔이 완료되었습니다!",
-		"scan_qrcode_please": "QR코드를 스캔해 주세요"
+		"scan_qrcode_please": "QR코드를 스캔해 주세요",
+		"locked_desc": "Wallet Locked",
+		"set_pin_number_desc1": "지갑을 안전하게 지키기 위하여",
+		"set_pin_number_desc2": "핀번호를 설정하세요",
+		"wrong_pin_number_desc1": "잘못된 핀번호입니다.",
+		"wrong_pin_number_desc2": "다시 입력해주시기 바랍니다.",
+		"input_pin_number_desc1": "핀번호를 입력하고",
+		"input_pin_number_desc2": "잠금을 해제하세요",
+		"confirm_pin_number_desc1": "핀번호를 다시 입력하고",
+		"confirm_pin_number_desc2": "잠금을 해제하세요",
+		"wallet": "지갑",
+		"transfer": "송금",
+		"setting": "설정",
+		"lock": "잠금",
+		"mnemonic_backup": "복원키 백업",
+		"landing": "RediWallet",
+		"loading": "불러오는 중",
+		"mnemonic": "보안키",
+		"import": "불러오기",
+		"create_new_account": "새로운 계정 만들기",
+		"import_account": "기존 계정 불러오기",
+		"delete_mnemonic": "계정 삭제하기",
+		"notice": "공지사항"
 
 	}
 }

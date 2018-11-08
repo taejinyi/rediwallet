@@ -14,15 +14,11 @@ import i18n from './utils/i18n'
 // const WatcherManager = withLock(withDB(Watcher))
 
 import connect from "react-redux/es/connect/connect";
+import Expo from "expo";
 
 class Main extends React.Component {
   constructor(props) {
     super(props)
-  }
-
-  async componentWillMount() {
-
-
   }
 
   _onTokenInvalid = async () => {
@@ -62,7 +58,7 @@ class Main extends React.Component {
         <LockPage isVisible={ this.props.unlocked !== true }/>
         <StatusBar barStyle='light-content' />
         {/*<NotificationSystem ref={ el => this.notificationSystem = el } />*/}
-        <AppNavigator screenProps={{ t: i18n.getFixedT() }} />
+        <AppNavigator language="ko" screenProps={{ t: i18n.getFixedT() }} />
         {/*<WatcherManager*/}
           {/*onTokenInvalid={ this._onTokenInvalid }*/}
           {/*notificationSystem={ this.notificationSystem }*/}

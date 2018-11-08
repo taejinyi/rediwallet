@@ -16,7 +16,28 @@
 		"paste_clipboard": "Paste Clipboard",
 		"scan_qrcode": "Scan QRCode",
 		"scan_qrcode_completed": "Scan Completed!",
-		"scan_qrcode_please": "Scan QRCode"
+		"scan_qrcode_please": "Scan QRCode",
+		"locked_desc": "Wallet Locked",
+		"set_pin_number_desc1": "Set Pin Number",
+		"set_pin_number_desc2": "Keep your wallet safe.",
+		"wrong_pin_number_desc1": "Wrong Pin Number",
+		"wrong_pin_number_desc2": "Try again.",
+		"input_pin_number_desc1": "Unlock with Pin Number",
+		"input_pin_number_desc2": "Input your pin number",
+		"confirm_pin_number_desc1": "Confirm and Unlock",
+		"confirm_pin_number_desc2": "Input your pin number again",
+		"wallet": "Wallet",
+		"transfer": "Transfer",
+		"setting": "Setting",
+		"lock": "Lock",
+		"mnemonic_backup": "Mnemonic Backup",
+		"landing": "Landing",
+		"loading": "Loading",
+		"mnemonic": "Mnemonic",
+		"import": "Import",
+		"create_new_account": "Create New Account",
+		"import_account": "Import Account",
+		"delete_mnemonic": "Delete Mnemonic",
+		"notice": "Notice"
 	}
-
 }

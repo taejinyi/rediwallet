@@ -3,7 +3,6 @@
 import SplashPage from './Splash'
 import LandingPage from './Landing'
 import LockPage from './Lock'
-import UnlockPage from './Unlock'
 import MnemonicBackupPage from './MnemonicBackup'
 import MnemonicImportPage from './MnemonicImport'
 import WalletPage from './Wallet'
@@ -106,7 +105,6 @@ export {
 	SplashPage,
 	LandingPage,
 	LockPage,
-  UnlockPage,
   MnemonicBackupPage,
   MnemonicImportPage,
   WalletPage,

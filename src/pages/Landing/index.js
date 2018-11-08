@@ -5,10 +5,10 @@ import { Container } from 'native-base'
 import { actions, sagas } from '../.'
 import { SecureStore } from 'expo'
 import {
-  Alert,
-	StyleSheet,
+  Alert, Image,
+  StyleSheet,
   Text,
-	View,
+  View,
 } from 'react-native'
 import {
 	Button,
@@ -17,13 +17,16 @@ import {
 } from 'native-base'
 
 import ethers from 'ethers'
-import { toHexString } from '../../utils'
+import {convertToMoney, toHexString} from '../../utils'
 import Wallet from "../../system/Wallet";
+import {translate} from "react-i18next";
 
+@translate(['main'], { wait: true })
 class LandingPage extends React.Component {
  	constructor(props) {
 		super(props)
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
+		this._logo = require('../../assets/images/logo_428x222.png')
 	}
   createAccount = async () => {
  		// const { t, i18n } = this.props
@@ -53,14 +56,14 @@ class LandingPage extends React.Component {
 			this.debounceNavigate('MnemonicBackup', {mnemonic: mnemonic})
 		} catch(error) {
     	console.log(error)
-			// Alert.alert(
-			// 	"Error",
-			// 	error,
-			// 	[
-			// 		{ text: 'OK', onPress: () => {} }
-			// 	],
-			// 	{ cancelable: false}
-			// )
+			Alert.alert(
+				"Error",
+				error,
+				[
+					{ text: 'OK', onPress: () => {} }
+				],
+				{ cancelable: false}
+			)
 		}
   }
 
@@ -69,26 +72,35 @@ class LandingPage extends React.Component {
   }
 
   render() {
+ 		const { t, i18n } = this.props
     return (
-      <Container>
-        <View style={{ flex: 1, }}>
-          <Left>
-            <Button
-              style={{ marginTop: 200 }}
-              onPress={this.createAccount}
-              transparent>
-              <Text style={{ fontWeight: 'bold', color: '#303140' }}>Create New Account</Text>
-            </Button>
-          </Left>
-          <Right>
-            <Button
-              onPress={this.importMnemonic}
-              transparent>
-              <Text style={{ fontWeight: 'bold', color: '#303140' }}>Import Account</Text>
-            </Button>
-          </Right>
-        </View>
-      </Container>
+			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 0, backgroundColor: "#303140" }}>
+				<View style={{ flex: 0.3, flexDirection: "row", alignItems: 'flex-end' }}>
+						<Image style={{ height: 78, width: 150, alignItems: 'center' }} source={ require('rediwallet/src/assets/images/logo_428x222.png') } />
+				</View>
+				<View style={{ flex: 0.7, flexDirection: "row", width: '92%', alignItems: 'flex-end'}}>
+					<View style={{padding: 10, width: '100%', marginBottom: "30%"}}>
+
+						<Button
+							style={{ backgroundColor: "#888888", width: '100%' }}
+							onPress={this.createAccount}
+							transparent>
+							<Text style={{ fontWeight: 'bold', color: 'white', width: '100%', textAlign: "center" }}>
+								{t('create_new_account', { locale: i18n.language })}
+							</Text>
+						</Button>
+						<Button
+							onPress={this.importMnemonic}
+							transparent
+							style={{ marginTop: 30, backgroundColor: "blue", width: '100%' }}
+						>
+							<Text style={{ fontWeight: 'bold', color: 'white', width: '100%' , textAlign: "center" }}>
+								{t('import_account', { locale: i18n.language })}
+							</Text>
+						</Button>
+					</View>
+				</View>
+			</View>
     )
   }
 }

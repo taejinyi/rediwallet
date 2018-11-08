@@ -32,6 +32,7 @@ import {NavigationActions} from "react-navigation";
 import {actions} from "../index";
 import {connect} from "react-redux";
 import Wallet from "../../system/Wallet";
+import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 
 
 
@@ -133,7 +134,7 @@ class MnemonicImportPage extends React.Component {
         <Button
           onPress={ () => this.pasteClipboard() }
           style={ styles.buttonDanal }>
-          <Text style={{ color: 'white', fontSize: 13, fontWeight: 'bold', }}>{ t('paste_clipboard', { locale: i18n.language })}</Text>
+          <MaterialCommunityIcons style={{ color: 'white', fontSize: 20 }} name='content-paste' />
         </Button>
 			</View>
 		)

@@ -5,6 +5,9 @@ import { TextLoader } from 'react-native-indicator'
 import { NavigationActions } from 'react-navigation'
 import {actions} from "../index";
 import connect from "react-redux/es/connect/connect";
+import {translate} from "react-i18next";
+
+@translate(['main'], { wait: true })
 class MnemonicBackupPage extends React.Component {
   closePage = () => {
     const { dispatch } = this.props.navigation

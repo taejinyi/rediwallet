@@ -17,7 +17,7 @@ i18n
   .use(languageDetector)
   .use(reactI18nextModule)
   .init({
-    fallbackLng: 'kr',
+    fallbackLng: 'en',
 
     resources: {
       kr: require('./i18n-resources/kr.json'),

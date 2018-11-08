@@ -17,35 +17,36 @@ import {
   SettingPage,
   QRCodeScan
 } from '../../pages'
+import i18n from '../../utils/i18n'
 
 import withDB from '../WithDB'
 import withLock from '../WithLock'
 import withWallet from '../WithWallet'
 import withTransactions from '../WithTransactions'
 import Color from "../../constants/Colors";
-
+const t = i18n.getFixedT()
 const MainTabNavigator = TabNavigator({
   Wallet: {
     screen: withDB(withLock(withWallet(WalletPage))),
-    navigationOptions: {
-      tabBarLabel: '지갑',
+    navigationOptions: () => ({
+      tabBarLabel: i18n.t('main:wallet', { locale: i18n.language }),
       tabBarIcon: () => (
         <Image
           source={ require('../../assets/images/wallet.png') }
         />
       )
-    }
+    })
   },
   Settings: {
     screen: withDB(withLock(SettingPage)),
-    navigationOptions: {
-      tabBarLabel: '설정',
+    navigationOptions: () => ({
+      tabBarLabel: i18n.t('main:setting', { locale: i18n.language }),
       tabBarIcon: () => (
         <Image
           source={ require('../../assets/images/settings.png') }
         />
       )
-    },
+    }),
   }}, {
     header: null,
     animationEnabled: true,
@@ -86,21 +87,21 @@ const MainTabNavigator = TabNavigator({
 const MainNavigator = StackNavigator({
   MainTab: {
     screen: MainTabNavigator,
-    navigationOptions: {
+    navigationOptions: () => ({
       header: null
-    }
+    })
   },
   Lock: {
     screen: LockPage,
-    navigationOptions: {
+    navigationOptions: () => ({
       header: null,
-      headerBackTitle: 'Lock',
-    }
+      headerBackTitle: i18n.t('main:lock', { locale: i18n.language }),
+    })
   },
   WalletDetail: {
     screen: withDB(withWallet(withTransactions(WalletDetailPage))),
     navigationOptions: ({ navigation }) => ({
-      headerTitle: navigation.state.params ? getHeaderTitle(navigation.state.params.account) : "Loading...",
+      headerTitle: navigation.state.params ? getHeaderTitle(navigation.state.params.account) : i18n.t('main:loading', { locale: i18n.language }),
       headerTintColor: 'white',
       headerStyle: {
         backgroundColor: navigation.state.params ? getHeaderBackgroundColor(navigation.state.params.account) : "#303140",
@@ -109,7 +110,7 @@ const MainNavigator = StackNavigator({
       headerLeft: (
         <HeaderBackButton
           tintColor='white'
-          title='Wallet'  // TODO onPress
+          title={i18n.t('main:wallet', { locale: i18n.language })}  // TODO onPress
           onPress={() => navigation.goBack(null)} // TODO Alert
         />
       )
@@ -117,14 +118,14 @@ const MainNavigator = StackNavigator({
   },
   QRCodeScan: {
     screen: QRCodeScan,
-    navigationOptions: {
+    navigationOptions: () => ({
       header: null
-    }
+    })
   },
   Send: {
     screen: withDB(withWallet(SendPage)),
     navigationOptions: ({ navigation }) => ({
-      headerTitle: "Transfer",
+      headerTitle: i18n.t('main:transfer', { locale: i18n.language }),
       headerTintColor: 'white',
       headerStyle: {
         backgroundColor: navigation.state.params ? getHeaderBackgroundColor(navigation.state.params.account) : "#303140",
@@ -133,7 +134,7 @@ const MainNavigator = StackNavigator({
       headerLeft: (
         <HeaderBackButton
           tintColor='white'
-          title={navigation.state.params ? getHeaderTitle(navigation.state.params.account) : "Account"}
+          title={navigation.state.params ? getHeaderTitle(navigation.state.params.account) : i18n.t('main:account', { locale: i18n.language })}
           onPress={() => navigation.goBack(null)} // TODO Alert
         />
       )
@@ -144,10 +145,10 @@ const MainNavigator = StackNavigator({
 const MnemonicManagementStackNavigator = StackNavigator({
   MnemonicBackup: {
     screen: MnemonicBackupPage,
-    navigationOptions: {
+    navigationOptions: () => ({
       header: null,
-      headerBackTitle: 'Mnemonic Backup',
-    }
+      headerBackTitle: i18n.t('main:mnemonic_backup', { locale: i18n.language }),
+    })
   }}, {
     headerMode: 'screen',
     headerTintColor: 'white',
@@ -168,34 +169,34 @@ const MnemonicManagementStackNavigator = StackNavigator({
 const AppNavigator = StackNavigator({
   Splash: {
     screen: withDB(withLock(SplashPage)),
-    navigationOptions: {
+    navigationOptions: () => ({
       header: null,
-    }
+    })
   },
   Main: {
     screen: MainNavigator,
-    navigationOptions: {
+    navigationOptions: () => ({
       header: null,
-    }
+    })
   },
   Landing: {
     screen: withDB(LandingPage),
-    navigationOptions: {
+    navigationOptions: () => ({
       header: null,
-      headerBackTitle: 'Landing',
-    }
+      headerBackTitle: t('main:landing', { locale: i18n.language }),
+    })
   },
   MnemonicBackup: {
     screen: withDB(withLock(MnemonicBackupPage)),
-    navigationOptions: {
+    navigationOptions: () => ({
       header: null,
-      headerBackTitle: 'Mnemonic Backup',
-    }
+      headerBackTitle: i18n.t('main:mnemonic_backup', { locale: i18n.language }),
+    })
   },
   MnemonicImport: {
     screen: withDB(withLock(MnemonicImportPage)),
     navigationOptions: ({ navigation }) => ({
-      headerTitle: 'Import',
+      headerTitle: i18n.t('main:import', { locale: i18n.language }),
       headerTintColor: 'white',
       headerStyle: {
         backgroundColor: '#303140',
@@ -204,7 +205,7 @@ const AppNavigator = StackNavigator({
       headerLeft: (
         <HeaderBackButton
           tintColor='white'
-          title='Landing'  // TODO onPress
+          title={i18n.t('main:landing', { locale: i18n.language })}  // TODO onPress
           onPress={() => navigation.goBack(null)} // TODO Alert
         />
       )
