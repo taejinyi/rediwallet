@@ -1,11 +1,12 @@
 import React from 'react'
-import {Text, View, Clipboard} from 'react-native'
+import {Text, View, Clipboard, Image} from 'react-native'
 import {Button, Container, Content, Left, Right} from 'native-base'
 import { TextLoader } from 'react-native-indicator'
 import { NavigationActions } from 'react-navigation'
 import {actions} from "../index";
 import connect from "react-redux/es/connect/connect";
 import {translate} from "react-i18next";
+import MnemonicList from "../../components/MnemonicList";
 
 @translate(['main'], { wait: true })
 class MnemonicBackupPage extends React.Component {
@@ -29,21 +30,37 @@ class MnemonicBackupPage extends React.Component {
   }
   render() {
     const { mnemonic } = this.props.navigation.state.params
+ 		const { t, i18n } = this.props
 
     return (
       <Container>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-          <TextLoader text={mnemonic} textStyle={{ marginTop: 15, color: '#303140', fontSize: 17, }} />
-          <Button
-            onPress={this.copyToClipboard}
-            transparent>
-            <Text style={{ fontWeight: 'bold', color: '#303140' }}>Copy to Clipboard</Text>
-          </Button>
-          <Button
-            onPress={this.closePage}
-            transparent>
-            <Text style={{ fontWeight: 'bold', color: '#303140' }}>Close</Text>
-          </Button>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "#303140" }}>
+          <View style={{ flex: 0.3, flexDirection: "row", alignItems: 'flex-end' }}>
+              <Image style={{ height: 78, width: 150, alignItems: 'center' }} source={ require('rediwallet/src/assets/images/logo_428x222.png') } />
+          </View>
+          <View style={{ flex: 0.7, flexDirection: "row", width: '92%', alignItems: 'flex-end'}}>
+            <View style={{padding: 10, width: '100%', marginBottom: "30%"}}>
+              <MnemonicList style={{width: "100%"}} mnemonics={mnemonic} />
+              <Button
+                style={{ backgroundColor: "blue", width: '100%' }}
+                onPress={this.copyToClipboard}
+                transparent>
+                <Text style={{ fontWeight: 'bold', color: 'white', width: '100%', textAlign: "center" }}>
+                  {t('copy_to_clipboard', { locale: i18n.language })}
+                </Text>
+              </Button>
+              <Button
+                onPress={this.closePage}
+                transparent
+                style={{ marginTop: 30, backgroundColor: "gray", width: '100%' }}
+              >
+                <Text style={{ fontWeight: 'bold', color: 'white', width: '100%' , textAlign: "center" }}>
+                  {t('close', { locale: i18n.language })}
+                </Text>
+              </Button>
+            </View>
+          </View>
+
         </View>
       </Container>
     )

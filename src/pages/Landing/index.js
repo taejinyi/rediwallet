@@ -82,7 +82,7 @@ class LandingPage extends React.Component {
 					<View style={{padding: 10, width: '100%', marginBottom: "30%"}}>
 
 						<Button
-							style={{ backgroundColor: "#888888", width: '100%' }}
+							style={{ backgroundColor: "blue", width: '100%' }}
 							onPress={this.createAccount}
 							transparent>
 							<Text style={{ fontWeight: 'bold', color: 'white', width: '100%', textAlign: "center" }}>
@@ -92,7 +92,7 @@ class LandingPage extends React.Component {
 						<Button
 							onPress={this.importMnemonic}
 							transparent
-							style={{ marginTop: 30, backgroundColor: "blue", width: '100%' }}
+							style={{ marginTop: 30, backgroundColor: "gray", width: '100%' }}
 						>
 							<Text style={{ fontWeight: 'bold', color: 'white', width: '100%' , textAlign: "center" }}>
 								{t('import_account', { locale: i18n.language })}

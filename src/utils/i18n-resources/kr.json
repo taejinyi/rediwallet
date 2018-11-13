@@ -47,12 +47,13 @@
 		"mnemonic_backup": "복원키 백업",
 		"landing": "RediWallet",
 		"loading": "불러오는 중",
-		"mnemonic": "보안키",
+		"mnemonic": "복원키",
 		"import": "불러오기",
 		"create_new_account": "새로운 계정 만들기",
 		"import_account": "기존 계정 불러오기",
 		"delete_mnemonic": "계정 삭제하기",
-		"notice": "공지사항"
-
+		"notice": "공지사항",
+		"copy_to_clipboard": "클립보드로 복사하기",
+		"backup_mnemonic": "복원키 백업하기"
 	}
 }

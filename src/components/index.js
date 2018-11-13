@@ -5,6 +5,7 @@ import LoadingButton from './LoadingButton'
 import DismissKeyboardViewHOC from './DismissKeyboardViewHOC'
 import Input from './Input'
 import PinNumberInputs from './PinNumberInputs'
+import MnemonicList from './MnemonicList'
 export {
 	Header,
 	WalletAccountList,
@@ -12,5 +13,6 @@ export {
 	LoadingButton,
   DismissKeyboardViewHOC,
 	Input,
-	PinNumberInputs
+	PinNumberInputs,
+	MnemonicList
 }

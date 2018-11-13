@@ -9,6 +9,8 @@ import {actions} from "../index";
 import connect from "react-redux/es/connect/connect";
 import { NavigationActions } from 'react-navigation'
 import {translate} from "react-i18next";
+import ethers from "ethers";
+import {fromHexString, toHexString} from "../../utils";
 
 @translate(['main'], { wait: true })
 class SettingPage extends React.Component {
@@ -32,7 +34,12 @@ class SettingPage extends React.Component {
     }))
 
   }
-
+  backupMnemonic = async () => {
+    const hex = await SecureStore.getItemAsync('seed')
+    const seed = fromHexString(hex)
+    const mnemonic = await ethers.HDNode.entropyToMnemonic(seed)
+    this.debounceNavigate('MnemonicBackup', {mnemonic: mnemonic})
+  }
   render() {
     const { navigation, t, i18n } = this.props
 
@@ -57,6 +64,20 @@ class SettingPage extends React.Component {
             </Right>
           </ListItem>
           <Separator />
+          <ListItem
+            onPress={ this.backupMnemonic }
+            button
+            icon>
+            <Left>
+              <Icon name='ios-contact' style={{ color: '#666666', }} />
+            </Left>
+            <Body>
+              <Text>{t('backup_mnemonic', { locale: i18n.language })}</Text>
+            </Body>
+            <Right>
+              <Icon name='arrow-forward' />
+            </Right>
+          </ListItem>
           <ListItem
             onPress={ this.deleteMnemonic }
             button

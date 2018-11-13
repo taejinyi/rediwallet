@@ -8,7 +8,7 @@
     "platforms": ["ios", "android"],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/images/logo_400x400.png",
+    "icon": "./src/assets/images/logo_ios.png",
     "splash": {
       "image": "./src/assets/images/intro_lock.png",
       "resizeMode": "contain",
@@ -23,7 +23,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "io.infleum.rediwallet",
-      "icon": "./src/assets/favicon/apple-icon-180x180.png"
+      "icon": "./src/assets/images/logo_ios.png"
     },
 	"android": {
 		"package": "io.infleum.rediwallet",

@@ -38,6 +38,8 @@
 		"create_new_account": "Create New Account",
 		"import_account": "Import Account",
 		"delete_mnemonic": "Delete Mnemonic",
-		"notice": "Notice"
+		"notice": "Notice",
+		"copy_to_clipboard": "Copy to Clipboard",
+		"backup_mnemonic": "Backup Mnemonic"
 	}
 }
