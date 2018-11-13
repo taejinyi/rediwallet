@@ -34,16 +34,16 @@ class LandingPage extends React.Component {
     let seed = await SecureStore.getItemAsync('seed')
 
     if(seed && seed.length > 10) {
-    	 Alert.alert(
-          // t('wallet_already_exist', { locale: i18n.language }),
-          // t('wallet_already_exist_desc', { locale: i18n.language }),
-				 	'Wallet Registered',
-          'Wallet is already registered',
-          [
-            { text: 'OK', onPress: () => this.navigateTo('Main', nav) }
-          ],
-          { cancelable: false}
-        )
+    	 // Alert.alert(
+       //    // t('wallet_already_exist', { locale: i18n.language }),
+       //    // t('wallet_already_exist_desc', { locale: i18n.language }),
+				//  	'Wallet Registered',
+       //    'Wallet is already registered',
+       //    [
+       //      { text: 'OK', onPress: () => this.navigateTo('Main', nav) }
+       //    ],
+       //    { cancelable: false}
+       //  )
 			return
 		}
 		try {
@@ -56,14 +56,14 @@ class LandingPage extends React.Component {
 			this.debounceNavigate('MnemonicBackup', {mnemonic: mnemonic})
 		} catch(error) {
     	console.log(error)
-			Alert.alert(
-				"Error",
-				error,
-				[
-					{ text: 'OK', onPress: () => {} }
-				],
-				{ cancelable: false}
-			)
+			// Alert.alert(
+			// 	"Error",
+			// 	error,
+			// 	[
+			// 		{ text: 'OK', onPress: () => {} }
+			// 	],
+			// 	{ cancelable: false}
+			// )
 		}
   }
 

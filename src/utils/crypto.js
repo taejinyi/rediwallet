@@ -22,8 +22,16 @@ import { toChecksumAddress } from 'ethereumjs-util'
 const fromHexString = hexString =>
   new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
 
-const toHexString = bytes =>
-  bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
+const toHexString = bytes => {
+  let hex = ""
+  console.log(bytes)
+
+  for (let i=0; i < bytes.length; i++) {
+    hex = hex + (bytes[i].toString(16).length == 1 ? "0" + bytes[i].toString(16) : bytes[i].toString(16))
+  }
+  return hex
+  // bytes.reduce((str, byte) => str + (byte.toString(16).length == 1 ? "0" + byte.toString(16) : byte.toString(16)), '');
+}
 
 const getHeaderTitle = (account) => {
   let currencyName

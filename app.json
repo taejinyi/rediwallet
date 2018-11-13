@@ -27,7 +27,7 @@
     },
 	"android": {
 		"package": "io.infleum.rediwallet",
-		"versionCode": 2,
+		"versionCode": 3,
 		"icon": "./src/assets/favicon/android-icon-192x192.png",
 		"permissions": [
 			"CAMERA",

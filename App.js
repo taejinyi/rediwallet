@@ -50,6 +50,13 @@ if (module.hot) {
 //
 
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#555555',
+  },
+});
+
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
@@ -99,10 +106,3 @@ export default class App extends React.Component {
     this.setState({isLoadingComplete: true});
   };
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#555555',
-  },
-});
