@@ -26,19 +26,15 @@ class WalletDetailPage extends React.Component {
       isReceiveModalVisible: false,
       targetAddress: undefined,
       amount: 0,
-      currency: this.props.navigation.state.params.wallet.currency
+      currency: this.props.navigation.state.params.account.currency
     }
   }
 
   showSendPage = () => {
     const account = this.props.navigation.state.params.account
-	  const wallet = this.props.navigation.state.params.wallet
-	  const _wallet = this.props.navigation.state.params._wallet
 
     this.debounceNavigate('Send', {
-      wallet: wallet,
       account: account,
-      _wallet: _wallet
     })
   }
   showReceiveModal = () => {
@@ -47,11 +43,12 @@ class WalletDetailPage extends React.Component {
     })
   }
   copyAddressToClipboard = () => {
-    Clipboard.setString(this.props.navigation.state.params.wallet.address)
+    Clipboard.setString(this.props.wallet.address)
   }
 
   async componentWillMount() {
-    const { wallet, account } = this.props.navigation.state.params
+    const { account } = this.props.navigation.state.params
+    const { db, wallet } = this.props.wallet
     const currency = this.props.navigation.state.params.account.currency
     let currencyIcon, currencyName, headerBackgroundColor, headerTitle
     if (currency) {
@@ -82,12 +79,11 @@ class WalletDetailPage extends React.Component {
     })
     this.headerBackgroundColor = headerBackgroundColor
     // await this.props.getTransactionsFromDB(db, this.props.navigation.state.params.wallet, this.props.navigation.state.params.account)
-    const { db } = this.props
     await this.props.getTransactionsFromDB(db, wallet, account)
   }
   async componentDidMount() {
-    const { db, transactions } = this.props
-    const { wallet, account } = this.props.navigation.state.params
+    const { db, transactions, wallet } = this.props
+    const { account } = this.props.navigation.state.params
     await this.props.getTransactionsFromServer(db, wallet, account)
     this._interval = setInterval( () => {
       this.refreshAccount()
@@ -100,15 +96,15 @@ class WalletDetailPage extends React.Component {
   }
 
   refreshAccount = () => {
-    const { wallet, account, _wallet } = this.props.navigation.state.params
-    this.props.getTransactionsFromServer(this.props.db, wallet, account)
+    const { account } = this.props.navigation.state.params
+    const { db, wallet } = this.props
+    this.props.getTransactionsFromServer(db, wallet, account)
   }
 
 
   render() {
-    const { navigation, transactions } = this.props
-    const { wallet, account, _wallet } = this.props.navigation.state.params
-    const { targetAddress, amount, currency } = this.state
+    const { navigation, transactions, db, wallet, instWallet } = this.props
+    const { account } = this.props.navigation.state.params
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
 
     if (account.currency === "ETH") {
@@ -193,7 +189,7 @@ class WalletDetailPage extends React.Component {
                   wallet={ wallet }
                   account={ account }
                   transactions={ transactions }
-                  _wallet={ _wallet}
+                  instWallet={ instWallet}
                   navigation={ navigation }
                 />
               </View>

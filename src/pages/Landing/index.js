@@ -20,6 +20,7 @@ import ethers from 'ethers'
 import {convertToMoney, toHexString} from '../../utils'
 import Wallet from "../../system/Wallet";
 import {translate} from "react-i18next";
+import {startWalletInstance} from "../Wallet/sagas";
 
 @translate(['main'], { wait: true })
 class LandingPage extends React.Component {
@@ -51,8 +52,10 @@ class LandingPage extends React.Component {
       const hex = toHexString(seed)
       await SecureStore.setItemAsync('seed', hex)
 			const mnemonic = await ethers.HDNode.entropyToMnemonic(seed)
-			const wallet = await Wallet.generateWallet()
-			await this.props.addWallet(this.props.db, wallet)
+			Wallet.generateWallet().then((wallet) => {
+				this.props.startWalletInstance(this.props.db, wallet)
+				}
+			)
 			this.debounceNavigate('MnemonicBackup', {mnemonic: mnemonic})
 		} catch(error) {
     	console.log(error)
@@ -155,7 +158,7 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => ({
   showProcessingModal: (message) => dispatch(actions.showProcessingModal(message)),
   hideProcessingModal: () => dispatch(actions.hideProcessingModal()),
-  addWallet: (db, wallet) => dispatch(actions.addWallet(db, wallet)),
+  startWalletInstance: (db, wallet) => dispatch(actions.startWalletInstance(db, wallet)),
 })
 
 export default connect(null, mapDispatchToProps)(LandingPage)

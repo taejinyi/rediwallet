@@ -1,7 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Animated, View, Text, PanResponder } from 'react-native'
-import nacl from 'tweetnacl'
 import HDWalletProvider from "truffle-hdwallet-provider";
 import Web3 from "web3";
 import {Currency, fromHexString} from "../../utils/crypto";
@@ -117,14 +114,15 @@ export default class Wallet {
     }
   }
   static async generateWallet(currency="KRWT") {
-    let nonce = await SecureStore.getItemAsync('nonce')
-    if (!nonce) {
-      nonce = 0
-    } else {
-      nonce = parseInt(nonce, 10)
-    }
-    const nextNonce = nonce + 1
-    await SecureStore.setItemAsync('nonce', nextNonce.toString())
+    const nonce = 0
+    // let nonce = await SecureStore.getItemAsync('nonce')
+    // if (!nonce) {
+    //   nonce = 0
+    // } else {
+    //   nonce = parseInt(nonce, 10)
+    // }
+    // const nextNonce = nonce + 1
+    // await SecureStore.setItemAsync('nonce', nextNonce.toString())
 
     const hex = await SecureStore.getItemAsync('seed')
     let seed
@@ -180,7 +178,7 @@ export default class Wallet {
     const ABI = await this.getABIAsync("KRWT")
     const KRWTContractAddress = await this.getContractAddressAsync('KRWT')
     const IFUMContractAddress = await this.getContractAddressAsync('IFUM')
-    this._web3 = await this.getWeb3(await getMnemonic())
+    this._web3 = await this.getWeb3(await getMnemonic(), this.nonce)
     this._contracts = {
       IFUM: new this._web3.eth.Contract(ABI, IFUMContractAddress, {from: this.address}),
       KRWT: new this._web3.eth.Contract(ABI, KRWTContractAddress, {from: this.address}),
@@ -449,9 +447,10 @@ export default class Wallet {
     if (account.currency === Currency.ETH.ticker) {
       try {
         const tx = await this._web3.eth.sendTransaction({to:to, from:this.address, value:this._web3.utils.toWei(amount.toString(), "ether")})
+        console.log("tx in transfer", tx)
         return tx
       } catch (error) {
-        console.log(error)
+        console.log("error in transfer", error)
         return null
       }
     } else {

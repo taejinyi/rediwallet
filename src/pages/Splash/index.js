@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import { StatusBar, Image, View } from 'react-native'
 import { FileSystem, SecureStore, Notifications, Permissions } from 'expo'
+import { SPLASH_STATE, getInformation } from './actions'
 
 import { actions } from 'rediwallet/src/pages'
 
@@ -20,6 +21,15 @@ class SplashPage extends React.Component {
     dispatch(resetAction)
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { nav } = nextProps
+    const { splashState, wallet } = nextProps
+
+    if(splashState === SPLASH_STATE.STATE_FINISH) {
+      return this.navigateTo('Main')
+    }
+  }
+
 	async componentDidMount() {
     const { db, nav, } = this.props
     // TODO: Uncomment it
@@ -34,7 +44,7 @@ class SplashPage extends React.Component {
 			if(seed == null) {
 				this.navigateTo('Landing', nav)
 			} else {
-        this.navigateTo('Main', nav)
+        this.props.getInformation(db)
 			}
 		}, 1000)
 	}
@@ -58,4 +68,8 @@ const mapStateToProps = (state) => ({
   splashState: state.splashStateReducer.splashState,
 })
 
-export default connect(mapStateToProps)(SplashPage)
+const mapDispatchToProps = (dispatch) => ({
+  getInformation: (db) => dispatch(actions.getInformation(db)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(SplashPage)

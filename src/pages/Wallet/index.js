@@ -30,7 +30,6 @@ class WalletPage extends React.Component {
     }
 
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
-    this._wallet = new Wallet()
   }
 
   addWallet = async (currency) => {
@@ -42,32 +41,18 @@ class WalletPage extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       wallet: nextProps.wallet,
+      instWallet: nextProps.instWallet,
       wallets: nextProps.wallets,
     })
   }
 
   async componentWillMount() {
-    const { db, wallet } = this.props
-    await this.props.getWalletFromDB(db)
-    await this.props.getWalletsFromDB(db)
+    const { db, wallet, instWallet } = this.props
+    this.props.getWalletFromNetwork(db, instWallet)
     this.logo = require('../../assets/images/logo_428x222.png')
   }
 
   async componentDidMount() {
-    const { db } = this.props
-    try {
-      const fetchResult = await db.get('wallet')
-      if (fetchResult.data && fetchResult.data.address !== undefined) {
-        await this._wallet.start(fetchResult.data)
-        await this._wallet.getFromNetwork()
-        const newWallet = this._wallet.getJson()
-        await this.props.saveWalletToDB(db, newWallet)
-      }
-    } catch (e) {
-      console.log(e)
-      return false
-    }
-
     this._internal = setInterval( () => {
       this.refreshWallet()
     }, 15000);
@@ -80,9 +65,9 @@ class WalletPage extends React.Component {
 
   async refreshWallet() {
     try {
-      await this._wallet.getFromNetwork()
-      const newWallet = this._wallet.getJson()
-      await this.props.saveWalletToDB(this.props.db, newWallet)
+      const { db, instWallet } = this.props
+      // console.log("instWallet.address in refreshWallet", instWallet.address)
+      await this.props.getWalletFromNetwork(db, instWallet)
     } catch (e) {
       console.log(e)
     }
@@ -140,7 +125,7 @@ class WalletPage extends React.Component {
               <View style={ styles.WalletAccountListContainer }>
                 <WalletAccountList
                   wallet={ wallet }
-                  _wallet={this._wallet}
+                  instWallet={this.props.instWallet}
                   navigation={ navigation }
                 />
               </View>
@@ -228,12 +213,8 @@ const styles = StyleSheet.create({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  getWalletFromDB: (db) => dispatch(actions.getWalletFromDB(db)),
-  getWalletFromNetwork: (db) => dispatch(actions.getWalletFromNetwork(db)),
-  getWalletsFromNetwork: (db) => dispatch(actions.getWalletsFromNetwork(db)),
-  getWalletsFromDB: (db) => dispatch(actions.getWalletsFromDB(db)),
-  saveWalletToDB: (db, wallet) => dispatch(actions.saveWalletToDB(db, wallet)),
-  addWallet: (db, wallet) => dispatch(actions.addWallet(db, wallet)),
+  // getWalletFromDB: (db) => dispatch(actions.getWalletFromDB(db)),
+  getWalletFromNetwork: (db, instWallet) => dispatch(actions.getWalletFromNetwork(db, instWallet)),
   showProcessingModal: (message) => dispatch(actions.showProcessingModal(message))
 })
 

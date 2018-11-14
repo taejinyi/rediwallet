@@ -218,9 +218,8 @@ class SendPage extends React.Component {
       confirmModalShow: false
     })
     const account = this.props.navigation.state.params.account
-    const wallet = this.props.navigation.state.params.wallet
-    const _wallet = this.props.navigation.state.params._wallet
-    const promise = _wallet.transfer(account, this.sendData.address, this.sendData.amount)
+    const { wallet, instWallet } =  this.props
+    const promise = instWallet.transfer(account, this.sendData.address, this.sendData.amount)
 
     setTimeout(async () => {
       await this.props.showProcessingModal("Please wait a few seconds")
@@ -228,7 +227,7 @@ class SendPage extends React.Component {
         console.log(tx)
         const now = parseInt(Date.now() / 1000)
         const transactionData = {
-          from: wallet.address,
+          from: instWallet.address,
           to: this.sendData.address,
           value: this.sendData.amount * account.decimals,
           hash: tx.transactionHash,
@@ -249,9 +248,9 @@ class SendPage extends React.Component {
             ],
             { cancelable: false}
           )
-        }, 100);  //5000 milliseconds
+        }, 500);  //5000 milliseconds
       })
-    }, 300);  //5000 milliseconds
+    }, 500);  //5000 milliseconds
   }
   async componentWillMount() {
 	  const account = this.props.navigation.state.params.account
@@ -269,8 +268,8 @@ class SendPage extends React.Component {
     const amount = formValue.amount
 
 
-    const { navigation, transactions } = this.props
-    const { wallet, account, _wallet } = this.props.navigation.state.params
+    const { navigation, transactions, instWallet, wallet } = this.props
+    const { account } = this.props.navigation.state.params
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
 
     if (account.currency === "ETH") {

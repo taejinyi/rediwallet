@@ -15,6 +15,7 @@ import splashStateReducer from './Splash/reducers'
 import walletReducer from './Wallet/reducers'
 import transactionsReducer from './WalletDetail/reducers'
 import {
+  startWalletInstance,
   getWalletFromNetwork,
   getWalletsFromNetwork,
   getWalletFromDB,
@@ -68,6 +69,7 @@ const actions = {
   setDefaultWallet,
   getWalletFromDB,
   getWalletsFromDB,
+  startWalletInstance,
   getWalletFromNetwork,
   getWalletsFromNetwork,
   getTransactionsFromDB,

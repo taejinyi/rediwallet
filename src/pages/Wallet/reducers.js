@@ -9,9 +9,7 @@ import {
   SAVE_WALLETS_TO_DB,
   GET_WALLET_FROM_DB,
   GET_WALLETS_FROM_DB,
-  GET_TRANSACTIONS_FROM_DB,
-  SAVE_TRANSACTIONS_TO_DB,
-  SAVE_TRANSACTIONS,
+  SAVE_WALLET_INSTANCE,
 } from './actions'
 
 const walletReducer = (state = {}, action) => {
@@ -44,10 +42,14 @@ const walletReducer = (state = {}, action) => {
         db: action.db,
         wallets: action.wallets,
       })
+    case SAVE_WALLET_INSTANCE:
+      return Object.assign({}, state, {
+        instWallet: action.instWallet,
+      })
     case GET_WALLET_FROM_NETWORK:
       return Object.assign({}, state, {
         db: action.db,
-        wallet: action.wallet,
+        instWallet: action.instWallet,
       })
     case GET_WALLETS_FROM_NETWORK:
       return Object.assign({}, state, {

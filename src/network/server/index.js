@@ -69,23 +69,6 @@ const getTransactions = async (wallet, account, offset=0) => {
 }
 
 
-// const requestSecretSMS = async (mobile_number) => {
-//   try {
-//     const response = await axios({
-//       method: 'POST',
-//       url: globals.API_REQUEST_SECRET_SMS,
-//       data: {
-//         mobile_number: mobile_number
-//       }
-//     })
-//
-//     return response
-//   } catch (error) {
-//     return error.response
-//   }
-// }
-
-
 export {
   getTransactions,
 }

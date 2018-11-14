@@ -28,12 +28,8 @@ class WalletAccountList extends React.Component {
 
   onWalletClicked = (cardIndex) => {
   }
-  componentWillMount(){
-    const { wallet, _wallet } = this.props
-
-  }
   renderAccountItem = (account) => {
-    const { navigation, wallet, _wallet } = this.props
+    const { navigation, wallet } = this.props
     const accountData = account.item
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
 
@@ -76,7 +72,7 @@ class WalletAccountList extends React.Component {
       <View style={ styles.walletContainer }>
         <TouchableOpacity onPress={ () => {
           this.props.showProcessingModal("Loading transaction history")
-          this.debounceNavigate('WalletDetail', { account: accountData, wallet: wallet, _wallet: _wallet })
+          this.debounceNavigate('WalletDetail', { account: accountData })
         }}>
           <View style={{ height: 90, width: '100%' ,backgroundColor: accountColor, flexDirection: "row"}}>
             <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>

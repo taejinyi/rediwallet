@@ -4,8 +4,9 @@ import { SPLASH_STATE, GET_INFORMATION, SAVE_SPLASH_STATE } from './actions'
 import {SAVE_DEFAULT_ACCOUNT, SAVE_WALLET, ADD_ACCOUNT} from "../Wallet/actions";
 import {SecureStore} from "expo";
 
-import {addAccount, generateAccount, getWalletFromNetwork} from "../Wallet/sagas";
+import {addAccount, generateAccount, startWalletInstance, getWalletFromNetwork, saveWalletToDB} from "../Wallet/sagas";
 import {actions} from "../index";
+import Wallet from "../../system/Wallet";
 
 // import { getUnionsFromServer, getUnionsFromDB } from '../Unions/sagas'
 // import { getPayablesFromServer, getPayablesFromDB } from '../Repay/sagas'
@@ -19,6 +20,9 @@ import {actions} from "../index";
 
 export function* getInformation(action) {
   const { db } = action
+  let wallet = yield Wallet.generateWallet()
+
+  yield call(startWalletInstance, {db: db, wallet: wallet})
 
   yield put({
     type: SAVE_SPLASH_STATE,
