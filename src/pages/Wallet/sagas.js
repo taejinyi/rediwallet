@@ -10,10 +10,24 @@ import {
   GET_WALLET_FROM_DB,
   GET_WALLETS_FROM_DB,
   ADD_WALLET,
-  SET_DEFAULT_WALLET, START_WALLET_INSTANCE,
+  SET_DEFAULT_WALLET, START_WALLET_INSTANCE, CREATE_WALLET,
 } from './actions'
 import Wallet from "../../system/Wallet"
+import {UNSET_LOADING} from "../../actions";
 
+export function* createWallet(action) {
+  const { db } = action
+  const wallet = yield Wallet.generateWallet()
+  yield put({
+    type: SAVE_WALLET,
+    wallet: wallet,
+  })
+
+  yield call(startWalletInstance, {db: db, wallet: wallet})
+  yield put({
+    type: UNSET_LOADING,
+  })
+}
 export function* addWallet(action) {
   const { db, wallet } = action
 
@@ -172,11 +186,12 @@ export function* getWalletFromDB(action) {
         wallet: fetchResult.data,
       })
     }
+    return fetchResult.data
   } catch (e) {
-    console.log(e)
-    return false
+    const wallet = yield Wallet.generateWallet()
+    yield call(saveWalletToDB, {db: db, wallet: wallet})
+    return wallet
   }
-  return true
 }
 
 
@@ -197,17 +212,33 @@ export function* getWalletsFromDB(action) {
 
 export function* startWalletInstance(action) {
   let { db, wallet } = action
-
   try {
     const instWallet = new Wallet()
     yield instWallet.start(wallet)
-    yield instWallet.getFromNetwork()
     yield put({
       type: SAVE_WALLET_INSTANCE,
       instWallet: instWallet,
     })
-    const newWallet = instWallet.getJson()
-    yield call(saveWalletToDB, {db: db, wallet: newWallet})
+    call(getWalletFromNetwork, {db: db, instWallet: instWallet})
+
+    // instWallet.getFromNetwork().then({
+    //   put({
+    //     type: SAVE_WALLET_INSTANCE,
+    //     instWallet: instWallet,
+    //   }).then({
+    //     const newWallet = instWallet.getJson()
+    //     call(saveWalletToDB, {db: db, wallet: newWallet})
+    //   })
+    //
+
+
+    // yield instWallet.getFromNetwork()
+    // yield put({
+    //   type: SAVE_WALLET_INSTANCE,
+    //   instWallet: instWallet,
+    // })
+    // const newWallet = instWallet.getJson()
+    // yield call(saveWalletToDB, {db: db, wallet: newWallet})
     return instWallet
   } catch (error) {
     console.log('error in startWalletInstance', error)
@@ -217,6 +248,7 @@ export function* startWalletInstance(action) {
 
 
 const walletSaga = [
+  takeEvery(CREATE_WALLET, createWallet),
   takeEvery(ADD_WALLET, addWallet),
   takeEvery(SET_DEFAULT_WALLET, setDefaultWallet),
   takeEvery(START_WALLET_INSTANCE, startWalletInstance),

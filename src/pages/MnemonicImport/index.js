@@ -33,6 +33,7 @@ import {actions} from "../index";
 import {connect} from "react-redux";
 import Wallet from "../../system/Wallet";
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
+import {SPLASH_STATE} from "../Splash/actions";
 
 
 
@@ -74,7 +75,7 @@ class MnemonicImportPage extends React.Component {
       },
       confirmModalShow: false,
 		}
-
+    this.navigated = false
 		this.formElement = null
 
     this.data = {
@@ -162,6 +163,8 @@ class MnemonicImportPage extends React.Component {
     dispatch(resetAction)
   }
   importMnemonic = async (mnemonic) => {
+    await this.props.showProcessingModal()
+    await this.props.setLoading()
     let seed = await SecureStore.getItemAsync('seed')
     if(seed && seed.length > 10) {
     	 Alert.alert(
@@ -180,9 +183,7 @@ class MnemonicImportPage extends React.Component {
 			const entropy = await ethers.HDNode.mnemonicToEntropy(mnemonic)
       const hex = entropy.substr(entropy.length - 32)
 			await SecureStore.setItemAsync('seed', hex)
-      const wallet = await Wallet.generateWallet()
-			await this.props.addWallet(this.props.db, wallet)
-			this.navigateTo('Main')
+      await this.props.createWallet(this.props.db)
 		} catch(error) {
     	console.log(error)
 			// Alert.alert(
@@ -195,6 +196,17 @@ class MnemonicImportPage extends React.Component {
 			// )
 		}
   }
+
+  async componentWillReceiveProps(nextProps) {
+    const { isLoading } = nextProps
+
+    if(isLoading === false && !this.navigated) {
+      this.navigated = true
+      await this.props.hideProcessingModal()
+			this.navigateTo('Main')
+    }
+  }
+
 	render() {
     const {
       formValue,
@@ -315,7 +327,11 @@ const styles = StyleSheet.create({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  addWallet: (db, wallet) => dispatch(actions.addWallet(db, wallet)),
+  setLoading: () => dispatch(actions.setLoading()),
+  unsetLoading: () => dispatch(actions.unsetLoading()),
+  showProcessingModal: (message) => dispatch(actions.showProcessingModal(message)),
+  hideProcessingModal: () => dispatch(actions.hideProcessingModal()),
+  createWallet: (db) => dispatch(actions.createWallet(db)),
 })
 
 export default connect(null, mapDispatchToProps)(MnemonicImportPage)

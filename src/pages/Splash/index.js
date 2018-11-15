@@ -42,6 +42,7 @@ class SplashPage extends React.Component {
 		setTimeout(async () => {
       const seed = await SecureStore.getItemAsync('seed')
 			if(seed == null) {
+
 				this.navigateTo('Landing', nav)
 			} else {
         this.props.getInformation(db)

@@ -20,7 +20,7 @@ import ethers from 'ethers'
 import {convertToMoney, toHexString} from '../../utils'
 import Wallet from "../../system/Wallet";
 import {translate} from "react-i18next";
-import {startWalletInstance} from "../Wallet/sagas";
+import {getWalletFromNetwork, startWalletInstance} from "../Wallet/sagas";
 
 @translate(['main'], { wait: true })
 class LandingPage extends React.Component {
@@ -31,7 +31,8 @@ class LandingPage extends React.Component {
 	}
   createAccount = async () => {
  		// const { t, i18n } = this.props
- 		this.props.showProcessingModal('Please wait a moment')
+ 		// this.props.showProcessingModal('Please wait a moment')
+		this.props.setLoading()
     let seed = await SecureStore.getItemAsync('seed')
 
     if(seed && seed.length > 10) {
@@ -52,10 +53,7 @@ class LandingPage extends React.Component {
       const hex = toHexString(seed)
       await SecureStore.setItemAsync('seed', hex)
 			const mnemonic = await ethers.HDNode.entropyToMnemonic(seed)
-			Wallet.generateWallet().then((wallet) => {
-				this.props.startWalletInstance(this.props.db, wallet)
-				}
-			)
+			await this.props.createWallet(this.props.db)
 			this.debounceNavigate('MnemonicBackup', {mnemonic: mnemonic})
 		} catch(error) {
     	console.log(error)
@@ -158,7 +156,8 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => ({
   showProcessingModal: (message) => dispatch(actions.showProcessingModal(message)),
   hideProcessingModal: () => dispatch(actions.hideProcessingModal()),
-  startWalletInstance: (db, wallet) => dispatch(actions.startWalletInstance(db, wallet)),
+  createWallet: (db) => dispatch(actions.createWallet(db)),
+	setLoading: () => dispatch(actions.setLoading())
 })
 
 export default connect(null, mapDispatchToProps)(LandingPage)

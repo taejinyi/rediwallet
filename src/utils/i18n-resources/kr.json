@@ -54,6 +54,7 @@
 		"delete_mnemonic": "계정 삭제하기",
 		"notice": "공지사항",
 		"copy_to_clipboard": "클립보드로 복사하기",
-		"backup_mnemonic": "복원키 백업하기"
+		"backup_mnemonic": "복원키 백업하기",
+		"wait_for_wallet_generation": "지갑 생성 중..."
 	}
 }

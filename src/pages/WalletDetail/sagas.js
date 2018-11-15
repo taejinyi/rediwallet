@@ -83,7 +83,7 @@ export function* getTransactionsFromServer(action) {
         transactions = fetchResult.data
 
       } catch (error) {
-        console.log()
+        console.log(error)
       }
 
       let i

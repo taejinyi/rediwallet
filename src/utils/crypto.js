@@ -24,13 +24,10 @@ const fromHexString = hexString =>
 
 const toHexString = bytes => {
   let hex = ""
-  console.log(bytes)
-
   for (let i=0; i < bytes.length; i++) {
-    hex = hex + (bytes[i].toString(16).length == 1 ? "0" + bytes[i].toString(16) : bytes[i].toString(16))
+    hex = hex + (bytes[i].toString(16).length === 1 ? "0" + bytes[i].toString(16) : bytes[i].toString(16))
   }
   return hex
-  // bytes.reduce((str, byte) => str + (byte.toString(16).length == 1 ? "0" + byte.toString(16) : byte.toString(16)), '');
 }
 
 const getHeaderTitle = (account) => {

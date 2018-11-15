@@ -1,4 +1,11 @@
-import {SAVE_PIN_NUMBER, SAVE_SEED, SHOW_PROCESSING_MODAL, HIDE_PROCESSING_MODAL, SAVE_UNLOCKED} from './actions'
+import {
+  SAVE_PIN_NUMBER,
+  SAVE_SEED,
+  SHOW_PROCESSING_MODAL,
+  HIDE_PROCESSING_MODAL,
+  SAVE_UNLOCKED,
+  UNSET_LOADING, SET_LOADING
+} from './actions'
 
 const appStateReducer = (state = {}, action) => {
   switch(action.type) {
@@ -10,6 +17,14 @@ const appStateReducer = (state = {}, action) => {
     case HIDE_PROCESSING_MODAL:
       return Object.assign({}, state, {
         isShow: false,
+      })
+    case SET_LOADING:
+      return Object.assign({}, state, {
+        isLoading: true
+      })
+    case UNSET_LOADING:
+      return Object.assign({}, state, {
+        isLoading: false
       })
     case SAVE_PIN_NUMBER:
       return Object.assign({}, state, {

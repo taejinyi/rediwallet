@@ -224,7 +224,7 @@ class SendPage extends React.Component {
     setTimeout(async () => {
       await this.props.showProcessingModal("Please wait a few seconds")
       promise.then((tx) => {
-        console.log(tx)
+        // console.log(tx)
         const now = parseInt(Date.now() / 1000)
         const transactionData = {
           from: instWallet.address,

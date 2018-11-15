@@ -1,12 +1,13 @@
 import React from 'react'
 import {Text, View, Clipboard, Image} from 'react-native'
-import {Button, Container, Content, Left, Right} from 'native-base'
-import { TextLoader } from 'react-native-indicator'
+import {Button, Container, Content, FooterTab, Left, Right} from 'native-base'
+import {RippleLoader, TextLoader} from 'react-native-indicator'
 import { NavigationActions } from 'react-navigation'
 import {actions} from "../index";
 import connect from "react-redux/es/connect/connect";
 import {translate} from "react-i18next";
 import MnemonicList from "../../components/MnemonicList";
+import LoadingButton from "../../components/LoadingButton";
 
 @translate(['main'], { wait: true })
 class MnemonicBackupPage extends React.Component {
@@ -49,15 +50,40 @@ class MnemonicBackupPage extends React.Component {
                   {t('copy_to_clipboard', { locale: i18n.language })}
                 </Text>
               </Button>
+              {/*<LoadingButton*/}
+                {/*isLoading={this.props.isLoading}*/}
+                {/*full*/}
+                {/*Component={ Button }*/}
+                {/*onPress={this.closePage}*/}
+                {/*loadingView={*/}
+                  {/*<RippleLoader size={ 18 } color='white' />*/}
+                {/*}*/}
+                {/*style={{ marginTop: 30, backgroundColor: "gray", width: '100%' }}*/}
+              {/*>*/}
+                {/*<Text style={{ color: 'white', fontSize: 17, }}>*/}
+                  {/*{t('close', { locale: i18n.language })}*/}
+                {/*</Text>*/}
+              {/*</LoadingButton>*/}
               <Button
-                onPress={this.closePage}
-                transparent
+                disabled={this.props.isLoading}
                 style={{ marginTop: 30, backgroundColor: "gray", width: '100%' }}
-              >
-                <Text style={{ fontWeight: 'bold', color: 'white', width: '100%' , textAlign: "center" }}>
-                  {t('close', { locale: i18n.language })}
-                </Text>
+                onPress={this.closePage}
+                transparent>
+                {
+                  this.props.isLoading ? (
+                    <Text style={{ color: 'white', fontSize: 17, width: '100%', textAlign: "center" }}>
+                      {t('wait_for_wallet_generation', { locale: i18n.language })}
+                    </Text>
+                  ) : (
+                    <Text style={{ color: 'white', fontSize: 17, width: '100%', textAlign: "center" }}>
+                      {t('close', { locale: i18n.language })}
+                    </Text>
+                  )
+                }
+                  {/*<TextLoader text='Wait for wallet' textStyle={{ color: 'white', fontSize: 17, width: '100%', textAlign: "center" }} />*/}
               </Button>
+
+
             </View>
           </View>
 

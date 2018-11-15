@@ -15,6 +15,7 @@ import splashStateReducer from './Splash/reducers'
 import walletReducer from './Wallet/reducers'
 import transactionsReducer from './WalletDetail/reducers'
 import {
+  createWallet,
   startWalletInstance,
   getWalletFromNetwork,
   getWalletsFromNetwork,
@@ -36,6 +37,8 @@ import {
 
 import { getInformation } from './Splash/actions'
 import {
+  setLoading,
+  unsetLoading,
   saveSeed,
   saveUnlocked,
   showProcessingModal,
@@ -62,9 +65,12 @@ import transactionsSaga from './WalletDetail/sagas'
 // import unlockStateReducer from './Unlock/reducers'
 
 const actions = {
+  setLoading,
+  unsetLoading,
   saveSeed,
   getInformation,
   saveUnlocked,
+  createWallet,
   addWallet,
   setDefaultWallet,
   getWalletFromDB,

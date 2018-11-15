@@ -2,6 +2,7 @@ export const SAVE_WALLET = 'SAVE_WALLET'
 export const SAVE_WALLETS = 'SAVE_WALLETS'
 export const SAVE_WALLET_TO_DB = 'SAVE_WALLET_TO_DB'
 export const SAVE_WALLETS_TO_DB = 'SAVE_WALLETS_TO_DB'
+export const CREATE_WALLET = 'CREATE_WALLET'
 export const ADD_WALLET = 'ADD_WALLET'
 export const SET_DEFAULT_WALLET = 'SET_DEFAULT_WALLET'
 export const START_WALLET_INSTANCE = 'START_WALLET_INSTANCE'
@@ -48,6 +49,11 @@ export const saveWalletsToDB = (db, wallets) => ({
   db: db,
   wallets: wallets,
   type: SAVE_WALLETS_TO_DB,
+})
+
+export const createWallet = (db) => ({
+  db: db,
+  type: CREATE_WALLET,
 })
 
 export const startWalletInstance = (db, wallet) => ({

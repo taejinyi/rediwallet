@@ -24,6 +24,7 @@ import withLock from '../WithLock'
 import withWallet from '../WithWallet'
 import withTransactions from '../WithTransactions'
 import Color from "../../constants/Colors";
+import withLoading from "../WithLoading";
 const t = i18n.getFixedT()
 const MainTabNavigator = TabNavigator({
   Wallet: {
@@ -144,7 +145,7 @@ const MainNavigator = StackNavigator({
 
 const MnemonicManagementStackNavigator = StackNavigator({
   MnemonicBackup: {
-    screen: MnemonicBackupPage,
+    screen: withLoading(MnemonicBackupPage),
     navigationOptions: () => ({
       header: null,
       headerBackTitle: i18n.t('main:mnemonic_backup', { locale: i18n.language }),
@@ -187,14 +188,14 @@ const AppNavigator = StackNavigator({
     })
   },
   MnemonicBackup: {
-    screen: withDB(withLock(MnemonicBackupPage)),
+    screen: withLoading(withDB(withLock(MnemonicBackupPage))),
     navigationOptions: () => ({
       header: null,
       headerBackTitle: i18n.t('main:mnemonic_backup', { locale: i18n.language }),
     })
   },
   MnemonicImport: {
-    screen: withDB(withLock(MnemonicImportPage)),
+    screen: withLoading(withDB(withLock(MnemonicImportPage))),
     navigationOptions: ({ navigation }) => ({
       headerTitle: i18n.t('main:import', { locale: i18n.language }),
       headerTintColor: 'white',

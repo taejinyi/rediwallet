@@ -162,7 +162,7 @@ export default class Wallet {
     }
     const _wallet = new Wallet()
     await _wallet.start(wallet)
-    await _wallet.getFromNetwork()
+    // await _wallet.getFromNetwork()
     return _wallet.getJson()
   }
 

@@ -1,10 +1,17 @@
 import { put, call, select, takeEvery } from 'redux-saga/effects'
 
 import { SPLASH_STATE, GET_INFORMATION, SAVE_SPLASH_STATE } from './actions'
-import {SAVE_DEFAULT_ACCOUNT, SAVE_WALLET, ADD_ACCOUNT} from "../Wallet/actions";
+import {SAVE_DEFAULT_ACCOUNT, SAVE_WALLET, ADD_ACCOUNT, SAVE_WALLET_INSTANCE} from "../Wallet/actions";
 import {SecureStore} from "expo";
 
-import {addAccount, generateAccount, startWalletInstance, getWalletFromNetwork, saveWalletToDB} from "../Wallet/sagas";
+import {
+  addAccount,
+  generateAccount,
+  startWalletInstance,
+  getWalletFromNetwork,
+  saveWalletToDB,
+  getWalletFromDB
+} from "../Wallet/sagas";
 import {actions} from "../index";
 import Wallet from "../../system/Wallet";
 
@@ -20,9 +27,10 @@ import Wallet from "../../system/Wallet";
 
 export function* getInformation(action) {
   const { db } = action
-  let wallet = yield Wallet.generateWallet()
 
-  yield call(startWalletInstance, {db: db, wallet: wallet})
+  const wallet = yield call(getWalletFromDB, {db: db})
+  const instWallet = yield call(startWalletInstance, {db: db, wallet: wallet})
+  call(getWalletFromNetwork, {db: db, instWallet: instWallet})
 
   yield put({
     type: SAVE_SPLASH_STATE,
