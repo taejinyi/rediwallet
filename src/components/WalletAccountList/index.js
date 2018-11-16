@@ -14,6 +14,7 @@ class WalletAccountList extends React.Component {
 
     this.state = {
       lastAccountIndex: props.wallet.accounts ? ((Object.keys(props.wallet.accounts).length) - 1) : undefined,
+      refreshing: false
     }
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
   }
@@ -28,6 +29,11 @@ class WalletAccountList extends React.Component {
 
   onWalletClicked = (cardIndex) => {
   }
+
+  _onRefresh = () => {
+    console.log("onRefresh")
+  }
+
   renderAccountItem = (account) => {
     const { navigation, wallet } = this.props
     const accountData = account.item
@@ -103,6 +109,8 @@ class WalletAccountList extends React.Component {
       <FlatList
         data={ _.values(wallet.accounts) }
         renderItem={ this.renderAccountItem }
+        refreshing={this.state.refreshing}
+        onRefresh={this._onRefresh}
         contentContainerStyle={{ padding: 15 }}
         keyExtractor={( item, index ) => index.toString() }
       />
