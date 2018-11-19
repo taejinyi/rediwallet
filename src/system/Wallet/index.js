@@ -219,7 +219,6 @@ export default class Wallet {
       // console.log(token, 'account', account)
       this.accounts = Object.assign({}, this.accounts, account)
     }
-    console.log("final in fetchFromNetwork", this.accounts)
   }
 
   transfer = async (account, to, amount) => {

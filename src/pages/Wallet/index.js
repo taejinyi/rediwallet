@@ -95,7 +95,6 @@ class WalletPage extends React.Component {
       }
       if (iWallet !== undefined) {
         totalAssetAmount = iWallet.getTotalAssetAmount()
-        console.log('totalAssetAmount', totalAssetAmount)
       }
     }
 

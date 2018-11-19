@@ -107,49 +107,46 @@ class WalletDetailPage extends React.Component {
     const { account } = this.props.navigation.state.params
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
 
+    currencyIcon = iWallet.currency
+    if (currencyIcon === "KRWT") {
+      currencyIcon = "￦"
+    }
+    try {
+      fxRate = iWallet.fx[account.address][iWallet.currencyAddress]
+    } catch(e) {
+      fxRate = 1
+    }
+
     if (wallet){
       if (wallet.currency === "ETH") {
-        currencyIcon = "ETH"
         currencyName = "Ethereum"
       } else if (wallet.currency === "IFUM") {
-        currencyIcon = "IFUM"
         currencyName = "Infleum"
       } else if (wallet.currency === "KRWT") {
-        currencyIcon = "￦"
         currencyName = "KRW Tether"
       } else {
-        currencyIcon = "?"
         currencyName = "Unknown"
       }
     }
+    currencyTicker = account.currency
 
     if (account.currency === "ETH") {
       accountColor = Color.ethereumColor
-      currencyIcon = "￦"
-      currencyTicker = "ETH"
       currencyName = "Ethereum"
-      fxRate = 230500
     } else if (account.currency === "IFUM") {
       accountColor = Color.infleumColor
-      currencyIcon = "￦"
-      currencyTicker = "IFUM"
       currencyName = "Infleum"
-      fxRate = 22
     } else if (account.currency === "KRWT") {
       accountColor = Color.krwtColor
-      currencyIcon = "￦"
-      currencyTicker = "KRWT"
       currencyName = "KRW Tether"
-      fxRate = 1
     } else {
-      currencyIcon = "?"
-      currencyTicker = "???"
       currencyName = "Unknown"
       accountColor = "#999999"
-      fxRate = 1
     }
 
-    let moneyStr = numberToString(account.balance)
+    const balance = account.balance / Math.pow(10, account.decimals)
+
+    let moneyStr = numberToString(balance)
 
     return (
       <View style={{ flex: 1, backgroundColor: '#303140', alignItems: 'center'}}>
@@ -162,9 +159,9 @@ class WalletDetailPage extends React.Component {
             >
               <Text style={{ textAlign: 'center', color: 'white', fontSize: 12 }}>{ wallet.address }</Text>
             </Button>
-            <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 14, marginTop: 0 }}>{ currencyIcon + numberToString(fxRate) + " per " + currencyTicker }</Text>
+            <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 14, marginTop: 0 }}>{ currencyIcon + " " + numberToString(fxRate) + " per " + currencyTicker }</Text>
             <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 18, marginTop: 10 }}>{ currencyTicker + " " + moneyStr }</Text>
-            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 28 }}>{ " ~ " + currencyIcon + numberToString(account.balance / Math.pow(10, account.decimals) * fxRate) }</Text>
+            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 28 }}>{ " ~ " + currencyIcon + " " + numberToString(balance * fxRate) }</Text>
           </View>
         </View>
         <Modal
