@@ -24,8 +24,7 @@ import {
 } from 'react-native'
 import { LoadingButton, Header, DismissKeyboardViewHOC, Input } from '../../components'
 import {translate} from "react-i18next";
-import { getHeaderBackgroundColor, getHeaderTitle } from "../../utils/crypto";
-import {convertToMoney} from "../../utils";
+import {getHeaderBackgroundColor, getHeaderTitle, numberToString} from "../../utils/crypto";
 import Color from "../../constants/Colors";
 import {actions} from "../index";
 import connect from "react-redux/es/connect/connect";
@@ -218,8 +217,8 @@ class SendPage extends React.Component {
       confirmModalShow: false
     })
     const account = this.props.navigation.state.params.account
-    const { wallet, instWallet } =  this.props
-    const promise = instWallet.transfer(account, this.sendData.address, this.sendData.amount)
+    const { wallet, iWallet } =  this.props
+    const promise = iWallet.transfer(account, this.sendData.address, this.sendData.amount)
 
     setTimeout(async () => {
       await this.props.showProcessingModal("Please wait a few seconds")
@@ -227,9 +226,9 @@ class SendPage extends React.Component {
         // console.log(tx)
         const now = parseInt(Date.now() / 1000)
         const transactionData = {
-          from: instWallet.address,
+          from: iWallet.address,
           to: this.sendData.address,
-          value: this.sendData.amount * account.decimals,
+          value: this.sendData.amount * Math.pow(10, account.decimals),
           hash: tx.transactionHash,
           confirmations: 0,
           timeStamp: now
@@ -268,7 +267,7 @@ class SendPage extends React.Component {
     const amount = formValue.amount
 
 
-    const { navigation, transactions, instWallet, wallet } = this.props
+    const { navigation, transactions, iWallet, wallet } = this.props
     const { account } = this.props.navigation.state.params
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
 
@@ -298,14 +297,7 @@ class SendPage extends React.Component {
       fxRate = 1
     }
 
-    let moneyStr
-    const fraction = (account.balance - Math.floor(account.balance))
-    const strFraction = fraction.toFixed(8)
-    if (fraction > 0) {
-      moneyStr = convertToMoney(Math.floor(account.balance)) + strFraction.substr(1)
-    } else {
-      moneyStr = convertToMoney(account.balance)
-    }
+    let moneyStr = numberToString(account.balance)
 
 		return (
 
@@ -326,9 +318,9 @@ class SendPage extends React.Component {
             >
               <Text style={{ textAlign: 'center', color: 'white', fontSize: 12 }}>{ wallet.address }</Text>
             </Button>
-            <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 14, marginTop: 0 }}>{ currencyIcon + convertToMoney(fxRate) + " per " + currencyTicker }</Text>
+            <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 14, marginTop: 0 }}>{ currencyIcon + numberToString(fxRate) + " per " + currencyTicker }</Text>
             <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 18, marginTop: 10 }}>{ currencyTicker + " " + moneyStr }</Text>
-            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 28 }}>{ " ~ " + currencyIcon + convertToMoney(Math.floor(account.balance * fxRate)) }</Text>
+            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 28 }}>{ " ~ " + currencyIcon + numberToString(account.balance / Math.pow(10, account.decimals) * fxRate) }</Text>
           </View>
         </View>
         <Modal

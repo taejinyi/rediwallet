@@ -15,10 +15,36 @@ const Currency = {
   },
 }
 import numeral from 'numeral'
-const convertToKRWUnit = (number) => {
-  return numeral(number).format('0,000')
+
+const numberToString = (number) => {
+  let numFraction = 6
+  if (number > 1000) {
+    numFraction = 0
+  } else if (number > 100) {
+    numFraction = 4
+  }
+  const fraction = number - Math.floor(number)
+  const strFraction = fraction.toFixed(numFraction)
+  if (fraction > 0.00001) {
+    return numeral(Math.floor(number)).format('0,000') + strFraction.substr(1)
+  } else if(fraction > 0 ) {
+    const decimals = 1000000000
+    const small = number * decimals
+
+    const fraction = small - Math.floor(small)
+    if (small > 1000) {
+      numFraction = 0
+    } else if (small > 100) {
+      numFraction = 4
+    }
+
+    const strFraction = fraction.toFixed(numFraction)
+    return numeral(Math.floor(small)).format('0,000') + strFraction.substr(1) + "e-9"
+  } else {
+    return numeral(Math.floor(number)).format('0,000')
+  }
 }
-import { toChecksumAddress } from 'ethereumjs-util'
+
 const fromHexString = hexString =>
   new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
 
@@ -66,7 +92,7 @@ const getHeaderBackgroundColor = (account) => {
   return headerBackgroundColor
 }
 export {
-  convertToKRWUnit,
+  numberToString,
   Currency,
   fromHexString,
   toHexString,

@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 import { FlatList, Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import {Button} from "native-base";
 import Color from '../../constants/Colors'
-import { convertToMoney } from '../../utils'
 import {actions} from "../../pages";
 import { connect } from 'react-redux'
+import {numberToString} from "../../utils/crypto";
 
 class WalletAccountList extends React.Component {
   constructor(props) {
@@ -35,44 +35,40 @@ class WalletAccountList extends React.Component {
   }
 
   renderAccountItem = (account) => {
-    const { navigation, wallet } = this.props
+    const { navigation, iWallet } = this.props
     const accountData = account.item
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
 
+    currencyIcon = iWallet.currency
+    if (currencyIcon === "KRWT") {
+      currencyIcon = "￦"
+    }
+    try {
+      fxRate = iWallet.fx[accountData.address][iWallet.currencyAddress]
+    } catch(e) {
+      fxRate = 1
+    }
 
     if (accountData.currency === "ETH") {
       accountColor = Color.ethereumColor
-      currencyIcon = "￦"
       currencyTicker = "ETH"
       currencyName = "Ethereum"
-      fxRate = 230500
     } else if (accountData.currency === "IFUM") {
       accountColor = Color.infleumColor
-      currencyIcon = "￦"
       currencyTicker = "IFUM"
       currencyName = "Infleum"
-      fxRate = 22
     } else if (accountData.currency === "KRWT") {
       accountColor = Color.krwtColor
-      currencyIcon = "￦"
       currencyTicker = "KRWT"
       currencyName = "KRW Tether"
-      fxRate = 1
     } else {
       currencyIcon = "?"
       currencyTicker = "???"
       currencyName = "Unknown"
       accountColor = "#999999"
-      fxRate = 1
     }
-    let moneyStr
-    const fraction = accountData.balance - Math.floor(accountData.balance)
-    const strFraction = fraction.toFixed(8)
-    if (fraction > 0) {
-      moneyStr = convertToMoney(Math.floor(accountData.balance)) + strFraction.substr(1)
-    } else {
-      moneyStr = convertToMoney(accountData.balance)
-    }
+    const balance = accountData.balance / Math.pow(10, accountData.decimals)
+    const moneyStr = numberToString(balance)
 
     return (
       <View style={ styles.walletContainer }>
@@ -91,8 +87,8 @@ class WalletAccountList extends React.Component {
               <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 14 }}>{ currencyTicker + " " + moneyStr }</Text>
             </View>
             <View style={{ paddingRight: 20, flex: 0.4, justifyContent: 'center', alignItems: 'flex-end' }}>
-              <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ fontWeight: 'bold', color: 'white', marginBottom: 8,fontSize: 16 }}>{ currencyIcon + convertToMoney(Math.floor(accountData.balance * fxRate)) }</Text>
-              <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 14 }}>{ currencyIcon + convertToMoney(fxRate) + " per " + currencyTicker }</Text>
+              <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ fontWeight: 'bold', color: 'white', marginBottom: 8,fontSize: 16 }}>{ currencyIcon + " " + numberToString(balance * fxRate) }</Text>
+              <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 14 }}>{ currencyIcon + " " + numberToString(fxRate) + " per " + currencyTicker }</Text>
             </View>
           </View>
         </TouchableOpacity>

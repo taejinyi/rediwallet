@@ -10,12 +10,12 @@ import {
   MnemonicBackupPage,
   MnemonicImportPage,
   LockPage,
-  UnlockPage,
   WalletPage,
   WalletDetailPage,
   SendPage,
   SettingPage,
-  QRCodeScan
+  QRCodeScan,
+  WalletChangeCurrency
 } from '../../pages'
 import i18n from '../../utils/i18n'
 
@@ -141,6 +141,24 @@ const MainNavigator = StackNavigator({
       )
     })
   },
+  WalletChangeCurrency: {
+    screen: withDB(withWallet(WalletChangeCurrency)),
+    navigationOptions: ({ navigation }) => ({
+      headerTitle: i18n.t('main:transfer', { locale: i18n.language }),
+      headerTintColor: 'white',
+      headerStyle: {
+        backgroundColor: navigation.state.params ? getHeaderBackgroundColor(navigation.state.params.account) : "#303140",
+        borderBottomWidth: 0,
+      },
+      headerLeft: (
+        <HeaderBackButton
+          tintColor='white'
+          title={navigation.state.params ? getHeaderTitle(navigation.state.params.account) : i18n.t('main:account', { locale: i18n.language })}
+          onPress={() => navigation.goBack(null)} // TODO Alert
+        />
+      )
+    })
+  }
 })
 
 const MnemonicManagementStackNavigator = StackNavigator({

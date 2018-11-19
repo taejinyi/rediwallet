@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { FlatList, Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import {Button} from "native-base";
 import Color from '../../constants/Colors'
-import { convertToMoney } from '../../utils'
+import {numberToString} from "../../utils/crypto";
 
 class TransactionList extends React.Component {
   constructor(props) {
@@ -60,15 +60,8 @@ class TransactionList extends React.Component {
     const formattedDate = date.getFullYear() + "." + month.substr(-2) + "." + day.substr(-2)
     const formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
-    const amount = transaction.value / account.decimals
-    let moneyStr
-    const fraction = amount - Math.floor(amount)
-    const strFraction = fraction.toFixed(5)
-    if (fraction > 0) {
-      moneyStr = convertToMoney(Math.floor(amount)) + strFraction.substr(1)
-    } else {
-      moneyStr = convertToMoney(amount)
-    }
+    const amount = transaction.value / Math.pow(10, account.decimals)
+    let moneyStr = numberToString(amount)
 
     const confirmations = parseInt(transaction.confirmations)
     if (confirmations > 0) {

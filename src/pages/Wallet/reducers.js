@@ -44,12 +44,12 @@ const walletReducer = (state = {}, action) => {
       })
     case SAVE_WALLET_INSTANCE:
       return Object.assign({}, state, {
-        instWallet: action.instWallet,
+        iWallet: action.iWallet,
       })
     case GET_WALLET_FROM_NETWORK:
       return Object.assign({}, state, {
         db: action.db,
-        instWallet: action.instWallet,
+        iWallet: action.iWallet,
       })
     case GET_WALLETS_FROM_NETWORK:
       return Object.assign({}, state, {

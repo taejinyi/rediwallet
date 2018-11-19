@@ -41,6 +41,7 @@
 		"notice": "Notice",
 		"copy_to_clipboard": "Copy to Clipboard",
 		"backup_mnemonic": "Backup Mnemonic",
-		"wait_for_wallet_generation": "Wait for wallet generation..."
+		"wait_for_wallet_generation": "Wait for wallet generation...",
+		"change_currency": "Change Currency"
 	}
 }

@@ -40,6 +40,11 @@ class SettingPage extends React.Component {
     const mnemonic = await ethers.HDNode.entropyToMnemonic(seed)
     this.debounceNavigate('MnemonicBackup', {mnemonic: mnemonic})
   }
+
+  changeCurrency = async () => {
+    this.debounceNavigate('WalletChangeCurrency')
+  }
+
   render() {
     const { navigation, t, i18n } = this.props
 
@@ -64,6 +69,20 @@ class SettingPage extends React.Component {
             </Right>
           </ListItem>
           <Separator />
+          <ListItem
+            onPress={ this.changeCurrency }
+            button
+            icon>
+            <Left>
+              <Icon name='ios-contact' style={{ color: '#666666', }} />
+            </Left>
+            <Body>
+              <Text>{t('change_currency', { locale: i18n.language })}</Text>
+            </Body>
+            <Right>
+              <Icon name='arrow-forward' />
+            </Right>
+          </ListItem>
           <ListItem
             onPress={ this.backupMnemonic }
             button

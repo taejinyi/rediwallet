@@ -17,7 +17,7 @@ import {
 } from 'native-base'
 
 import ethers from 'ethers'
-import {convertToMoney, toHexString} from '../../utils'
+import {toHexString} from '../../utils'
 import Wallet from "../../system/Wallet";
 import {translate} from "react-i18next";
 import {getWalletFromNetwork, startWalletInstance} from "../Wallet/sagas";

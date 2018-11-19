@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import {actions} from "../../pages";
 
 const withWallet = (Component) => {
   class WrapperComponent extends React.Component {
@@ -12,11 +13,17 @@ const withWallet = (Component) => {
 
   const mapStateToProps = (state) => ({
     wallet: state.walletReducer.wallet,
-    instWallet: state.walletReducer.instWallet,
+    iWallet: state.walletReducer.iWallet,
     // wallets: state.walletReducer.wallets,
   })
 
-  return connect(mapStateToProps)(WrapperComponent)
+  const mapDispatchToProps = (dispatch) => ({
+    saveWalletToDB: (db, wallet) => dispatch(actions.saveWalletToDB(db, wallet)),
+    saveWalletInstance: (iWallet) => dispatch(actions.saveWalletInstance(iWallet)),
+    saveWalletInstanceToDB: (db, iWallet) => dispatch(actions.saveWalletInstanceToDB(db, iWallet)),
+  })
+
+  return connect(mapStateToProps, mapDispatchToProps)(WrapperComponent)
 }
 
 export default withWallet

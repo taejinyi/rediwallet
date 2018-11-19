@@ -10,7 +10,7 @@ import {
   GET_WALLET_FROM_DB,
   GET_WALLETS_FROM_DB,
   ADD_WALLET,
-  SET_DEFAULT_WALLET, START_WALLET_INSTANCE, CREATE_WALLET,
+  SET_DEFAULT_WALLET, START_WALLET_INSTANCE, CREATE_WALLET, SAVE_WALLET_INSTANCE_TO_DB,
 } from './actions'
 import Wallet from "../../system/Wallet"
 import {UNSET_LOADING} from "../../actions";
@@ -145,10 +145,10 @@ export function* saveWalletsToDB(action) {
 
 
 export function* getWalletFromNetwork(action) {
-  let { db, instWallet } = action
+  let { db, iWallet } = action
   try {
-    yield instWallet.getFromNetwork()
-    const newWallet = instWallet.getJson()
+    yield iWallet.fetchWalletFromNetwork()
+    const newWallet = iWallet.getJson()
     yield call(saveWalletToDB, {db: db, wallet: newWallet})
   } catch (e) {
     console.log(e)
@@ -213,44 +213,46 @@ export function* getWalletsFromDB(action) {
 export function* startWalletInstance(action) {
   let { db, wallet } = action
   try {
-    const instWallet = new Wallet()
-    yield instWallet.start(wallet)
+    const iWallet = new Wallet()
+    yield iWallet.start(wallet)
     yield put({
       type: SAVE_WALLET_INSTANCE,
-      instWallet: instWallet,
+      iWallet: iWallet,
     })
-    call(getWalletFromNetwork, {db: db, instWallet: instWallet})
-
-    // instWallet.getFromNetwork().then({
-    //   put({
-    //     type: SAVE_WALLET_INSTANCE,
-    //     instWallet: instWallet,
-    //   }).then({
-    //     const newWallet = instWallet.getJson()
-    //     call(saveWalletToDB, {db: db, wallet: newWallet})
-    //   })
-    //
-
-
-    // yield instWallet.getFromNetwork()
-    // yield put({
-    //   type: SAVE_WALLET_INSTANCE,
-    //   instWallet: instWallet,
-    // })
-    // const newWallet = instWallet.getJson()
-    // yield call(saveWalletToDB, {db: db, wallet: newWallet})
-    return instWallet
+    call(getWalletFromNetwork, {db: db, iWallet: iWallet})
+    return iWallet
   } catch (error) {
     console.log('error in startWalletInstance', error)
     return null
   }
 }
 
+export function* saveWalletInstanceToDB(action) {
+  let { db, iWallet } = action
+  // console.log('in saveWalletInstanceToDB', iWallet)
+  try {
+
+    const wallet = iWallet.getJson()
+    yield put({
+      type: SAVE_WALLET_TO_DB,
+      db: db,
+      wallet: wallet,
+    })
+    yield put({
+      type: SAVE_WALLET_INSTANCE,
+      iWallet: iWallet,
+    })
+  } catch(e) {
+    console.log("error in saveWalletInstanceToDB", e)
+  }
+}
 
 const walletSaga = [
   takeEvery(CREATE_WALLET, createWallet),
   takeEvery(ADD_WALLET, addWallet),
   takeEvery(SET_DEFAULT_WALLET, setDefaultWallet),
+  takeEvery(START_WALLET_INSTANCE, startWalletInstance),
+  takeEvery(SAVE_WALLET_INSTANCE_TO_DB, saveWalletInstanceToDB),
   takeEvery(START_WALLET_INSTANCE, startWalletInstance),
   takeEvery(GET_WALLET_FROM_NETWORK, getWalletFromNetwork),
   takeEvery(GET_WALLETS_FROM_NETWORK, getWalletsFromNetwork),

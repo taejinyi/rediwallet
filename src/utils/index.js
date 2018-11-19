@@ -2,14 +2,13 @@ import {
   Currency,
   fromHexString,
   toHexString,
+  numberToString
 } from './crypto'
 import './format'
-import { convertToMoney } from './money'
 
 export {
   Currency,
   fromHexString,
   toHexString,
-  convertToMoney
-
+  numberToString
 }

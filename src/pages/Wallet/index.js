@@ -11,15 +11,15 @@ import { call, put, take, takeEvery } from 'redux-saga/effects'
 import connect from "react-redux/es/connect/connect";
 // import { NavigationActions } from 'react-navigation'
 import {SecureStore} from "expo";
-import {Currency} from '../../utils'
+import {Currency, numberToString} from '../../utils'
 
 import Wallet from "../../system/Wallet"
 import Color from "../../constants/Colors";
-import {convertToMoney} from '../../utils'
 import {saveWalletToDB} from "./sagas";
 import {SAVE_WALLET} from "./actions";
+import {translate} from "react-i18next";
 
-
+@translate(['wallet'], { wait: true, })
 class WalletPage extends React.Component {
   constructor(props) {
     super(props)
@@ -41,14 +41,14 @@ class WalletPage extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       wallet: nextProps.wallet,
-      instWallet: nextProps.instWallet,
+      iWallet: nextProps.iWallet,
       wallets: nextProps.wallets,
     })
   }
 
   async componentWillMount() {
-    const { db, wallet, instWallet } = this.props
-    this.props.getWalletFromNetwork(db, instWallet)
+    const { db, wallet, iWallet } = this.props
+    this.props.getWalletFromNetwork(db, iWallet)
     this.logo = require('../../assets/images/logo_428x222.png')
   }
 
@@ -65,9 +65,9 @@ class WalletPage extends React.Component {
 
   async refreshWallet() {
     try {
-      const { db, instWallet } = this.props
-      // console.log("instWallet.address in refreshWallet", instWallet.address)
-      await this.props.getWalletFromNetwork(db, instWallet)
+      const { db, iWallet } = this.props
+      // console.log("iWallet.address in refreshWallet", iWallet.address)
+      await this.props.getWalletFromNetwork(db, iWallet)
     } catch (e) {
       console.log(e)
     }
@@ -75,7 +75,7 @@ class WalletPage extends React.Component {
 
   render() {
     const { navigation } = this.props
-    const { wallet } = this.props
+    const { wallet, iWallet } = this.props
 
     let currencyIcon, currencyName, totalAssetAmount = 0
 
@@ -93,8 +93,9 @@ class WalletPage extends React.Component {
         currencyIcon = "?"
         currencyName = "Unknown"
       }
-      if (wallet.accounts) {
-        totalAssetAmount = wallet.accounts.ETH.balance * 230500 + wallet.accounts.IFUM.balance * 22 + wallet.accounts.KRWT.balance
+      if (iWallet !== undefined) {
+        totalAssetAmount = iWallet.getTotalAssetAmount()
+        console.log('totalAssetAmount', totalAssetAmount)
       }
     }
 
@@ -112,7 +113,7 @@ class WalletPage extends React.Component {
                     <Text style={styles.TotalAsset}>TOTAL ASSET</Text>
                   </View>
                   <View style={{ alignItems: 'flex-end' }}>
-                    <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ fontWeight: 'bold', color: 'white', marginBottom: 8,fontSize: 26 }}>{currencyIcon + " " + convertToMoney(Math.floor(totalAssetAmount))}</Text>
+                    <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ fontWeight: 'bold', color: 'white', marginBottom: 8,fontSize: 26 }}>{currencyIcon + " " + numberToString(totalAssetAmount)}</Text>
                   </View>
                 </View>
               </View>
@@ -125,7 +126,7 @@ class WalletPage extends React.Component {
               <View style={ styles.WalletAccountListContainer }>
                 <WalletAccountList
                   wallet={ wallet }
-                  instWallet={this.props.instWallet}
+                  iWallet={this.props.iWallet}
                   navigation={ navigation }
                 />
               </View>
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => ({
   // getWalletFromDB: (db) => dispatch(actions.getWalletFromDB(db)),
-  getWalletFromNetwork: (db, instWallet) => dispatch(actions.getWalletFromNetwork(db, instWallet)),
+  getWalletFromNetwork: (db, iWallet) => dispatch(actions.getWalletFromNetwork(db, iWallet)),
   showProcessingModal: (message) => dispatch(actions.showProcessingModal(message))
 })
 

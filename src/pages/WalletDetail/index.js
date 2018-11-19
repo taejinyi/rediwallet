@@ -11,7 +11,7 @@ import { QRCode } from 'react-native-custom-qr-codes'
 import {translate} from "react-i18next";
 import Color from '../../constants/Colors'
 import { TransactionList } from '../../components'
-import {convertToMoney} from "../../utils";
+import {numberToString} from "../../utils/crypto";
 
 @translate(['main'], { wait: true })
 class WalletDetailPage extends React.Component {
@@ -103,9 +103,25 @@ class WalletDetailPage extends React.Component {
 
 
   render() {
-    const { navigation, transactions, db, wallet, instWallet } = this.props
+    const { navigation, transactions, db, wallet, iWallet } = this.props
     const { account } = this.props.navigation.state.params
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
+
+    if (wallet){
+      if (wallet.currency === "ETH") {
+        currencyIcon = "ETH"
+        currencyName = "Ethereum"
+      } else if (wallet.currency === "IFUM") {
+        currencyIcon = "IFUM"
+        currencyName = "Infleum"
+      } else if (wallet.currency === "KRWT") {
+        currencyIcon = "￦"
+        currencyName = "KRW Tether"
+      } else {
+        currencyIcon = "?"
+        currencyName = "Unknown"
+      }
+    }
 
     if (account.currency === "ETH") {
       accountColor = Color.ethereumColor
@@ -133,14 +149,8 @@ class WalletDetailPage extends React.Component {
       fxRate = 1
     }
 
-    let moneyStr
-    const fraction = (account.balance - Math.floor(account.balance))
-    const strFraction = fraction.toFixed(8)
-    if (fraction > 0) {
-      moneyStr = convertToMoney(Math.floor(account.balance)) + strFraction.substr(1)
-    } else {
-      moneyStr = convertToMoney(account.balance)
-    }
+    let moneyStr = numberToString(account.balance)
+
     return (
       <View style={{ flex: 1, backgroundColor: '#303140', alignItems: 'center'}}>
         <View style={{ height: 140, width:'100%', backgroundColor: this.headerBackgroundColor, justifyContent: 'center', alignItems: 'center'}}>
@@ -152,9 +162,9 @@ class WalletDetailPage extends React.Component {
             >
               <Text style={{ textAlign: 'center', color: 'white', fontSize: 12 }}>{ wallet.address }</Text>
             </Button>
-            <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 14, marginTop: 0 }}>{ currencyIcon + convertToMoney(fxRate) + " per " + currencyTicker }</Text>
+            <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 14, marginTop: 0 }}>{ currencyIcon + numberToString(fxRate) + " per " + currencyTicker }</Text>
             <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 18, marginTop: 10 }}>{ currencyTicker + " " + moneyStr }</Text>
-            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 28 }}>{ " ~ " + currencyIcon + convertToMoney(Math.floor(account.balance * fxRate)) }</Text>
+            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 28 }}>{ " ~ " + currencyIcon + numberToString(account.balance / Math.pow(10, account.decimals) * fxRate) }</Text>
           </View>
         </View>
         <Modal
@@ -189,7 +199,7 @@ class WalletDetailPage extends React.Component {
                   wallet={ wallet }
                   account={ account }
                   transactions={ transactions }
-                  instWallet={ instWallet}
+                  iWallet={ iWallet}
                   navigation={ navigation }
                 />
               </View>

@@ -10,6 +10,7 @@ import WalletDetailPage from './WalletDetail'
 import SendPage from './Send'
 import QRCodeScan from './QRCodeScan'
 import SettingPage from './Setting'
+import WalletChangeCurrency from './WalletChangeCurrency'
 import appStateReducer from '../reducers'
 import splashStateReducer from './Splash/reducers'
 import walletReducer from './Wallet/reducers'
@@ -21,6 +22,8 @@ import {
   getWalletsFromNetwork,
   getWalletFromDB,
   getWalletsFromDB,
+  saveWalletInstance,
+  saveWalletInstanceToDB,
   saveWalletToDB,
   saveWalletsToDB,
   addWallet,
@@ -83,6 +86,8 @@ const actions = {
   saveOneTransaction,
   getNextTransactionsOnlyState,
   saveWalletToDB,
+  saveWalletInstance,
+  saveWalletInstanceToDB,
   saveWalletsToDB,
   showProcessingModal,
   hideProcessingModal,
@@ -120,7 +125,7 @@ export {
   SendPage,
   QRCodeScan,
   SettingPage,
-
+  WalletChangeCurrency,
   actions,
   sagas,
   reducers,

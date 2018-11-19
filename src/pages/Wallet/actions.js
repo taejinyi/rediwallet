@@ -7,6 +7,7 @@ export const ADD_WALLET = 'ADD_WALLET'
 export const SET_DEFAULT_WALLET = 'SET_DEFAULT_WALLET'
 export const START_WALLET_INSTANCE = 'START_WALLET_INSTANCE'
 export const SAVE_WALLET_INSTANCE = 'SAVE_WALLET_INSTANCE'
+export const SAVE_WALLET_INSTANCE_TO_DB = 'SAVE_WALLET_INSTANCE_TO_DB'
 export const GET_WALLET_FROM_NETWORK = 'GET_WALLET_FROM_NETWORK'
 export const GET_WALLETS_FROM_NETWORK = 'GET_WALLETS_FROM_NETWORK'
 export const GET_WALLET_FROM_DB = 'GET_WALLET_FROM_DB'
@@ -29,9 +30,15 @@ export const saveWallet = (wallet) => ({
   type: SAVE_WALLET,
 })
 
-export const saveInstWallet = (instWallet) => ({
-  instWallet: instWallet,
+export const saveWalletInstance = (iWallet) => ({
+  iWallet: iWallet,
   type: SAVE_WALLET_INSTANCE,
+})
+
+export const saveWalletInstanceToDB = (db, iWallet) => ({
+  db: db,
+  iWallet: iWallet,
+  type: SAVE_WALLET_INSTANCE_TO_DB,
 })
 
 export const saveWallets = (wallets) => ({
@@ -62,9 +69,9 @@ export const startWalletInstance = (db, wallet) => ({
   type: START_WALLET_INSTANCE,
 })
 
-export const getWalletFromNetwork = (db, instWallet) => ({
+export const getWalletFromNetwork = (db, iWallet) => ({
   db: db,
-  instWallet: instWallet,
+  iWallet: iWallet,
   type: GET_WALLET_FROM_NETWORK,
 })
 
