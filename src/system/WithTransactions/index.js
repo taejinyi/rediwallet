@@ -12,6 +12,7 @@ const withTransactions = (Component) => {
 
   const mapStateToProps = (state) => ({
     transactions: state.transactionsReducer.transactions,
+    pageState: state.transactionsReducer.pageState,
   })
 
   return connect(mapStateToProps)(WrapperComponent)

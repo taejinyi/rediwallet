@@ -12,6 +12,7 @@ import {translate} from "react-i18next";
 import Color from '../../constants/Colors'
 import { TransactionList } from '../../components'
 import {numberToString} from "../../utils/crypto";
+import {PAGE_STATE} from "./actions";
 
 @translate(['main'], { wait: true })
 class WalletDetailPage extends React.Component {
@@ -25,8 +26,30 @@ class WalletDetailPage extends React.Component {
       isSendModalVisible: false,
       isReceiveModalVisible: false,
       targetAddress: undefined,
+      currentPage: 1,
       amount: 0,
+      transactions: _.values(props.transactions).sort(this._compare),
       currency: this.props.navigation.state.params.account.currency
+    }
+    this.offset = 10
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { pageState, transactions } = nextProps
+    console.log('componentWillReceiveProps', pageState, transactions)
+
+    switch(pageState) {
+      case PAGE_STATE.STATE_LOADING_FINISH:
+        this.setState({
+          isLoading: false,
+          currentPage: this.state.currentPage + 1
+        })
+        break
+    }
+    if(transactions) {
+      this.setState({
+        transactions: _.values(transactions).sort(this._compare),
+      })
     }
   }
 
@@ -82,9 +105,7 @@ class WalletDetailPage extends React.Component {
     await this.props.getTransactionsFromDB(db, wallet, account)
   }
   async componentDidMount() {
-    const { db, transactions, wallet } = this.props
-    const { account } = this.props.navigation.state.params
-    await this.props.getTransactionsFromServer(db, wallet, account)
+    this.refreshAccount()
     this._interval = setInterval( () => {
       this.refreshAccount()
     }, 30000);
@@ -98,12 +119,19 @@ class WalletDetailPage extends React.Component {
   refreshAccount = () => {
     const { account } = this.props.navigation.state.params
     const { db, wallet } = this.props
-    this.props.getTransactionsFromServer(db, wallet, account)
+    this.props.getTransactionsFromServer(db, wallet, account, 1, this.offset)
   }
 
+  _onEndReached = () => {
+    console.log("_inEndReached")
+    const { db, wallet } = this.props
+    const { account } = this.props.navigation.state.params
+    this.props.getTransactionsFromServer(db, wallet, account, this.state.currentPage, this.offset)
+  }
 
   render() {
-    const { navigation, transactions, db, wallet, iWallet } = this.props
+    const { navigation, db, wallet, iWallet } = this.props
+    const { transactions } = this.state
     const { account } = this.props.navigation.state.params
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
 
@@ -198,6 +226,7 @@ class WalletDetailPage extends React.Component {
                   transactions={ transactions }
                   iWallet={ iWallet}
                   navigation={ navigation }
+                  onEndReached={ this._onEndReached }
                 />
               </View>
             ) : (
@@ -233,8 +262,7 @@ class WalletDetailPage extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   getTransactionsFromDB: (db, wallet, account) => dispatch(actions.getTransactionsFromDB(db, wallet, account)),
-  getTransactionsFromServer: (db, wallet, account) => dispatch(actions.getTransactionsFromServer(db, wallet, account)),
-  getNextTransactionsFromServer: (db, wallet, account, offset, count) => dispatch(actions.getNextTransactionsOnlyState(db, wallet, account, offset, count)),
+  getTransactionsFromServer: (db, wallet, account, page, offset) => dispatch(actions.getTransactionsFromServer(db, wallet, account, page, offset)),
 })
 
 export default connect(null, mapDispatchToProps)(WalletDetailPage)

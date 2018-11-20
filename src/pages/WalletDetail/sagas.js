@@ -68,10 +68,15 @@ export function* getTransactionsFromDB(action) {
 }
 
 export function* getTransactionsFromServer(action) {
-  const { db, wallet, account, } = action
+  yield put({
+    type: SAVE_PAGE_STATE,
+    pageState: PAGE_STATE.STATE_LOADING,
+  })
+
+  const { db, wallet, account, page, offset} = action
   const dbIndex = "tx" + account.currency
 
-  const response = yield call(() => server.getTransactions(wallet, account))
+  const response = yield call(() => server.getTransactions(wallet, account, page, offset))
 
   try {
     if(response && response.status === 200) {
@@ -91,9 +96,26 @@ export function* getTransactionsFromServer(action) {
       for(i=0; i < data.length; i++) {
         const newTransaction = {
           [data[i].hash]: {
-            ... data[i]
+            blockHash: data[i].blockHash,
+            blockNumber: data[i].blockNumber,
+            confirmations: data[i].confirmations,
+            contractAddress: data[i].contractAddress,
+            cumulativeGasUsed: data[i].cumulativeGasUsed,
+            from: data[i].from,
+            gas: data[i].gas,
+            gasPrice: data[i].gasPrice,
+            gasUsed: data[i].gasUsed,
+            hash: data[i].hash,
+            nonce: data[i].nonce,
+            timeStamp: data[i].timeStamp,
+            to: data[i].to,
+            transactionIndex: data[i].transactionIndex,
+            txreceipt_status: data[i].txreceipt_status,
+            value: data[i].value,
+            // input: data[i].input,
           }
         }
+
         transactions = Object.assign({}, transactions, newTransaction)
         // if(transactions.hasOwnProperty(newTransaction.hash)) {
         //   transactions = Object.assign({}, newTransaction, transactions)
@@ -129,9 +151,26 @@ export function* saveOneTransaction(action) {
   const dbIndex = "tx" + account.currency
   const transactionData = {
     [ transaction.hash ]: {
-      ... transaction,
+      blockHash: transaction.blockHash,
+      blockNumber: transaction.blockNumber,
+      confirmations: transaction.confirmations,
+      contractAddress: transaction.contractAddress,
+      cumulativeGasUsed: transaction.cumulativeGasUsed,
+      from: transaction.from,
+      gas: transaction.gas,
+      gasPrice: transaction.gasPrice,
+      gasUsed: transaction.gasUsed,
+      hash: transaction.hash,
+      nonce: transaction.nonce,
+      timeStamp: transaction.timeStamp,
+      to: transaction.to,
+      transactionIndex: transaction.transactionIndex,
+      txreceipt_status: transaction.txreceipt_status,
+      value: transaction.value,
+      // input: transaction.input,
     }
   }
+
   try {
     let newTransactions
 

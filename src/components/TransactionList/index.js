@@ -182,6 +182,9 @@ class TransactionList extends React.Component {
           renderItem={ this.renderTransactionItem }
           contentContainerStyle={{ padding: 15 }}
           keyExtractor={( item, index ) => index.toString() }
+          onEndReachedThreshold={ 0 }
+          onEndReached={this.props.onEndReached}
+//        ref={ el => this.listElement = el }
         />
       </View>
     )

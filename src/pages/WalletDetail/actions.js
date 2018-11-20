@@ -33,10 +33,12 @@ export const getTransactionsFromDB = (db, wallet, account) => ({
   type: GET_TRANSACTIONS_FROM_DB,
 })
 
-export const getTransactionsFromServer = (db, wallet, account) => ({
+export const getTransactionsFromServer = (db, wallet, account, page, offset) => ({
   db: db,
   wallet: wallet,
   account: account,
+  page: page,
+  offset: offset,
   type: GET_TRANSACTIONS_FROM_SERVER,
 })
 
