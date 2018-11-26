@@ -121,7 +121,8 @@ export default class Wallet {
       nonce: this.nonce,
       currency: this.currency,
       currencyAddress: this.currencyAddress,
-      accounts: this.accounts
+      accounts: this.accounts,
+      fx: this.fx
     }
   }
   static async generateWallet(currency="ETH") {
@@ -160,6 +161,9 @@ export default class Wallet {
     this.currency = wallet.currency
     this.currencyAddress = wallet.currencyAddress
     this.accounts = wallet.accounts
+    if (wallet.fx) {
+      this.fx = wallet.fx
+    }
     this._web3 = await this.getWeb3(await getMnemonic())
     this.ready = true
   }
@@ -205,6 +209,28 @@ export default class Wallet {
   }
 
   fetchWalletFromNetwork = async () => {
+
+    const ethPriceUrl = "https://api.bithumb.com/public/ticker/ETH"
+    try {
+      const result = await axios({
+        method: "GET",
+        url: ethPriceUrl
+      })
+      if (result && result.status && result.status === 200) {
+        if (result.data && result.data.status && result.data.status === "0000") {
+          const midPrice = (parseInt(result.data.data.buy_price) + parseInt(result.data.data.sell_price)) / 2
+          this.fx[ethereumAddress][krwtAddress] = midPrice
+          this.fx[krwtAddress][ethereumAddress] = 1 / parseFloat(midPrice)
+          this.fx[ethereumAddress][infleumAddress] = midPrice / 20
+          this.fx[infleumAddress][ethereumAddress] = 20 / parseFloat(midPrice)
+        }
+      }
+    } catch (e) {
+      console.error("Error in getTransactions ", e);
+      console.log(e)
+      return e
+    }
+
     const tokens = _.keys(this.accounts)
     for(let i = 0; i < tokens.length; i++){
       const token = tokens[i]

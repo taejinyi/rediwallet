@@ -36,7 +36,7 @@ class WalletDetailPage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { pageState, transactions } = nextProps
-    console.log('componentWillReceiveProps', pageState, transactions)
+    // console.log('componentWillReceiveProps', pageState, transactions)
 
     switch(pageState) {
       case PAGE_STATE.STATE_LOADING_FINISH:
@@ -123,7 +123,7 @@ class WalletDetailPage extends React.Component {
   }
 
   _onEndReached = () => {
-    console.log("_inEndReached")
+    // console.log("_inEndReached")
     const { db, wallet } = this.props
     const { account } = this.props.navigation.state.params
     this.props.getTransactionsFromServer(db, wallet, account, this.state.currentPage, this.offset)
