@@ -51,7 +51,7 @@ const initialAccounts = {
   },
 }
 
-const initialFx = {
+export const initialFx = {
   [ ethereumAddress ]: {
     [ ethereumAddress ] : 1,
     [ krwtAddress ] : 186700,
@@ -334,12 +334,26 @@ export default class Wallet {
   getTransaction = async (hash) => {
     return await this._web3.eth.getTransaction(hash)
   }
+  getFX = () => {
+    if (this.fx === undefined) {
+      return initialFx
+    }
+    return this.fx
+  }
   getTotalAssetAmount = () => {
+    if (this.fx === undefined) {
+      this.fx = initialFx
+    }
+
     let totalAssetAmount = 0
     const tokens = _.keys(this.accounts)
     for(let i = 0; i < tokens.length; i++){
       const token = tokens[i]
-      totalAssetAmount = totalAssetAmount + this.accounts[token].balance / Math.pow(10, this.accounts[token].decimals) * this.fx[token][this.currencyAddress]
+      try {
+        totalAssetAmount = totalAssetAmount + parseFloat(this.accounts[token].balance) / Math.pow(10, this.accounts[token].decimals) * this.fx[token][this.currencyAddress]
+      } catch(e) {
+        totalAssetAmount = totalAssetAmount + parseFloat(this.accounts[token].balance) / Math.pow(10, this.accounts[token].decimals) * initialFx[token][this.currencyAddress]
+      }
     }
     return totalAssetAmount
   }

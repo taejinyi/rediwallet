@@ -12,7 +12,7 @@ import {
   ADD_WALLET,
   SET_DEFAULT_WALLET, START_WALLET_INSTANCE, CREATE_WALLET, SAVE_WALLET_INSTANCE_TO_DB,
 } from './actions'
-import Wallet from "../../system/Wallet"
+import Wallet, {initialFx} from "../../system/Wallet"
 import {UNSET_LOADING} from "../../actions";
 
 export function* createWallet(action) {
@@ -181,9 +181,14 @@ export function* getWalletFromDB(action) {
   try {
     const fetchResult = yield call(() => db.get('wallet'))
     if (fetchResult.data) {
+      let wallet = fetchResult.data
+      if (wallet.fx !== undefined) {
+        wallet = Object.assign({}, {fx: initialFx}, wallet)
+      }
+      // console.log("wallet in getWalletFromDB", wallet)
       yield put({
         type: SAVE_WALLET,
-        wallet: fetchResult.data,
+        wallet: wallet,
       })
     }
     return fetchResult.data
