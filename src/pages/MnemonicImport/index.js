@@ -25,13 +25,11 @@ import {translate} from "react-i18next";
 
 const Form = t.form.Form
 const DismissKeyboardAvoidingView = DismissKeyboardViewHOC(KeyboardAvoidingView)
-import {Currency, generateWallet, toHexString} from "../../utils";
 import ethers from "ethers";
 import {SecureStore} from "expo";
 import {NavigationActions} from "react-navigation";
 import {actions} from "../index";
 import {connect} from "react-redux";
-import Wallet from "../../system/Wallet";
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 import {SPLASH_STATE} from "../Splash/actions";
 

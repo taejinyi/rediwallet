@@ -15,6 +15,7 @@ import i18n from './utils/i18n'
 
 import connect from "react-redux/es/connect/connect";
 import Expo from "expo";
+import PinView from 'react-native-pin-view'
 
 class Main extends React.Component {
   constructor(props) {
@@ -40,7 +41,7 @@ class Main extends React.Component {
     // web3.eth.getBlock('latest').then(console.log);
 		const { isProcessingModalShow, processingModalMessage, unlocked } = this.props
     // TODO Comment
-    this.props.saveUnlocked(true)
+    // this.props.saveUnlocked(true)
     return (
       <Root>
         <Modal
@@ -55,10 +56,15 @@ class Main extends React.Component {
             <TextLoader text={ processingModalMessage } textStyle={{ marginTop: 15, fontSize: 17, color: 'white', }} />
           </View>
         </Modal>
-        <LockPage isVisible={ this.props.unlocked !== true }/>
         <StatusBar barStyle='light-content' />
         {/*<NotificationSystem ref={ el => this.notificationSystem = el } />*/}
-        <AppNavigator language="ko" screenProps={{ t: i18n.getFixedT() }} />
+        {
+          (this.props.unlocked) ? (
+            <AppNavigator language="ko" screenProps={{ t: i18n.getFixedT() }} />
+          ) : (
+            <LockPage />
+          )
+        }
         {/*<WatcherManager*/}
           {/*onTokenInvalid={ this._onTokenInvalid }*/}
           {/*notificationSystem={ this.notificationSystem }*/}

@@ -185,7 +185,7 @@ class WalletDetailPage extends React.Component {
               transparent
               style={{ width:'100%', justifyContent: 'center', alignItems: 'center', marginTop:0, marginBottom: 0}}
             >
-              <Text style={{ textAlign: 'center', color: 'white', fontSize: 12 }}>{ wallet.address }</Text>
+              <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ textAlign: 'center', color: 'white', fontSize: 12 }}>{ wallet.address }</Text>
             </Button>
             <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 14, marginTop: 0 }}>{ currencyIcon + " " + numberToString(fxRate) + " per " + currencyTicker }</Text>
             <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 18, marginTop: 10 }}>{ currencyTicker + " " + moneyStr }</Text>
@@ -198,8 +198,8 @@ class WalletDetailPage extends React.Component {
           isVisible={ this.state.isReceiveModalVisible }>
           <View style={{ borderRadius: 8, flex: 0.5, backgroundColor: 'white', }}>
             <TouchableWithoutFeedback onPress={() => this.setState({ isReceiveModalVisible: false, })}>
-              <View>
-                <Text style={{ color: '#555555', fontSize: 20, fontWeight: 'bold', }}>X</Text>
+              <View style={{ padding:20 }}>
+                <Text style={{ color: '#303140', fontSize: 20, fontWeight: 'bold', }}>X</Text>
               </View>
             </TouchableWithoutFeedback>
             <View style={{ marginTop: 35, justifyContent: 'center', alignItems: 'center', }}>
@@ -210,9 +210,16 @@ class WalletDetailPage extends React.Component {
                 color='black'
                 logo={ require('rediwallet/src/assets/images/logo_400x400.png') }
               />
-              <Text style={{ color: '#555555', fontSize: 20, fontWeight: 'bold', }}>
+              <Text style={{ color: '#303140', fontSize: 20, fontWeight: 'bold', }}>
                 Show to receive
               </Text>
+              <Button
+                onPress={this.copyAddressToClipboard}
+                transparent
+                style={{ width:'100%', justifyContent: 'center', alignItems: 'center', marginTop:0, marginBottom: 0}}
+              >
+                <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ textAlign: 'center', color: '#303140', fontSize: 12 }}>{ wallet.address }</Text>
+              </Button>
             </View>
           </View>
         </Modal>

@@ -11,6 +11,7 @@ import { NavigationActions } from 'react-navigation'
 import {translate} from "react-i18next";
 import ethers from "ethers";
 import {fromHexString, toHexString} from "../../utils";
+import {getMnemonic} from "../../system/Wallet";
 
 @translate(['main'], { wait: true })
 class SettingPage extends React.Component {
@@ -39,6 +40,15 @@ class SettingPage extends React.Component {
     const seed = fromHexString(hex)
     const mnemonic = await ethers.HDNode.entropyToMnemonic(seed)
     this.debounceNavigate('MnemonicBackup', {mnemonic: mnemonic})
+  }
+
+  backupPrivateKey = async () => {
+    const { iWallet } = this.props
+    const nonce = iWallet.nonce !== undefined ? iWallet.nonce : 0
+    const mnemonic = await getMnemonic()
+    const path = "m/44'/60'/0'/0/" + nonce
+    const _newAccount = await ethers.Wallet.fromMnemonic(mnemonic, path);
+    this.debounceNavigate('PrivateKeyBackup', {privateKey: _newAccount.privateKey})
   }
 
   changeCurrency = async () => {
@@ -78,6 +88,20 @@ class SettingPage extends React.Component {
             </Left>
             <Body>
               <Text>{t('change_currency', { locale: i18n.language })}</Text>
+            </Body>
+            <Right>
+              <Icon name='arrow-forward' />
+            </Right>
+          </ListItem>
+          <ListItem
+            onPress={ this.backupPrivateKey }
+            button
+            icon>
+            <Left>
+              <Icon name='ios-contact' style={{ color: '#666666', }} />
+            </Left>
+            <Body>
+              <Text>{t('backup_private_key', { locale: i18n.language })}</Text>
             </Body>
             <Right>
               <Icon name='arrow-forward' />

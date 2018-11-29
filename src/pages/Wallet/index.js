@@ -1,23 +1,17 @@
 import _ from 'lodash'
 import React from 'react'
-import {StyleSheet, View, Text, Image, Alert} from 'react-native'
-import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
+import {StyleSheet, View, Text, Image, Alert, TouchableWithoutFeedback, TouchableOpacity} from 'react-native'
+import { MaterialCommunityIcons, FontAwesome, Feather } from '@expo/vector-icons'
 import { Container, Content, Body, Left, List, ListItem, Icon, Separator, Right } from 'native-base'
-// import { Util, SecureStore } from 'expo'
 import { Header, WalletAccountList } from '../../components'
 import {actions, sagas} from "../index";
-import { call, put, take, takeEvery } from 'redux-saga/effects'
 
 import connect from "react-redux/es/connect/connect";
-// import { NavigationActions } from 'react-navigation'
-import {SecureStore} from "expo";
 import {Currency, numberToString} from '../../utils'
 
-import Wallet from "../../system/Wallet"
-import Color from "../../constants/Colors";
-import {saveWalletToDB} from "./sagas";
-import {SAVE_WALLET} from "./actions";
+import Wallet, {TRAFFIC_STATUS} from "../../system/Wallet"
 import {translate} from "react-i18next";
+import Modal from "react-native-modal";
 
 @translate(['wallet'], { wait: true, })
 class WalletPage extends React.Component {
@@ -27,15 +21,65 @@ class WalletPage extends React.Component {
     this.state = {
       wallet: props.wallet,
       wallets: props.wallets,
+      isTrafficModalShow: false
     }
 
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
   }
+  renderStatusIcon = () => {
+    const { iWallet } = this.props
+    switch(iWallet.traffic) {
+      case TRAFFIC_STATUS.PASSING:
+        return (<FontAwesome name='check-circle' style={{ fontSize: 24, color: 'green', }} />)
+      case TRAFFIC_STATUS.PAUSED:
+        return (<MaterialCommunityIcons size={ 24 } color='yellow' name='pause-octagon' />)
+      case TRAFFIC_STATUS.PENDING:
+        return (<MaterialCommunityIcons size={ 24 } color='grey' name='dots-horizontal-circle' />)
+      default:
+        return (<MaterialCommunityIcons size={ 24 } color='red' name='close-octagon' />)
+    }
+  }
 
-  addWallet = async (currency) => {
-    const wallet = await Wallet.generateWallet(currency)
-    const { db } = this.props
-    this.props.addWallet(db, wallet)
+  renderTrafficModalContent = () => {
+    const {db, t, i18n, iWallet} = this.props
+    const ethDecimals = Math.pow(10, iWallet.getEthDecimals())
+    const ethBalance = iWallet.getEthBalance() / ethDecimals
+    const gasPrice = Math.floor(iWallet.gasPrice / Math.pow(10, 9))
+    // const ethPrice = gasPrice * iWallet.get / Math.pow(10, 9)
+    return (
+      <View style={{ flex: 1, padding: 20, }}>
+        <View style={{ marginTop: 5, flex: 0.1, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', }}>
+          <TouchableWithoutFeedback onPress={() => this.setState({ isTrafficModalShow: false, })}>
+            <Feather name='x' style={{ fontSize: 32, color: '#303140', }} />
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => {
+            this.setState({
+              isTrafficModalShow: false,
+            }, () => {
+              this.refreshWallet().then()
+            })
+          }}>
+            <MaterialCommunityIcons size={ 24 } color='#303140' name='refresh' />
+          </TouchableWithoutFeedback>
+        </View>
+        <View style={{ flex: 0.9, alignItems: 'center', justifyContent: 'center', }}>
+          <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ fontSize: 16, color: '#666666' }}>
+            { "ETH " + `${ numberToString(ethBalance) }`}
+          </Text>
+          {
+            gasPrice ?
+
+            (<Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ fontSize: 16, color: '#666666' }}>
+              { `Gas Price = ${ numberToString(gasPrice) } gwei ` }
+            </Text>) :
+            (null)
+
+          }
+        </View>
+      </View>
+
+
+    )
   }
 
   componentWillReceiveProps(nextProps) {
@@ -53,8 +97,8 @@ class WalletPage extends React.Component {
   }
 
   async componentDidMount() {
-    this._internal = setInterval( () => {
-      this.refreshWallet()
+    this._interval = setInterval( () => {
+      this.refreshWallet().then()
     }, 15000);
   }
 
@@ -76,6 +120,7 @@ class WalletPage extends React.Component {
   render() {
     const { navigation } = this.props
     const { wallet, iWallet } = this.props
+    const { isTrafficModalShow } = this.state
 
     let currencyIcon, currencyName, totalAssetAmount = 0
 
@@ -100,11 +145,38 @@ class WalletPage extends React.Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: '#303140', alignItems: 'center'}}>
+        <Modal
+          isVisible={ isTrafficModalShow }
+          useNativeDriver={ true }
+          hideModalContentWhileAnimating={ true }
+          onBackdropPress={() => this.setState({ isTrafficModalShow: false, })}>
+          <View style={{ flex: 0.69, borderRadius: 15, backgroundColor: 'white', }}>
+            { this.renderTrafficModalContent() }
+          </View>
+        </Modal>
         <View style={{ flex: 0.3, width:'92%'}}>
           <View style={{ flex: 1, alignItems: 'flex-end', }}>
             <View style={{flexDirection: 'row', height: '100%', justifyContent: 'space-between', alignItems: 'flex-end', }}>
               <View style={{flex: 0.5, flexDirection: 'column'}} >
-                <Image style={{ height: 78, width: 150, alignItems: 'flex-end',  }} source={ this.logo } />
+                <View style={{ flex: 0.3,
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-start',
+                  flexDirection: 'row',
+                  paddingTop: 40
+                }}>
+                  <TouchableOpacity
+                    onPress={ () => this.setState({ isTrafficModalShow: true}) }
+                    style={{ paddingLeft: 10, paddingRight:10, paddingBottom: 7, paddingTop: 13}}>
+                    { this.renderStatusIcon() }
+                  </TouchableOpacity>
+
+                </View>
+                <View style={{ flex: 0.7,
+                             justifyContent: 'flex-start',
+                             alignItems: 'flex-end',
+                             flexDirection: 'row'}}>
+                  <Image style={{ height: 78, width: 150, alignItems: 'flex-end',  }} source={ this.logo } />
+                </View>
               </View>
               <View style={{flex: 0.5, flexDirection: 'column'}} >
                 <View style={{alignItems: 'flex-end', width: '100%' }}>

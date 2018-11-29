@@ -1,19 +1,4 @@
 import Color from "../constants/Colors";
-
-const Currency = {
-  IFUM: {
-    ticker: "IFUM",
-    address: "0xf337f6821b18b2eb24c44d74f3fa91128ead23f4",
-  },
-  KRWT: {
-    ticker: "KRWT",
-    address: "0xd5a23575d32849b7430dcd44d28c9fef3954068a"
-  },
-  ETH: {
-    ticker: "ETH",
-    address: "0x"
-  },
-}
 import numeral from 'numeral'
 
 const numberToString = (number) => {
@@ -93,7 +78,6 @@ const getHeaderBackgroundColor = (account) => {
 }
 export {
   numberToString,
-  Currency,
   fromHexString,
   toHexString,
   getHeaderTitle,

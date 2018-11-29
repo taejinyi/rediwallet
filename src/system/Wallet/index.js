@@ -18,19 +18,7 @@ const ethereumAddress = "0x0000000000000000000000000000000000000000"
 const krwtAddress = "0xd5a23575d32849b7430dcd44d28c9fef3954068a"
 const infleumAddress = "0xf337f6821b18b2eb24c44d74f3fa91128ead23f4"
 
-async function getMnemonic() {
-  const hex = await SecureStore.getItemAsync('seed')
-  let seed
-  if (hex === null) {
-    console.log("TODO: Error! seed is empty!")
-    return null
-  } else {
-    seed = fromHexString(hex)
-  }
-  return await ethers.HDNode.entropyToMnemonic(seed)
-}
-
-const initialAccounts = {
+export const initialAccounts = {
   [ ethereumAddress ]: {
     balance: 0,
     currency: "ETH",
@@ -51,10 +39,29 @@ const initialAccounts = {
   },
 }
 
+export async function getMnemonic() {
+  const hex = await SecureStore.getItemAsync('seed')
+  let seed
+  if (hex === null) {
+    console.log("TODO: Error! seed is empty!")
+    return null
+  } else {
+    seed = fromHexString(hex)
+  }
+  return await ethers.HDNode.entropyToMnemonic(seed)
+}
+
+export const TRAFFIC_STATUS = {
+  FAILING: 'FAILING',
+  PASSING: 'PASSING',
+  PAUSED: 'PAUSED',
+  PENDING: 'PENDING',
+}
+
 export const initialFx = {
   [ ethereumAddress ]: {
     [ ethereumAddress ] : 1,
-    [ krwtAddress ] : 186700,
+    [ krwtAddress ] : 135000,
     [ infleumAddress ] : 9335,
   },
   [ krwtAddress ]: {
@@ -81,6 +88,7 @@ export default class Wallet {
     this._web3 = undefined
     this._contracts = {}
     this.fx = initialFx
+    this.traffic = TRAFFIC_STATUS.PAUSED
   }
 
   getWeb3 = async (mnemonic, nonce=0) => {
@@ -125,7 +133,7 @@ export default class Wallet {
       fx: this.fx
     }
   }
-  static async generateWallet(currency="ETH") {
+  static async generateWallet() {
     try {
       const nonce = 0
       // let nonce = await SecureStore.getItemAsync('nonce')
@@ -142,7 +150,8 @@ export default class Wallet {
       const wallet = {
         address: _newAccount.address,
         nonce: nonce,
-        currency: currency,
+        currency: "ETH",
+        currencyAddress: ethereumAddress,
         accounts: initialAccounts
       }
       return wallet
@@ -207,9 +216,30 @@ export default class Wallet {
       return 0
     }
   }
+  getGasPrice = async () => {
+    try {
+      const ret = await this._web3.eth.getGasPrice()
+      return parseInt(ret)
+    } catch (e) {
+      return null
+    }
+  }
+  getEthBalance = () => {
+    try {
+      return this.accounts[ethereumAddress].balance
+    } catch(e) {
+      return 0
+    }
+  }
+  getEthDecimals = () => {
+    try {
+      return this.accounts[ethereumAddress].decimals
+    } catch(e) {
+      return 0
+    }
+  }
 
-  fetchWalletFromNetwork = async () => {
-
+  getEthPriceInKRW = async () => {
     const ethPriceUrl = "https://api.bithumb.com/public/ticker/ETH"
     try {
       const result = await axios({
@@ -219,17 +249,55 @@ export default class Wallet {
       if (result && result.status && result.status === 200) {
         if (result.data && result.data.status && result.data.status === "0000") {
           const midPrice = (parseInt(result.data.data.buy_price) + parseInt(result.data.data.sell_price)) / 2
-          this.fx[ethereumAddress][krwtAddress] = midPrice
-          this.fx[krwtAddress][ethereumAddress] = 1 / parseFloat(midPrice)
-          this.fx[ethereumAddress][infleumAddress] = midPrice / 20
-          this.fx[infleumAddress][ethereumAddress] = 20 / parseFloat(midPrice)
+          return midPrice
         }
+      }
+      return null
+    } catch (e) {
+      console.error("Error in getTransactions ", e);
+      console.log(e)
+      return null
+    }
+  }
+  getEthPriceInUSD = async () => {
+    const ethPriceUrl = "https://api-kovan.etherscan.io/api?module=stats&action=ethprice&apiKey=" + etherscanAPIKey;
+
+    try {
+      const result = await axios({
+        method: "GET",
+        url: ethPriceUrl
+      })
+      if (result && result.status && result.status === "1" && result.message && result.message === "OK") {
+        const midPrice = parseFloat(result.result.ethusd)
+        return midPrice
       }
     } catch (e) {
       console.error("Error in getTransactions ", e);
       console.log(e)
-      return e
+      return null
     }
+
+  }
+  fetchWalletFromNetwork = async () => {
+    const ethMidPrice = await this.getEthPriceInKRW()
+    if (ethMidPrice) {
+      this.fx[ethereumAddress][krwtAddress] = ethMidPrice
+      this.fx[krwtAddress][ethereumAddress] = 1 / parseFloat(ethMidPrice)
+      this.fx[ethereumAddress][infleumAddress] = ethMidPrice / 20
+      this.fx[infleumAddress][ethereumAddress] = 20 / parseFloat(ethMidPrice)
+    }
+    this.gasPrice = await this.getGasPrice()
+    const gwei = Math.pow(10, 9)
+    if (this.gasPrice === null) {
+      this.traffic = TRAFFIC_STATUS.FAILING
+    } else if (this.gasPrice > 20 * gwei) {
+      this.traffic = TRAFFIC_STATUS.PAUSED
+    } else if (this.gasPrice > 10 * gwei) {
+      this.traffic = TRAFFIC_STATUS.PENDING
+    } else {
+      this.traffic = TRAFFIC_STATUS.PASSING
+    }
+
 
     const tokens = _.keys(this.accounts)
     for(let i = 0; i < tokens.length; i++){
@@ -344,7 +412,6 @@ export default class Wallet {
     if (this.fx === undefined) {
       this.fx = initialFx
     }
-
     let totalAssetAmount = 0
     const tokens = _.keys(this.accounts)
     for(let i = 0; i < tokens.length; i++){
@@ -352,7 +419,11 @@ export default class Wallet {
       try {
         totalAssetAmount = totalAssetAmount + parseFloat(this.accounts[token].balance) / Math.pow(10, this.accounts[token].decimals) * this.fx[token][this.currencyAddress]
       } catch(e) {
-        totalAssetAmount = totalAssetAmount + parseFloat(this.accounts[token].balance) / Math.pow(10, this.accounts[token].decimals) * initialFx[token][this.currencyAddress]
+        try {
+          totalAssetAmount = totalAssetAmount + parseFloat(this.accounts[token].balance) / Math.pow(10, this.accounts[token].decimals) * initialFx[token][this.currencyAddress]
+        } catch(e){
+          console.log(e)
+        }
       }
     }
     return totalAssetAmount

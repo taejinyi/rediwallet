@@ -3,6 +3,7 @@
 import SplashPage from './Splash'
 import LandingPage from './Landing'
 import LockPage from './Lock'
+import PrivateKeyBackupPage from './PrivateKeyBackup'
 import MnemonicBackupPage from './MnemonicBackup'
 import MnemonicImportPage from './MnemonicImport'
 import WalletPage from './Wallet'
@@ -118,6 +119,7 @@ export {
 	SplashPage,
 	LandingPage,
 	LockPage,
+  PrivateKeyBackupPage,
   MnemonicBackupPage,
   MnemonicImportPage,
   WalletPage,

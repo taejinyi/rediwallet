@@ -1,5 +1,5 @@
 import React from 'react'
-import {Alert, KeyboardAvoidingView, Text, View} from 'react-native'
+import {Alert, Image, KeyboardAvoidingView, StatusBar, Text, View} from 'react-native'
 import {TextLoader} from 'react-native-indicator'
 import Modal from 'react-native-modal'
 import DialogInput from "react-native-dialog-input";
@@ -10,6 +10,7 @@ import {Container} from "native-base";
 import { PinNumberInputs } from "../../components";
 import {translate} from "react-i18next";
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
+import PinView from "react-native-pin-view";
 
 @translate(['main'], { wait: true })
 class LockPage extends React.Component {
@@ -23,10 +24,10 @@ class LockPage extends React.Component {
     }
   }
 
-  _onTextFilled = async (code) => {
+  _onInputFinished = async (code, clear) => {
     if (this.state.pinNumber === undefined) {
       await SecureStore.setItemAsync('pinNumber', code)
-      this.pinNumberElements.clearAllInputs()
+      clear()
       this.setState({
         justSet: true,
         pinNumberInvalid: false,
@@ -35,12 +36,11 @@ class LockPage extends React.Component {
     } else if (this.state.pinNumber === code) {
       this.props.saveUnlocked(true)
     } else {
-      this.pinNumberElements.clearAllInputs()
+      clear()
       this.setState({
         justSet: false,
         pinNumberInvalid: true
       })
-
     }
   }
 
@@ -59,20 +59,8 @@ class LockPage extends React.Component {
         const result = await Expo.Fingerprint.authenticateAsync()
         if (result.success) {
           this.props.saveUnlocked(true)
-        } else {
-
         }
-
-      } else {
-        // this.setState({
-        //   showPinNumberDialog: true
-        // })
       }
-    }
-    else {
-      // this.setState({
-      //   showPinNumberDialog: true
-      // })
     }
   }
 
@@ -93,41 +81,49 @@ class LockPage extends React.Component {
       desc2 = t('input_pin_number_desc2', { locale: i18n.language })
     }
     return (
-      <Modal
-        useNativeDriver={ true }
-        animationInTiming={ 1 }
-        animationOutTiming={ 1 }
-        isVisible={ this.props.unlocked !== true }
-        hideModalContentWhileAnimating={ true }>
-
-        <KeyboardAvoidingView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }} behavior='padding'>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 0, backgroundColor: "#303140" }}>
-            <View style={{ marginBottom: 35, justifyContent: 'center', alignItems: 'center', }}>
-              <MaterialCommunityIcons name='lock' style={{ fontSize: 128, color: '#666666', }} />
-              <Text style={{ fontSize: 24, color: '#666666', }}>
-                {t('locked_desc', { locale: i18n.language })}
-              </Text>
-              <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-                <Text style={{ marginTop: 5, fontSize: 15, color: '#999999', }}>
-                  { desc1 }
-                </Text>
-                <Text style={{ fontSize: 15, color: '#999999', }}>
-                  { desc2 }
-                </Text>
-              </View>
-            </View>
-            <View style={{ height: 50, }}>
-              <PinNumberInputs
-                ref={ el => this.pinNumberElements = el }
-                numberOfInputs={ 6 }
-                focusTextBorderColor='#6e6e6e'
-                normalTextBorderColor='#9e9e9e'
-                onTextFilled={ this._onTextFilled }
-              />
-            </View>
+      <View style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#303140',
+      }}>
+        <StatusBar barStyle='light-content' />
+        <View style={{flex:0.3,
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+        }}>
+  				<Image style={{ width: 150, height: 150, }} source={ require('rediwallet/src/assets/images/logo_400x400.png') } />
+          <Text style={{ fontSize: 24, color: 'white', }}>
+            {t('locked_desc', { locale: i18n.language })}
+          </Text>
+        </View>
+        <View style={{flex:0.2,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <View style={{ justifyContent: 'center', alignItems: 'center', }}>
+            <Text style={{ marginTop: 25, fontSize: 15, color: '#999999', }}>
+              { desc1 }
+            </Text>
+            <Text style={{ marginTop: 15, fontSize: 15, color: '#999999', }}>
+              { desc2 }
+            </Text>
           </View>
-        </KeyboardAvoidingView>
-      </Modal>
+        </View>
+        <View style={{flex:0.5,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <PinView
+            onComplete={(val, clear)=>{this._onInputFinished(val, clear).then()}}
+            pinLength={6}
+            buttonTextColor={'#303140'}
+            inputBgColor={'white'}
+            inputActiveBgColor={'#555555'}
+          />
+        </View>
+
+			</View>
     )
   }
 }

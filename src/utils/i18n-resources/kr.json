@@ -56,6 +56,8 @@
 		"copy_to_clipboard": "클립보드로 복사하기",
 		"backup_mnemonic": "복원키 백업하기",
 		"wait_for_wallet_generation": "지갑 생성 중...",
-		"change_currency": "통화 변경"
+		"change_currency": "통화 변경",
+		"backup_private_key": "프라이빗 키 백업하기",
+		"private_key_backup": "키 백업"
 	}
 }

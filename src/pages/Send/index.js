@@ -255,6 +255,10 @@ class SendPage extends React.Component {
 	  const account = this.props.navigation.state.params.account
     this.headerBackgroundColor = getHeaderBackgroundColor(account)
   }
+  copyAddressToClipboard = () => {
+    Clipboard.setString(this.props.wallet.address)
+  }
+
 	render() {
     const {
       formValue,
@@ -316,7 +320,7 @@ class SendPage extends React.Component {
               transparent
               style={{ width:'100%', justifyContent: 'center', alignItems: 'center', marginTop:0, marginBottom: 0}}
             >
-              <Text style={{ textAlign: 'center', color: 'white', fontSize: 12 }}>{ wallet.address }</Text>
+              <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ textAlign: 'center', color: 'white', fontSize: 12 }}>{ wallet.address }</Text>
             </Button>
             <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 14, marginTop: 0 }}>{ currencyIcon + numberToString(fxRate) + " per " + currencyTicker }</Text>
             <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 18, marginTop: 10 }}>{ currencyTicker + " " + moneyStr }</Text>

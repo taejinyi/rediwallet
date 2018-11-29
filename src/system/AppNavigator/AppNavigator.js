@@ -7,6 +7,7 @@ import { getHeaderBackgroundColor, getHeaderTitle } from "../../utils/crypto";
 import {
   SplashPage,
   LandingPage,
+  PrivateKeyBackupPage,
   MnemonicBackupPage,
   MnemonicImportPage,
   LockPage,
@@ -39,7 +40,7 @@ const MainTabNavigator = TabNavigator({
     })
   },
   Settings: {
-    screen: withDB(withLock(SettingPage)),
+    screen: withDB(withLock(withWallet(SettingPage))),
     navigationOptions: () => ({
       tabBarLabel: i18n.t('main:setting', { locale: i18n.language }),
       tabBarIcon: () => (
@@ -143,21 +144,25 @@ const MainNavigator = StackNavigator({
   },
   WalletChangeCurrency: {
     screen: withDB(withWallet(WalletChangeCurrency)),
-    navigationOptions: ({ navigation }) => ({
-      headerTitle: i18n.t('main:transfer', { locale: i18n.language }),
-      headerTintColor: 'white',
-      headerStyle: {
-        backgroundColor: navigation.state.params ? getHeaderBackgroundColor(navigation.state.params.account) : "#303140",
-        borderBottomWidth: 0,
-      },
-      headerLeft: (
-        <HeaderBackButton
-          tintColor='white'
-          title={navigation.state.params ? getHeaderTitle(navigation.state.params.account) : i18n.t('main:account', { locale: i18n.language })}
-          onPress={() => navigation.goBack(null)} // TODO Alert
-        />
-      )
+    navigationOptions: () => ({
+      header: null,
     })
+
+    // navigationOptions: ({ navigation }) => ({
+    //   headerTitle: i18n.t('main:transfer', { locale: i18n.language }),
+    //   headerTintColor: 'white',
+    //   headerStyle: {
+    //     backgroundColor: navigation.state.params ? getHeaderBackgroundColor(navigation.state.params.account) : "#303140",
+    //     borderBottomWidth: 0,
+    //   },
+    //   headerLeft: (
+    //     <HeaderBackButton
+    //       tintColor='white'
+    //       title={navigation.state.params ? getHeaderTitle(navigation.state.params.account) : i18n.t('main:account', { locale: i18n.language })}
+    //       onPress={() => navigation.goBack(null)} // TODO Alert
+    //     />
+    //   )
+    // })
   }
 })
 
@@ -203,6 +208,13 @@ const AppNavigator = StackNavigator({
     navigationOptions: () => ({
       header: null,
       headerBackTitle: t('main:landing', { locale: i18n.language }),
+    })
+  },
+  PrivateKeyBackup: {
+    screen: withLoading(withDB(withLock(PrivateKeyBackupPage))),
+    navigationOptions: () => ({
+      header: null,
+      headerBackTitle: i18n.t('main:private_key_backup', { locale: i18n.language }),
     })
   },
   MnemonicBackup: {

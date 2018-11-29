@@ -13,7 +13,7 @@ import getTheme from '../../native-base-theme/components'
 import {translate} from "react-i18next";
 import {numberToString} from "../../utils/crypto";
 
-@translate(['wallet'], { wait: true, })
+@translate(['main'], { wait: true, })
 class WalletChangeCurrency extends React.Component {
   constructor(props) {
     super(props)
@@ -47,15 +47,15 @@ class WalletChangeCurrency extends React.Component {
           })
           console.log('selectedAccount in renderCurrencyItem', account)
         }}>
-        <View style={{ height: 40, width: '100%', borderBottomWidth: 1, flexDirection: "row"}}>
+        <View style={{ height: 40, width: '100%', flexDirection: "row"}}>
           <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', paddingLeft: 0 }}>
             <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'black', fontSize: 16 }}>{ account.currency }</Text>
           </View>
-          <View style={{ flex: 0.7, justifyContent: 'center', alignItems: 'center', paddingLeft: 0, paddingRight: 0 }}>
+          <View style={{ flex: 0.6, justifyContent: 'center', alignItems: 'center', paddingLeft: 0, paddingRight: 0 }}>
             <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'black', fontSize: 16 }}>{ balance }</Text>
           </View>
-          <View style={{ flex: 0.1, justifyContent: 'center', alignItems: 'center', paddingLeft: 0, paddingRight: 0 }}>
-            <CheckBox color='#10b5bc' checked={ checked } />
+          <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', paddingLeft: 0, paddingRight: 0 }}>
+            <CheckBox disabled={true} color='#303140' checked={ checked } />
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -79,7 +79,7 @@ class WalletChangeCurrency extends React.Component {
         <StyleProvider style={ getTheme(platform) }>
           <Header 
             iosBarStyle='light-content'
-            style={{ backgroundColor: '#10b5bc'}}>
+            style={{ backgroundColor: '#303140'}}>
             <Left>
               <TouchableOpacity onPress={() => {
                 const { navigation } = this.props
@@ -115,12 +115,12 @@ class WalletChangeCurrency extends React.Component {
           </Header>
         </StyleProvider>
 
-        <View style={{ height: 40, width: '100%', borderBottomColor: '#10b5bc', backgroundColor: '#10b5bc', borderBottomWidth: 1, flexDirection: "row"}}>
+        <View style={{ height: 40, width: '100%', borderBottomColor: '#303140', backgroundColor: '#303140', borderBottomWidth: 1, flexDirection: "row"}}>
           <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', paddingLeft: 0 }}>
-            <Text numberOfLines={1} style={{ color: '#666666', fontSize: 12 }}>Currency</Text>
+            <Text numberOfLines={1} style={{ color: '#C7C7CC', fontSize: 12 }}>{ t('currency',{ lng: i18n.language })}</Text>
           </View>
           <View style={{ flex: 0.7, justifyContent: 'center', alignItems: 'center', paddingLeft: 0, paddingRight: 0 }}>
-            <Text numberOfLines={1} style={{ color: '#666666', fontSize: 12 }}>Balance</Text>
+            <Text numberOfLines={1} style={{ color: '#C7C7CC', fontSize: 12 }}>{ t('balance',{ lng: i18n.language })}</Text>
           </View>
           <View style={{ flex: 0.1, justifyContent: 'center', alignItems: 'flex-end', paddingLeft: 0, paddingRight: 0 }}>
           </View>
@@ -132,7 +132,7 @@ class WalletChangeCurrency extends React.Component {
           contentContainerStyle={{ padding: 10, paddingRight: 0, }}
           keyExtractor={( item, index ) => index.toString() }
           ItemSeparatorComponent={() => (
-            <View style={{ marginBottom: 5, marginTop: 5, width: '100%', height: 1, backgroundColor: '#C7C7CC', }} />
+            <View style={{ marginBottom: 5, marginTop: 5, width: '100%', height: 1, backgroundColor: '#303140', }} />
           )}
         />
       </Container>

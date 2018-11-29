@@ -86,7 +86,7 @@ class WalletAccountList extends React.Component {
               <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ fontWeight: 'bold', color: 'white', marginBottom: 8,fontSize: 16 }}>{ currencyName }</Text>
               <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 14 }}>{ currencyTicker + " " + moneyStr }</Text>
             </View>
-            <View style={{ paddingRight: 20, flex: 0.4, justifyContent: 'center', alignItems: 'flex-end' }}>
+            <View style={{ paddingLeft: 20, paddingRight: 20, flex: 0.4, justifyContent: 'center', alignItems: 'flex-end' }}>
               <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ fontWeight: 'bold', color: 'white', marginBottom: 8,fontSize: 16 }}>{ currencyIcon + " " + numberToString(balance * fxRate) }</Text>
               <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 14 }}>{ currencyIcon + " " + numberToString(fxRate) + " per " + currencyTicker }</Text>
             </View>
