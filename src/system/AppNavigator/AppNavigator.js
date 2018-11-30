@@ -9,6 +9,7 @@ import {
   LandingPage,
   PrivateKeyBackupPage,
   MnemonicBackupPage,
+  MnemonicBackupVerificationPage,
   MnemonicImportPage,
   LockPage,
   WalletPage,
@@ -219,6 +220,13 @@ const AppNavigator = StackNavigator({
   },
   MnemonicBackup: {
     screen: withLoading(withDB(withLock(MnemonicBackupPage))),
+    navigationOptions: () => ({
+      header: null,
+      headerBackTitle: i18n.t('main:mnemonic_backup', { locale: i18n.language }),
+    })
+  },
+  MnemonicBackupVerification: {
+    screen: withLoading(withDB(withLock(MnemonicBackupVerificationPage))),
     navigationOptions: () => ({
       header: null,
       headerBackTitle: i18n.t('main:mnemonic_backup', { locale: i18n.language }),

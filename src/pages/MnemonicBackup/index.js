@@ -8,23 +8,20 @@ import connect from "react-redux/es/connect/connect";
 import {translate} from "react-i18next";
 import MnemonicList from "../../components/MnemonicList";
 import LoadingButton from "../../components/LoadingButton";
+import _ from "lodash";
 
 @translate(['main'], { wait: true })
 class MnemonicBackupPage extends React.Component {
-  closePage = () => {
-    const { dispatch } = this.props.navigation
+  constructor(props) {
+    super(props)
+    this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, {leading: true, trailing: false,})
+  }
 
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      actions: [
-        NavigationActions.navigate({ routeName: 'Main' })
-      ]
-    })
-    dispatch(resetAction)
+  verifyBackup = () => {
+    const { mnemonic } = this.props.navigation.state.params
+    this.debounceNavigate('MnemonicBackupVerification', {mnemonic: mnemonic})
   }
-  copyToClipboard = () => {
-    Clipboard.setString(this.props.navigation.state.params.mnemonic)
-  }
+
   async componentDidMount() {
     this.props.hideProcessingModal()
 
@@ -50,24 +47,10 @@ class MnemonicBackupPage extends React.Component {
                   {t('copy_to_clipboard', { locale: i18n.language })}
                 </Text>
               </Button>
-              {/*<LoadingButton*/}
-                {/*isLoading={this.props.isLoading}*/}
-                {/*full*/}
-                {/*Component={ Button }*/}
-                {/*onPress={this.closePage}*/}
-                {/*loadingView={*/}
-                  {/*<RippleLoader size={ 18 } color='white' />*/}
-                {/*}*/}
-                {/*style={{ marginTop: 30, backgroundColor: "gray", width: '100%' }}*/}
-              {/*>*/}
-                {/*<Text style={{ color: 'white', fontSize: 17, }}>*/}
-                  {/*{t('close', { locale: i18n.language })}*/}
-                {/*</Text>*/}
-              {/*</LoadingButton>*/}
               <Button
                 disabled={this.props.isLoading}
                 style={{ marginTop: 30, backgroundColor: "gray", width: '100%' }}
-                onPress={this.closePage}
+                onPress={this.verifyBackup}
                 transparent>
                 {
                   this.props.isLoading ? (
@@ -76,7 +59,7 @@ class MnemonicBackupPage extends React.Component {
                     </Text>
                   ) : (
                     <Text style={{ color: 'white', fontSize: 17, width: '100%', textAlign: "center" }}>
-                      {t('close', { locale: i18n.language })}
+                      {t('backupVerification', { locale: i18n.language })}
                     </Text>
                   )
                 }

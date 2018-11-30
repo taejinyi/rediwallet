@@ -16,7 +16,6 @@ import PinView from "react-native-pin-view";
 class LockPage extends React.Component {
   constructor() {
     super()
-    this.pinNumberElements = undefined
     this.state = {
       justSet: false,
       pinNumberInvalid: false,
@@ -88,7 +87,7 @@ class LockPage extends React.Component {
         backgroundColor: '#303140',
       }}>
         <StatusBar barStyle='light-content' />
-        <View style={{flex:0.3,
+        <View style={{flex:0.2,
           alignItems: 'flex-end',
           justifyContent: 'flex-end',
         }}>
@@ -110,7 +109,7 @@ class LockPage extends React.Component {
             </Text>
           </View>
         </View>
-        <View style={{flex:0.5,
+        <View style={{flex:0.6,
           alignItems: 'center',
           justifyContent: 'center',
         }}>
