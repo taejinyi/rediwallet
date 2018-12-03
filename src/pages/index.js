@@ -6,6 +6,7 @@ import LockPage from './Lock'
 import PrivateKeyBackupPage from './PrivateKeyBackup'
 import MnemonicBackupPage from './MnemonicBackup'
 import MnemonicBackupVerificationPage from './MnemonicBackupVerification'
+import ChangePinNumberPage from './ChangePinNumber'
 import MnemonicImportPage from './MnemonicImport'
 import WalletPage from './Wallet'
 import WalletDetailPage from './WalletDetail'
@@ -123,6 +124,7 @@ export {
   PrivateKeyBackupPage,
   MnemonicBackupPage,
   MnemonicBackupVerificationPage,
+  ChangePinNumberPage,
   MnemonicImportPage,
   WalletPage,
   WalletDetailPage,

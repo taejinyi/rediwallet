@@ -1,5 +1,5 @@
 import React from 'react'
-import {Alert, Image, KeyboardAvoidingView, StatusBar, Text, View} from 'react-native'
+import {Alert, Image, KeyboardAvoidingView, StatusBar, Text, TouchableWithoutFeedback, View} from 'react-native'
 import {TextLoader} from 'react-native-indicator'
 import Modal from 'react-native-modal'
 import DialogInput from "react-native-dialog-input";
@@ -9,8 +9,9 @@ import { SecureStore } from 'expo'
 import {Container} from "native-base";
 import { PinNumberInputs } from "../../components";
 import {translate} from "react-i18next";
-import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
+import { MaterialCommunityIcons, Feather, FontAwesome } from '@expo/vector-icons'
 import PinView from "react-native-pin-view";
+import {NavigationActions} from "react-navigation";
 
 @translate(['main'], { wait: true })
 class ChangePinNumberPage extends React.Component {
@@ -22,6 +23,17 @@ class ChangePinNumberPage extends React.Component {
       pinNumberInvalid: false,
       pinNumber: undefined
     }
+  }
+  closePage = () => {
+    const { dispatch } = this.props.navigation
+
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Main' })
+      ]
+    })
+    dispatch(resetAction)
   }
 
   _onInputFinished = async (code, clear) => {
@@ -53,17 +65,6 @@ class ChangePinNumberPage extends React.Component {
     }
   }
 
-  async componentDidMount() {
-    if (await Expo.Fingerprint.hasHardwareAsync()) {
-      if(await Expo.Fingerprint.isEnrolledAsync()) {
-        const result = await Expo.Fingerprint.authenticateAsync()
-        if (result.success) {
-          this.props.saveUnlocked(true)
-        }
-      }
-    }
-  }
-
   render() {
     const { t, i18n } = this.props
     let desc1, desc2
@@ -80,6 +81,9 @@ class ChangePinNumberPage extends React.Component {
       desc1 = t('input_pin_number_desc1', { locale: i18n.language })
       desc2 = t('input_pin_number_desc2', { locale: i18n.language })
     }
+
+
+
     return (
       <View style={{
         flex: 1,
@@ -88,14 +92,10 @@ class ChangePinNumberPage extends React.Component {
         backgroundColor: '#303140',
       }}>
         <StatusBar barStyle='light-content' />
-        <View style={{flex:0.3,
-          alignItems: 'flex-end',
-          justifyContent: 'flex-end',
-        }}>
-  				<Image style={{ width: 150, height: 150, }} source={ require('rediwallet/src/assets/images/logo_400x400.png') } />
-          <Text style={{ fontSize: 24, color: 'white', }}>
-            {t('locked_desc', { locale: i18n.language })}
-          </Text>
+        <View style={{ paddingTop: 15, paddingLeft: 15, flex: 0.1, width: "100%", justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', }}>
+          <TouchableWithoutFeedback onPress={() => this.closePage()}>
+            <Feather name='x' style={{ fontSize: 32, color: 'white', }} />
+          </TouchableWithoutFeedback>
         </View>
         <View style={{flex:0.2,
           alignItems: 'center',

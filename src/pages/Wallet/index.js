@@ -166,7 +166,7 @@ class WalletPage extends React.Component {
                 }}>
                   <TouchableOpacity
                     onPress={ () => this.setState({ isTrafficModalShow: true}) }
-                    style={{ paddingLeft: 10, paddingRight:10, paddingBottom: 7, paddingTop: 13}}>
+                    style={{ paddingLeft: 10, paddingRight:10, paddingBottom: 7, paddingTop: 0}}>
                     { this.renderStatusIcon() }
                   </TouchableOpacity>
 

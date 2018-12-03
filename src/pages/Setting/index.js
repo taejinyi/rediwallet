@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
-import { View, Text } from 'react-native'
+import {View, Text, Alert} from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Container, Content, Body, Left, List, ListItem, Icon, Separator, Right } from 'native-base'
 import { Updates, SecureStore } from 'expo'
@@ -21,19 +21,52 @@ class SettingPage extends React.Component {
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
   }
 
+  changePinNumber = async () => {
+    this.debounceNavigate('ChangePinNumber')
+  }
+
   deleteMnemonic = async () => {
-    await SecureStore.deleteItemAsync('seed')
-    await SecureStore.deleteItemAsync('nonce')
-    await this.props.db.destroy()
-    await Updates.reload()
-    const { dispatch } = this.props
+    try {
+      const { t, i18n } = this.props
+      const backupVerified = await SecureStore.getItemAsync('backupVerified')
+      if (backupVerified === "verified") {
+        Alert.alert(
+          t('areYouSureToDeleteAccount', { locale: i18n.language }),
+          t('areYouSureToDeleteAccountDesc', { locale: i18n.language }),
+          [
+            { text: 'OK', onPress: async () => {
+              await SecureStore.deleteItemAsync('backupVerified')
+              await SecureStore.deleteItemAsync('seed')
+              await SecureStore.deleteItemAsync('nonce')
+              await this.props.db.destroy()
+              await Updates.reload()
+              const { dispatch } = this.props
 
-    dispatch(NavigationActions.reset({
-      index: 0,
-      key: null,
-      actions: [ NavigationActions.navigate({ routeName: 'Splash' }) ],
-    }))
-
+              dispatch(NavigationActions.reset({
+                index: 0,
+                key: null,
+                actions: [ NavigationActions.navigate({ routeName: 'Splash' }) ],
+              }))
+            }},
+            { text: t('cancel', { locale: i18n.language }), onPress: async () => {
+            }}
+          ],
+          { cancelable: true}
+        )
+      } else {
+        Alert.alert(
+          t('unableToDeleteAccountBeforeBackup', { locale: i18n.language }),
+          t('unableToDeleteAccountBeforeBackupDesc', { locale: i18n.language }),
+          [
+            { text: 'OK', onPress: () => {
+            }}
+          ],
+          { cancelable: false}
+        )
+      }
+    } catch(e) {
+      console.log(e)
+    }
   }
   backupMnemonic = async () => {
     const hex = await SecureStore.getItemAsync('seed')
@@ -88,6 +121,20 @@ class SettingPage extends React.Component {
             </Left>
             <Body>
               <Text>{t('change_currency', { locale: i18n.language })}</Text>
+            </Body>
+            <Right>
+              <Icon name='arrow-forward' />
+            </Right>
+          </ListItem>
+          <ListItem
+            onPress={ this.changePinNumber }
+            button
+            icon>
+            <Left>
+              <Icon name='ios-contact' style={{ color: '#666666', }} />
+            </Left>
+            <Body>
+              <Text>{t('changePinNumber', { locale: i18n.language })}</Text>
             </Body>
             <Right>
               <Icon name='arrow-forward' />

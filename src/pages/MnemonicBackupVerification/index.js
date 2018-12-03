@@ -1,13 +1,13 @@
 import React from 'react'
-import numeral from 'numeral'
 import t from 'tcomb-form-native'
 import { connect } from 'react-redux'
 import { RippleLoader, TextLoader } from 'react-native-indicator'
 import { Alert, StyleSheet, Text, KeyboardAvoidingView, TouchableOpacity, View } from 'react-native'
+import platform from '../../native-base-theme/variables/platform'
+import getTheme from '../../native-base-theme/components'
 
 import { LoadingButton, DismissKeyboardViewHOC, Input } from '../../components'
 
-import { numberToString } from '../../utils'
 import {translate} from "react-i18next";
 
 const Form = t.form.Form
@@ -15,6 +15,8 @@ const DismissKeyboardView = DismissKeyboardViewHOC(View)
 import { NavigationActions } from 'react-navigation'
 import {actions} from "../index";
 import _ from "lodash";
+import {Body, Header, Icon, Left, Right, StyleProvider, Title} from "native-base";
+import {SecureStore} from "expo";
 
 @translate(['main'], { wait: true })
 class MnemonicBackupVerificationPage extends React.Component {
@@ -35,7 +37,7 @@ class MnemonicBackupVerificationPage extends React.Component {
     super(props)
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
 
-    this.limitFormFields = t.struct({
+    this.formFields = t.struct({
       word1: t.String,
       word2: t.String,
     })
@@ -88,14 +90,15 @@ class MnemonicBackupVerificationPage extends React.Component {
           <Input
             underlineColor={ locals.hasError ? '#e75a5a' : '#dadada' }
             underlineHoverColor='#aaaaaa'
-            keyboardType='numeric'
+            keyboardType='default'
             containerStyle={{ width: 130, }}
-            textStyle={{ fontSize: 36, color: '#4BD160', }}
-            onChangeText={ value => locals.onChange(numeral(value).format('0,000')) }
+            textStyle={{ fontSize: 36, color: '#303140', }}
+            autoCapitalize="none"
+            onChangeText={ value => locals.onChange(value) }
             value={ locals.value }
             type='custom'
           />
-          <Text style={{ color: '#8E8E8E', fontWeight: 'bold', fontSize: 18, }}>만원</Text>
+          {/*<Text style={{ color: '#8E8E8E', fontWeight: 'bold', fontSize: 18, }}>만원</Text>*/}
         </View>
       </View>
     )
@@ -103,15 +106,35 @@ class MnemonicBackupVerificationPage extends React.Component {
 
   _onFormSubmit = async () => {
     try {
+      const { t, i18n } = this.props
       const { mnemonic } = this.props.navigation.state.params
       const { word1, word2 } = this.formElement.getValue()
 
-      console.log(word1, word2)
       const sepMnemonics = mnemonic.split(' ');
-      if (sepMnemonics[this.state.index1] === word1 && sepMnemonics[this.state.index2] === word2) {
-        console.log("verified!!!")
+      if (sepMnemonics[this.state.index1 - 1] === word1 && sepMnemonics[this.state.index2 - 1] === word2) {
+
+        await SecureStore.setItemAsync('backupVerified', "verified")
+
+        Alert.alert(
+          t('backupVerified', { locale: i18n.language }),
+          t('backupVerifiedDesc', { locale: i18n.language }),
+          [
+            { text: 'OK', onPress: () => {
+              this.closePage()
+            }}
+          ],
+          { cancelable: false}
+        )
       } else {
-        console.log("invalid!!")
+        Alert.alert(
+          t('backupVerificationFailed', { locale: i18n.language }),
+          t('backupVerificationFailedDesc', { locale: i18n.language }),
+          [
+            { text: 'OK', onPress: () => {
+            }}
+          ],
+          { cancelable: false}
+        )
       }
 
 
@@ -123,16 +146,16 @@ class MnemonicBackupVerificationPage extends React.Component {
 
   renderSubmitButton = () => {
     const { word1, word2 } = this.state.formValue
+    const { t, i18n } = this.props
 
-    if((word1 && word2) &&
-      (parseInt(word1.replace(',', '')) > 0 && parseInt(word2.replace(',', '')))) {
+    if((word1 && word2)) {
       return (
         <LoadingButton
           onPress={ this._onFormSubmit }
           Component={ TouchableOpacity }
           loadingView={ <RippleLoader size={ 16 } color='white' /> }>
           <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold', }}>
-            한도 조절
+            {t('verify', { locale: i18n.language })}
           </Text>
         </LoadingButton>
       )
@@ -140,53 +163,48 @@ class MnemonicBackupVerificationPage extends React.Component {
   }
 
   render() {
-    const { isLoading, word1, word2, formOptions, formValue } = this.state
-    const { color } = this.props.navigation.state.params
+    const { formOptions, formValue } = this.state
+    const { t, i18n } = this.props
 
     return (
       <DismissKeyboardView style={{ flex: 1, }}>
-        <KeyboardAvoidingView keyboardVerticalOffset={ -144 } style={{ zIndex: -3, flex: 1, }} behavior='position'>
+        <StyleProvider style={ getTheme(platform) }>
+          <Header
+            iosBarStyle='light-content'
+            style={{ backgroundColor: "#303140", }}>
+            <Left>
+              <TouchableOpacity onPress={() => {
+                const { navigation } = this.props
+                navigation.goBack()
+              }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+                  <Icon name='ios-arrow-back' style={{ color: 'white', fontSize: 20, marginRight: 5, }} />
+                  <Text style={{ color: 'white', fontSize: 18, }}>
+                    {t('cancel', { locale: i18n.language })}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </Left>
+            <Body>
+              <Title style={{ color: 'white', }}>
+                {t('backupVerification', { locale: i18n.language })}
+              </Title>
+            </Body>
+            <Right>
+              { this.renderSubmitButton() }
+            </Right>
+          </Header>
+        </StyleProvider>
+
+        <KeyboardAvoidingView keyboardVerticalOffset={ 0 } style={{ zIndex: -3, flex: 1, }} behavior='padding'>
+          {/*//-144*/}
           <View style={{ padding: 30, }}>
-            <View style={{ alignItems: 'flex-end', justifyContent: 'flex-end', marginBottom: 30, }}>
-              <View style={{ alignItems: 'flex-end', marginBottom: 15, }}>
-                <Text style={{ color: '#8E8E8E', fontSize: 14, }}>
-                  현재 그룹 한도
-                </Text>
-                {
-                  word1 ? (
-                    <Text style={{ fontSize: 18, color: '#666666', fontWeight: 'bold', }}>
-                      { `${numberToString(word1)} 만원` }
-                    </Text>
-                  ) : (
-                    <Text style={{ fontSize: 18, color: '#666666', fontWeight: 'bold', }}>
-                      설정 되어진 그룹 한도가 없습니다
-                    </Text>
-                  )
-                }
-              </View>
-              <View style={{ alignItems: 'flex-end', marginBottom: 15, }}>
-                <Text style={{ color: '#8e8e8e', fontSize: 14, }}>
-                  현재 개인 한도
-                </Text>
-                {
-                  word2 ? (
-                    <Text style={{ fontSize: 18, color: '#666666', fontWeight: 'bold', }}>
-                      { `${numberToString(word2)} 만원` }
-                    </Text>
-                  ) : (
-                    <Text style={{ fontSize: 18, color: '#666666', fontWeight: 'bold', }}>
-                      설정 되어진 개인 한도가 없습니다
-                    </Text>
-                  )
-                }
-              </View>
-            </View>
             <View style={{ justifyContent: 'flex-end', }}>
-              <Text style={{ color: '#8E8E8E', fontSize: 18, }}>새 한도</Text>
+              {/*<Text style={{ color: '#8E8E8E', fontSize: 18, }}>새 한도</Text>*/}
               <Form
                 value={ formValue }
                 options={ formOptions }
-                type={ this.limitFormFields }
+                type={ this.formFields }
                 ref={ el => this.formElement = el }
                 onChange={ value => { this.setState({ formValue: { ... value } })}}
               />
@@ -200,7 +218,7 @@ class MnemonicBackupVerificationPage extends React.Component {
 
 const styles = StyleSheet.create({
   textDesc: {
-    color: '#8e8e8e',
+    color: '#303140',
     fontSize: 16,
   },
 

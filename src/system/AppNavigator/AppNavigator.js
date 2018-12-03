@@ -10,6 +10,7 @@ import {
   PrivateKeyBackupPage,
   MnemonicBackupPage,
   MnemonicBackupVerificationPage,
+  ChangePinNumberPage,
   MnemonicImportPage,
   LockPage,
   WalletPage,
@@ -230,6 +231,13 @@ const AppNavigator = StackNavigator({
     navigationOptions: () => ({
       header: null,
       headerBackTitle: i18n.t('main:mnemonic_backup', { locale: i18n.language }),
+    })
+  },
+  ChangePinNumber: {
+    screen: ChangePinNumberPage,
+    navigationOptions: () => ({
+      header: null,
+      headerBackTitle: i18n.t('main:changePinNumber', { locale: i18n.language }),
     })
   },
   MnemonicImport: {

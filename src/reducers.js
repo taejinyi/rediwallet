@@ -1,10 +1,10 @@
 import {
-  SAVE_PIN_NUMBER,
   SAVE_SEED,
   SHOW_PROCESSING_MODAL,
   HIDE_PROCESSING_MODAL,
   SAVE_UNLOCKED,
-  UNSET_LOADING, SET_LOADING
+  UNSET_LOADING,
+  SET_LOADING
 } from './actions'
 
 const appStateReducer = (state = {}, action) => {
@@ -25,10 +25,6 @@ const appStateReducer = (state = {}, action) => {
     case UNSET_LOADING:
       return Object.assign({}, state, {
         isLoading: false
-      })
-    case SAVE_PIN_NUMBER:
-      return Object.assign({}, state, {
-        pinNumber: action.pinNumber
       })
     case SAVE_SEED:
       return Object.assign({}, state, {

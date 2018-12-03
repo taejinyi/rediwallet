@@ -40,8 +40,8 @@ class Main extends React.Component {
   render() {
     // web3.eth.getBlock('latest').then(console.log);
 		const { isProcessingModalShow, processingModalMessage, unlocked } = this.props
-    // TODO Comment
-    // this.props.saveUnlocked(true)
+    // TODO Uncomment
+    this.props.saveUnlocked(true)
     return (
       <Root>
         <Modal

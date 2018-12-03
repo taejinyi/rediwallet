@@ -87,29 +87,29 @@ class LockPage extends React.Component {
         backgroundColor: '#303140',
       }}>
         <StatusBar barStyle='light-content' />
-        <View style={{flex:0.2,
-          alignItems: 'flex-end',
+        <View style={{flex:0.4,
+          alignItems: 'center',
           justifyContent: 'flex-end',
         }}>
-  				<Image style={{ width: 150, height: 150, }} source={ require('rediwallet/src/assets/images/logo_400x400.png') } />
-          <Text style={{ fontSize: 24, color: 'white', }}>
-            {t('locked_desc', { locale: i18n.language })}
-          </Text>
-        </View>
-        <View style={{flex:0.2,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-            <Text style={{ marginTop: 25, fontSize: 15, color: '#999999', }}>
-              { desc1 }
+          <View style={{flex:1,
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+          }}>
+          	<Image style={{ width: 150, height: 150, }} source={ require('rediwallet/src/assets/images/logo_400x400.png') } />
+            <Text style={{ marginTop: 10, fontSize: 24, color: 'white', }}>
+              {t('locked_desc', { locale: i18n.language })}
             </Text>
             <Text style={{ marginTop: 15, fontSize: 15, color: '#999999', }}>
+              { desc1 }
+            </Text>
+            <Text style={{ marginTop: 5, fontSize: 15, color: '#999999', }}>
               { desc2 }
             </Text>
           </View>
         </View>
-        <View style={{flex:0.6,
+        <View style={{
+          paddingTop: 40,
+          flex:0.6,
           alignItems: 'center',
           justifyContent: 'center',
         }}>

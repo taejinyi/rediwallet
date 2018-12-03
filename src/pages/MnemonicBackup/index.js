@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, Clipboard, Image} from 'react-native'
+import {Text, View, Clipboard, Image, TouchableWithoutFeedback} from 'react-native'
 import {Button, Container, Content, FooterTab, Left, Right} from 'native-base'
 import {RippleLoader, TextLoader} from 'react-native-indicator'
 import { NavigationActions } from 'react-navigation'
@@ -9,12 +9,25 @@ import {translate} from "react-i18next";
 import MnemonicList from "../../components/MnemonicList";
 import LoadingButton from "../../components/LoadingButton";
 import _ from "lodash";
+import { MaterialCommunityIcons, FontAwesome, Feather } from '@expo/vector-icons'
 
 @translate(['main'], { wait: true })
 class MnemonicBackupPage extends React.Component {
   constructor(props) {
     super(props)
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, {leading: true, trailing: false,})
+  }
+
+  closePage = () => {
+    const { dispatch } = this.props.navigation
+
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Main' })
+      ]
+    })
+    dispatch(resetAction)
   }
 
   verifyBackup = () => {
@@ -33,7 +46,13 @@ class MnemonicBackupPage extends React.Component {
     return (
       <Container>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "#303140" }}>
-          <View style={{ flex: 0.3, flexDirection: "row", alignItems: 'flex-end' }}>
+          <View style={{ paddingTop: 15, paddingLeft: 15, flex: 0.1, width: "100%", justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', }}>
+            <TouchableWithoutFeedback onPress={() => this.closePage()}>
+              <Feather name='x' style={{ fontSize: 32, color: 'white', }} />
+            </TouchableWithoutFeedback>
+          </View>
+
+          <View style={{ flex: 0.2, flexDirection: "row", alignItems: 'flex-end' }}>
               <Image style={{ height: 78, width: 150, alignItems: 'center' }} source={ require('rediwallet/src/assets/images/logo_428x222.png') } />
           </View>
           <View style={{ flex: 0.7, flexDirection: "row", width: '92%', alignItems: 'flex-end'}}>

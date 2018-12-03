@@ -48,7 +48,18 @@
 		"change": "Change",
 		"selectCurrency": "Select Currency",
 		"balance": "Balance",
-		"currency": "Currency"
+		"currency": "Currency",
+		"backupVerification": "Backup Verification",
+		"verify": "Verify",
+		"backupVerified": "Mnemonic backup verified",
+		"backupVerifiedDesc": "Keep the backup securely and never disclose to others.",
+		"backupVerificationFailed": "Mnemonic backup verification failed",
+		"backupVerificationFailedDesc": "Try again please",
+		"changePinNumber": "Change Pin Number",
+		"unableToDeleteAccountBeforeBackup": "Backup Mnemonic Required",
+		"unableToDeleteAccountBeforeBackupDesc": "You must backup the mnemonic before deleting account.",
+		"areYouSureToDeleteAccount": "Are you sure to delete account?",
+		"areYouSureToDeleteAccountDesc": "If you lose the mnemonic backup, you can never get back the coins in the current account.",
 
 	}
 }

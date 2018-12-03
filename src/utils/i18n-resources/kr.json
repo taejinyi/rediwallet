@@ -58,6 +58,16 @@
 		"wait_for_wallet_generation": "지갑 생성 중...",
 		"change_currency": "통화 변경",
 		"backup_private_key": "프라이빗 키 백업하기",
-		"private_key_backup": "키 백업"
+		"private_key_backup": "키 백업",
+		"backupVerification": "복원키 백업인증",
+		"verify": "인증하기",
+		"backupVerified": "복원키 백업인증 완료",
+		"backupVerifiedDesc": "복원키를 안전하게 보관하고 절대 다른 사람에게 알려주지 마세요.",
+		"backupVerificationFailed": "복원키 백업인증 실패",
+		"backupVerificationFailedDesc": "다시 시도하여 주시기 바랍니다.",
+		"changePinNumber": "핀번호 변경",
+		"unableToDeleteAccountBeforeBackup": "복원키 백업 미인증",
+		"unableToDeleteAccountBeforeBackupDesc": "복원키를 백업 후 시도하여 주시기 바랍니다."
+
 	}
 }
