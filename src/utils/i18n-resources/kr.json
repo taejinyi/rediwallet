@@ -67,7 +67,19 @@
 		"backupVerificationFailedDesc": "다시 시도하여 주시기 바랍니다.",
 		"changePinNumber": "핀번호 변경",
 		"unableToDeleteAccountBeforeBackup": "복원키 백업 미인증",
-		"unableToDeleteAccountBeforeBackupDesc": "복원키를 백업 후 시도하여 주시기 바랍니다."
-
+		"unableToDeleteAccountBeforeBackupDesc": "복원키를 백업 후 시도하여 주시기 바랍니다.",
+		"wrongExistingPinNumber": "잘못된 핀번호입니다.",
+		"wrongExistingPinNumberDesc": "다시 입력해주시기 바랍니다.",
+		"inputExistingPinNumber": "기존 핀번호를 입력해 주시기 바랍니다.",
+		"inputExistingPinNumberDesc": "핀번호를 변경하기 전에 기존 핀번호를 입력해야합니다.",
+		"wrongNewPinNumber": "핀번호 확인에 실패하였습니다.",
+		"wrongNewPinNumberDesc": "다시 새로운 핀번호를 입력해주시기 바랍니다.",
+		"inputNewPinNumber": "새로운 핀번호를 입력해주시기 바랍니다.",
+		"inputNewPinNumberDesc": "핀번호를 절대 잊어버리면 안됩니다.",
+		"confirmNewPinNumber": "새로운 핀번호를 확인합니다.",
+		"confirmNewPinNumberDesc": "핀번호를 다시 입력해주시기 바랍니다.",
+		"pinNumberChanged": "핀번호가 변경되었습니다.",
+		"pinNumberChangedDesc": "변경된 핀번호를 잊어버리거나 다른 사람에게 알려주면 안됩니다.",
+		"nthWord": "{{no}}번째 단어"
 	}
 }

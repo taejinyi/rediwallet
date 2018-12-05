@@ -60,6 +60,18 @@
 		"unableToDeleteAccountBeforeBackupDesc": "You must backup the mnemonic before deleting account.",
 		"areYouSureToDeleteAccount": "Are you sure to delete account?",
 		"areYouSureToDeleteAccountDesc": "If you lose the mnemonic backup, you can never get back the coins in the current account.",
-
+		"wrongExistingPinNumber": "Wrong pin number",
+		"wrongExistingPinNumberDesc": "Try again",
+		"inputExistingPinNumber": "Input existing pin number.",
+		"inputExistingPinNumberDesc": "Unlock first to change pin number.",
+		"wrongNewPinNumber": "Failed to confirm.",
+		"wrongNewPinNumberDesc": "Please input a new pin number.",
+		"inputNewPinNumber": "Input new pin number.",
+		"inputNewPinNumberDesc": "Never forget this pin number",
+		"confirmNewPinNumber": "Confirm pin number change.",
+		"confirmNewPinNumberDesc": "Please input the new pin number again.",
+		"pinNumberChanged": "Pin number changed",
+		"pinNumberChangedDesc": "Don't forget or disclose the pin number.",
+		"nthWord": "{{no}} word"
 	}
 }

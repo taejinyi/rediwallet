@@ -34,6 +34,9 @@ class MnemonicBackupPage extends React.Component {
     const { mnemonic } = this.props.navigation.state.params
     this.debounceNavigate('MnemonicBackupVerification', {mnemonic: mnemonic})
   }
+  copyToClipboard = () => {
+    Clipboard.setString(this.props.navigation.state.params.mnemonic)
+  }
 
   async componentDidMount() {
     this.props.hideProcessingModal()

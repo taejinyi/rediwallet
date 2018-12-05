@@ -52,16 +52,22 @@ class MnemonicBackupVerificationPage extends React.Component {
       index2 = index1
       index1 = tmp
     }
-
+    let strIndex1 = index1, strIndex2 = index2
+    console.log("i18n = ", props.i18n.language)
+    if (props.i18n.language === 'en') {
+      strIndex1 = this.getNumberWithOrdinal(index1)
+      strIndex2 = this.getNumberWithOrdinal(index2)
+    }
     this.state = {
       formOptions: {
         fields: {
           word1: {
-            label: props.t(`${index1}thWord`, { locale: props.i18n.language }),
+            //            message: t('creditLineSetDesc', { name: "xx", unionLimit: 5000, individualLimit: 2000000, locale: i18n.language })
+            label: props.t('nthWord', { no: strIndex1, locale: props.i18n.language }),
             template: this.customTemplateForInput,
           },
           word2: {
-            label: props.t(`${index2}thWord`, { locale: props.i18n.language }),
+            label: props.t('nthWord', { no: strIndex2, locale: props.i18n.language }),
             template: this.customTemplateForInput,
           },
         }
@@ -76,6 +82,11 @@ class MnemonicBackupVerificationPage extends React.Component {
     }
 
     this.formElement = null
+  }
+
+  getNumberWithOrdinal = (n) => {
+    const s=["th","st","nd","rd"], v=n%100;
+    return n+(s[(v-20)%10]||s[v]||s[0]);
   }
 
   async componentWillMount() {

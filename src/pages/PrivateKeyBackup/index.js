@@ -10,15 +10,16 @@ import {translate} from "react-i18next";
 @translate(['main'], { wait: true })
 class PrivateKeyBackupPage extends React.Component {
   closePage = () => {
-    const { dispatch } = this.props.navigation
-
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      actions: [
-        NavigationActions.navigate({ routeName: 'Main' })
-      ]
-    })
-    dispatch(resetAction)
+    this.props.navigation.goBack(null)
+    // const { dispatch } = this.props.navigation
+    //
+    // const resetAction = NavigationActions.reset({
+    //   index: 0,
+    //   actions: [
+    //     NavigationActions.navigate({ routeName: 'Main' })
+    //   ]
+    // })
+    // dispatch(resetAction)
   }
   copyToClipboard = () => {
     Clipboard.setString(this.props.navigation.state.params.privateKey)

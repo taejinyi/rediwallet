@@ -45,7 +45,6 @@ class WalletChangeCurrency extends React.Component {
             selected: true,
             selectedCurrency: account
           })
-          console.log('selectedAccount in renderCurrencyItem', account)
         }}>
         <View style={{ height: 40, width: '100%', flexDirection: "row"}}>
           <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', paddingLeft: 0 }}>
