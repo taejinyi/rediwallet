@@ -53,8 +53,7 @@ class MnemonicBackupVerificationPage extends React.Component {
       index1 = tmp
     }
     let strIndex1 = index1, strIndex2 = index2
-    console.log("i18n = ", props.i18n.language)
-    if (props.i18n.language === 'en') {
+    if (props.i18n.language.startsWith('en')) {
       strIndex1 = this.getNumberWithOrdinal(index1)
       strIndex2 = this.getNumberWithOrdinal(index2)
     }
