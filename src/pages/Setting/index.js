@@ -24,7 +24,10 @@ class SettingPage extends React.Component {
   changePinNumber = async () => {
     this.debounceNavigate('ChangePinNumber')
   }
-
+  resetDB = async () => {
+    const { db } = this.props
+    db.destroy()
+  }
   deleteMnemonic = async () => {
     try {
       const { t, i18n } = this.props
@@ -163,6 +166,20 @@ class SettingPage extends React.Component {
             </Left>
             <Body>
               <Text>{t('backup_mnemonic', { locale: i18n.language })}</Text>
+            </Body>
+            <Right>
+              <Icon name='arrow-forward' />
+            </Right>
+          </ListItem>
+          <ListItem
+            onPress={ this.resetDB }
+            button
+            icon>
+            <Left>
+              <Icon name='ios-contact' style={{ color: '#666666', }} />
+            </Left>
+            <Body>
+              <Text>{t('resetDB', { locale: i18n.language })}</Text>
             </Body>
             <Right>
               <Icon name='arrow-forward' />

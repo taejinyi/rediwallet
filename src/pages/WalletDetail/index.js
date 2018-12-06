@@ -32,6 +32,8 @@ class WalletDetailPage extends React.Component {
       currency: this.props.navigation.state.params.account.currency
     }
     this.offset = 10
+    // this.onEndReached = this.onEndReached.bind(this);
+
   }
 
   componentWillReceiveProps(nextProps) {
@@ -42,7 +44,6 @@ class WalletDetailPage extends React.Component {
       case PAGE_STATE.STATE_LOADING_FINISH:
         this.setState({
           isLoading: false,
-          currentPage: this.state.currentPage + 1
         })
         break
     }
@@ -109,7 +110,6 @@ class WalletDetailPage extends React.Component {
     this._interval = setInterval( () => {
       this.refreshAccount()
     }, 30000);
-
   }
 
   async componentWillUnmount() {
@@ -122,15 +122,23 @@ class WalletDetailPage extends React.Component {
     this.props.getTransactionsFromServer(db, wallet, account, 1, this.offset)
   }
 
-  _onEndReached = () => {
-    // console.log("_inEndReached")
-    const { db, wallet } = this.props
-    const { account } = this.props.navigation.state.params
-    this.props.getTransactionsFromServer(db, wallet, account, this.state.currentPage, this.offset)
+  onEndReached = () => {
+    try {
+      const { db, wallet } = this.props
+      const { account } = this.props.navigation.state.params
+      console.log("in onEndReached", this.state.currentPage + 1, this.offset)
+      this.props.getTransactionsFromServer(db, wallet, account, this.state.currentPage + 1, this.offset)
+      this.setState({
+        currentPage: this.state.currentPage + 1
+      })
+
+    } catch(e) {
+      console.log('error in WDPage.onEndReached', e)
+    }
   }
 
   render() {
-    const { navigation, db, wallet, iWallet } = this.props
+    const { navigation, db, wallet, iWallet, t, i18n } = this.props
     const { transactions } = this.state
     const { account } = this.props.navigation.state.params
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
@@ -175,7 +183,6 @@ class WalletDetailPage extends React.Component {
     const balance = account.balance / Math.pow(10, account.decimals)
 
     let moneyStr = numberToString(balance)
-
     return (
       <View style={{ flex: 1, backgroundColor: '#303140', alignItems: 'center'}}>
         <View style={{ height: 140, width:'100%', backgroundColor: this.headerBackgroundColor, justifyContent: 'center', alignItems: 'center'}}>
@@ -196,7 +203,7 @@ class WalletDetailPage extends React.Component {
           hideModalContentWhileAnimating={ true }
           useNativeDriver={ true }
           isVisible={ this.state.isReceiveModalVisible }>
-          <View style={{ borderRadius: 8, flex: 0.5, backgroundColor: 'white', }}>
+          <View style={{ borderRadius: 15, flex: 0.69, backgroundColor: 'white', }}>
             <TouchableWithoutFeedback onPress={() => this.setState({ isReceiveModalVisible: false, })}>
               <View style={{ padding:20 }}>
                 <Text style={{ color: '#303140', fontSize: 20, fontWeight: 'bold', }}>X</Text>
@@ -211,7 +218,7 @@ class WalletDetailPage extends React.Component {
                 logo={ require('rediwallet/src/assets/images/logo_400x400.png') }
               />
               <Text style={{ color: '#303140', fontSize: 20, fontWeight: 'bold', }}>
-                Show to receive
+                { t('showToReceive', { locale: i18n.language }) }
               </Text>
               <Button
                 onPress={this.copyAddressToClipboard}
@@ -233,14 +240,14 @@ class WalletDetailPage extends React.Component {
                   transactions={ transactions }
                   iWallet={ iWallet}
                   navigation={ navigation }
-                  onEndReached={ this._onEndReached }
+                  onEndReached={ this.onEndReached }
                 />
               </View>
             ) : (
               <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 50 }}>
                 <MaterialCommunityIcons name='close-circle-outline' style={{ fontSize: 84, color: '#aaaaaa', }} />
                 <Text style={{ fontSize: 18, marginTop: 10, color: '#aaaaaa', }}>
-                  No transaction yet...
+                  { t('noTransactionYet', { locale: i18n.language }) }
                 </Text>
               </View>
             )
@@ -252,13 +259,17 @@ class WalletDetailPage extends React.Component {
               style={{  }}
               onPress={this.showSendPage}
               transparent>
-              <Text style={{ fontWeight: 'bold', color: '#303140' }}>Send</Text>
+              <Text style={{ fontWeight: 'bold', color: '#303140' }}>
+                { t('send', { locale: i18n.language }) }
+              </Text>
             </Button>
             <Button
               style={{  }}
               onPress={this.showReceiveModal}
               transparent>
-              <Text style={{ fontWeight: 'bold', color: '#303140' }}>Receive</Text>
+              <Text style={{ fontWeight: 'bold', color: '#303140' }}>
+                { t('receive', { locale: i18n.language }) }
+              </Text>
             </Button>
           </FooterTab>
         </Footer>

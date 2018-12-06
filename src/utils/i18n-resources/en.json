@@ -3,7 +3,10 @@
 		"login": "Login"
 	},
 	"wallet": {
-		"accountBalance": "Account Balance"
+		"accountBalance": "Account Balance",
+		"totalAsset": "Total Asset",
+		"send": "Send",
+		"receive": "Receive"
 	},
 	"main": {
 		"close": "Close",
@@ -72,6 +75,12 @@
 		"confirmNewPinNumberDesc": "Please input the new pin number again.",
 		"pinNumberChanged": "Pin number changed",
 		"pinNumberChangedDesc": "Don't forget or disclose the pin number.",
-		"nthWord": "{{no}} word"
+		"nthWord": "{{no}} word",
+		"receiver": "Receiver",
+		"sender": "Sender",
+		"date": "Date",
+		"time": "Time",
+		"showToReceive": "Show to sender",
+
 	}
 }

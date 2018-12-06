@@ -4,7 +4,7 @@ import { Root } from 'native-base'
 // import Modal from 'react-native-modal'
 import { RippleLoader, TextLoader } from 'react-native-indicator'
 import './global';
-import {SecureStore, Updates} from "expo";
+import {SecureStore, Updates, DangerZone} from "expo";
 import Modal from 'react-native-modal'
 import {actions, LockPage} from "./pages";
 import { withDB, withLock, AppNavigator } from './system'
@@ -35,6 +35,10 @@ class Main extends React.Component {
     //   actions: [ NavigationActions.navigate({ routeName: 'Splash' }) ],
     // }))
 
+  }
+  async componentWillMount() {
+    const deviceCountry = await DangerZone.Localization.getCurrentDeviceCountryAsync()
+    this.props.saveCountry(deviceCountry)
   }
 
   render() {
@@ -88,6 +92,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
+  saveCountry: (country) => dispatch(actions.saveCountry(country)),
   saveUnlocked: (unlocked) => dispatch(actions.saveUnlocked(unlocked)),
 })
 

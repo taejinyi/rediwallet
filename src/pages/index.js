@@ -43,6 +43,7 @@ import {
 
 import { getInformation } from './Splash/actions'
 import {
+  saveCountry,
   setLoading,
   unsetLoading,
   saveSeed,
@@ -71,6 +72,7 @@ import transactionsSaga from './WalletDetail/sagas'
 // import unlockStateReducer from './Unlock/reducers'
 
 const actions = {
+  saveCountry,
   setLoading,
   unsetLoading,
   saveSeed,

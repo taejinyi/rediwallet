@@ -5,19 +5,16 @@
 	"wallet": {
 		"accountBalance": "계좌잔고",
 	    "creditStatus": "카드 현황",
-		"availableAmount": "이용가능금액",
-		"borrowedAmount": "대출이용금액",
-		"soonReceivableAmount": "다음 달 받을금액",
 		"transactions": "거래내역",
-		"repay": "상환하기",
-		"cashAdvance": "현금서비스",
 		"scanQRCode": "QR코드 스캔하기",
 		"myQRCode": "내 QR코드 보기",
 		"cancel": "취소",
 		"choosePictureFromAlbum": "앨범에서 사진 선택",
-		"nothingToRepay": "상환 할 필요가 없습니다",
 		"confirm": "확인",
-		"myWalletQRCode": "내 지갑의 QRCode"
+		"myWalletQRCode": "내 지갑의 QRCode",
+		"totalAsset": "총자산",
+		"send": "보내기",
+		"receive": "받기"
 	},
 	"main": {
 		"close": "닫기",
@@ -26,7 +23,8 @@
 		"confirm_send": "송금 확정",
 		"confirm_send_desc": "송금을 확정합니다.",
 		"cancel": "취소",
-		"send": "송금",
+		"send": "보내기",
+		"receive": "받기",
 		"paste_clipboard": "클립보드 붙여넣기",
 		"scan_qrcode": "QR코드 스캔하기",
 		"scan_qrcode_completed": "스캔이 완료되었습니다!",
@@ -41,7 +39,7 @@
 		"confirm_pin_number_desc1": "핀번호를 다시 입력하고",
 		"confirm_pin_number_desc2": "잠금을 해제하세요",
 		"wallet": "지갑",
-		"transfer": "송금",
+		"transfer": "보내기",
 		"setting": "설정",
 		"lock": "잠금",
 		"mnemonic_backup": "복원키 백업",
@@ -80,6 +78,12 @@
 		"confirmNewPinNumberDesc": "핀번호를 다시 입력해주시기 바랍니다.",
 		"pinNumberChanged": "핀번호가 변경되었습니다.",
 		"pinNumberChangedDesc": "변경된 핀번호를 잊어버리거나 다른 사람에게 알려주면 안됩니다.",
-		"nthWord": "{{no}}번째 단어"
+		"nthWord": "{{no}}번째 단어",
+		"receiver": "받은주소",
+		"sender": "보낸주소",
+		"date": "일",
+		"time": "시",
+		"showToReceive": "보내는 사람에게 보여주시기 바랍니다.",
+
 	}
 }

@@ -77,6 +77,7 @@ export function* getTransactionsFromServer(action) {
   const dbIndex = "tx" + account.currency
 
   const response = yield call(() => server.getTransactions(wallet, account, page, offset))
+  console.log("in getTransactionsFromServer", page, offset, response.data.result.length)
 
   try {
     if(response && response.status === 200) {

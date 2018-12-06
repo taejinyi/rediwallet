@@ -7,6 +7,7 @@ const languageDetector = {
   async: true,
   detect: async (callback) => {
     const lng = await Expo.DangerZone.Localization.getCurrentLocaleAsync()
+    console.log("lng", lng)
     return callback(lng.replace('_', '-'))
   },
   init: () => {},
@@ -20,7 +21,7 @@ i18n
     fallbackLng: 'en',
 
     resources: {
-      kr: require('./i18n-resources/kr.json'),
+      ko: require('./i18n-resources/kr.json'),
       en: require('./i18n-resources/en.json'),
     },
 

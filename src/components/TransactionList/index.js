@@ -5,7 +5,9 @@ import { FlatList, Text, View, StyleSheet, TouchableOpacity, Image } from 'react
 import {Button} from "native-base";
 import Color from '../../constants/Colors'
 import {numberToString} from "../../utils/crypto";
+import {translate} from "react-i18next";
 
+@translate(['main'], { wait: true })
 class TransactionList extends React.Component {
   constructor(props) {
     super(props)
@@ -13,6 +15,7 @@ class TransactionList extends React.Component {
     this.state = {
       lastTransactionIndex: props.transactions ? ((Object.keys(props.transactions).length) - 1) : undefined,
     }
+    this.onEndReached = this.onEndReached.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -52,7 +55,7 @@ class TransactionList extends React.Component {
     }
     const date = new Date(parseInt(transaction.timeStamp, 10) * 1000);
     // Hours part from the timestamp
-    const month = "0" + date.getMonth();
+    const month = "0" + (date.getMonth() + 1);
     const day = "0" + date.getDate();
     const hours = date.getHours();
     const minutes = "0" + date.getMinutes();
@@ -155,24 +158,33 @@ class TransactionList extends React.Component {
       return 1;
     return 0;
   }
+  onEndReached() {
+    try {
+      console.log('endReached')
+      this.props.onEndReached()
+    } catch (e) {
+      console.log('error in TxList', e)
+    }
+  }
   render() {
-    const { transactions } = this.props
+    const { transactions, t, i18n } = this.props
     if(transactions === undefined)
       return null
     const dataArray = _.values(transactions)
+
     return (
       <View style={{ width: '100%' }}>
         <View style={{ height: 40, width: '100%', borderBottomColor: '#aaaaaa', borderBottomWidth: 1, flexDirection: "row"}}>
           <View style={{ flex: 0.1, justifyContent: 'center', alignItems: 'center' }}>
           </View>
           <View style={{ flex: 0.4, justifyContent: 'center', alignItems: 'center', paddingLeft: 0 }}>
-            <Text numberOfLines={1} style={{ color: 'white', fontSize: 12 }}>Receiver / Sender</Text>
+            <Text numberOfLines={1} style={{ color: 'white', fontSize: 12 }}>{ t('receiver', { locale: i18n.language }) } / { t('sender', { locale: i18n.language }) }</Text>
           </View>
           <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', paddingLeft: 0, paddingRight: 0 }}>
-            <Text numberOfLines={1} style={{ color: 'white', fontSize: 12 }}>Date / Time</Text>
+            <Text numberOfLines={1} style={{ color: 'white', fontSize: 12 }}>{ t('date', { locale: i18n.language }) } / { t('time', { locale: i18n.language }) }</Text>
           </View>
           <View style={{ flex: 0.25, justifyContent: 'center', alignItems: 'center', paddingLeft: 0, paddingRight: 0 }}>
-            <Text numberOfLines={1} style={{ color: 'white', fontSize: 12 }}>Amount</Text>
+            <Text numberOfLines={1} style={{ color: 'white', fontSize: 12 }}>{ t('amount', { locale: i18n.language }) }</Text>
           </View>
           <View style={{ flex: 0.05, justifyContent: 'center', alignItems: 'flex-end', paddingLeft: 0, paddingRight: 0 }}>
           </View>
@@ -182,8 +194,8 @@ class TransactionList extends React.Component {
           renderItem={ this.renderTransactionItem }
           contentContainerStyle={{ padding: 15 }}
           keyExtractor={( item, index ) => index.toString() }
-          onEndReachedThreshold={ 0 }
-          onEndReached={this.props.onEndReached}
+          onEndReachedThreshold={ 0.5 }
+          onEndReached={this.onEndReached}
 //        ref={ el => this.listElement = el }
         />
       </View>

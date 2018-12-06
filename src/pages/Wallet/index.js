@@ -118,7 +118,7 @@ class WalletPage extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
+    const { navigation, t, i18n } = this.props
     const { wallet, iWallet } = this.props
     const { isTrafficModalShow } = this.state
 
@@ -181,7 +181,7 @@ class WalletPage extends React.Component {
               <View style={{flex: 0.5, flexDirection: 'column'}} >
                 <View style={{alignItems: 'flex-end', width: '100%' }}>
                   <View>
-                    <Text style={styles.TotalAsset}>TOTAL ASSET</Text>
+                    <Text style={styles.TotalAsset}>{ t('totalAsset', { locale: i18n.language }) }</Text>
                   </View>
                   <View style={{ alignItems: 'flex-end' }}>
                     <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ fontWeight: 'bold', color: 'white', marginBottom: 8,fontSize: 26 }}>{currencyIcon + " " + numberToString(totalAssetAmount)}</Text>
@@ -205,7 +205,7 @@ class WalletPage extends React.Component {
               <View style={{ justifyContent: 'center', alignItems: 'center', }}>
                 <MaterialCommunityIcons name='close-circle-outline' style={{ fontSize: 84, color: '#aaaaaa', }} />
                 <Text style={{ fontSize: 18, marginTop: 10, color: '#aaaaaa', }}>
-                  Loading...
+                  { t('loading', { locale: i18n.language }) }
                 </Text>
               </View>
             )

@@ -57,7 +57,7 @@ export function* setDefaultWallet(action) {
       _rev: fetchResult._rev,
     }))
   } catch (e) {
-    console.log(e)
+    console.log("error1 in setDefaultWallet", e)
     yield call(() => db.put({
       _id: 'wallet',
       data: wallet,
@@ -71,7 +71,7 @@ export function* setDefaultWallet(action) {
       wallet: wallet,
     })
   } catch (e) {
-    console.log(e)
+    console.log("error2 in setDefaultWallet", e)
   }
 }
 
@@ -79,6 +79,7 @@ export function* saveWalletToDB(action) {
   let { db, wallet } = action
   try {
     const fetchResult = yield call(() => db.get('wallet'))
+    console.log('fetchResult in saveWalletToDB', fetchResult)
     yield call(() => db.put({
       _id: 'wallet',
       data: wallet,
@@ -89,6 +90,7 @@ export function* saveWalletToDB(action) {
       wallet: wallet,
     })
   } catch (e) {
+    console.log("error1 in saveWalletToDB", e)
     yield call(() => db.put({
       _id: 'wallet',
       data: wallet,
@@ -151,7 +153,7 @@ export function* getWalletFromNetwork(action) {
     const newWallet = iWallet.getJson()
     yield call(saveWalletToDB, {db: db, wallet: newWallet})
   } catch (e) {
-    console.log(e)
+    console.log("error1 in getWalletFromNetwork", e)
   }
   return true
 }
@@ -168,7 +170,7 @@ export function* getWalletsFromNetwork(action) {
       yield call(getWalletFromNetwork, {db: db, wallet: wallets[addresses[i]]})
     }
   } catch (e) {
-    console.log(e)
+    console.log("error1 in getWalletsFromNetwork", e)
     return false
   }
 
@@ -209,7 +211,7 @@ export function* getWalletsFromDB(action) {
       wallets: fetchResult.data,
     })
   } catch (e) {
-    console.log(e)
+    console.log("error1 in getWalletsFromDB", e)
     return false
   }
   return true
