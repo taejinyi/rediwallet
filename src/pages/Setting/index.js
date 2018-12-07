@@ -27,6 +27,7 @@ class SettingPage extends React.Component {
   resetDB = async () => {
     const { db } = this.props
     db.destroy()
+    await Updates.reload()
   }
   deleteMnemonic = async () => {
     try {

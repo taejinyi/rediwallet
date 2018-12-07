@@ -12,7 +12,7 @@ import {translate} from "react-i18next";
 import Color from '../../constants/Colors'
 import { TransactionList } from '../../components'
 import {numberToString} from "../../utils/crypto";
-import {PAGE_STATE} from "./actions";
+import {PAGE_STATE, SAVE_PAGE_STATE} from "./actions";
 
 @translate(['main'], { wait: true })
 class WalletDetailPage extends React.Component {
@@ -22,7 +22,6 @@ class WalletDetailPage extends React.Component {
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
 
     this.state = {
-      isLoading: true,
       isSendModalVisible: false,
       isReceiveModalVisible: false,
       targetAddress: undefined,
@@ -32,24 +31,51 @@ class WalletDetailPage extends React.Component {
       currency: this.props.navigation.state.params.account.currency
     }
     this.offset = 10
-    // this.onEndReached = this.onEndReached.bind(this);
 
   }
 
   componentWillReceiveProps(nextProps) {
-    const { pageState, transactions } = nextProps
-    // console.log('componentWillReceiveProps', pageState, transactions)
-
+    const { db, iWallet, pageState, transactions, endReached, recentNotUpdated, refreshing } = nextProps
+    const { account } = this.props.navigation.state.params
+    console.log('componentWillReceiveProps', pageState, refreshing, endReached, recentNotUpdated)
     switch(pageState) {
       case PAGE_STATE.STATE_LOADING_FINISH:
-        this.setState({
-          isLoading: false,
-        })
+        if (refreshing) {
+          this.props.savePageState(PAGE_STATE.STATE_LOADING)
+          this.props.getTransactionsFromNetwork(db, iWallet, account, 1, this.offset)
+          this.props.saveRefreshing(false)
+
+        } else if (endReached || recentNotUpdated) {
+          this.props.savePageState(PAGE_STATE.STATE_LOADING)
+          const nextPage = this.state.currentPage + 1
+          this.props.getTransactionsFromNetwork(db, iWallet, account, nextPage, this.offset)
+          this.setState({
+            currentPage: nextPage
+          })
+          if (endReached) {
+            this.props.saveEndReached(false)
+          }
+          if (recentNotUpdated) {
+            this.props.saveRecentNotUpdated(false)
+          }
+        }
         break
+      case PAGE_STATE.STATE_LOADING_FAILED:
+        this.props.savePageState(PAGE_STATE.STATE_LOADING)
+        this.props.getTransactionsFromNetwork(db, iWallet, account, this.state.currentPage, this.offset)
+        break
+      case PAGE_STATE.STATE_LOADING_COMPLETE:
+        if (refreshing) {
+          this.props.savePageState(PAGE_STATE.STATE_LOADING)
+          this.props.getTransactionsFromNetwork(db, iWallet, account, 1, this.offset)
+          this.props.saveRefreshing(false)
+        }
     }
     if(transactions) {
+      const txs = _.values(transactions).sort(this._compare)
       this.setState({
-        transactions: _.values(transactions).sort(this._compare),
+        transactions: txs,
+        totalTransactions: txs.length
       })
     }
   }
@@ -102,44 +128,30 @@ class WalletDetailPage extends React.Component {
       'headerTitle': currencyName
     })
     this.headerBackgroundColor = headerBackgroundColor
-    // await this.props.getTransactionsFromDB(db, this.props.navigation.state.params.wallet, this.props.navigation.state.params.account)
-    await this.props.getTransactionsFromDB(db, wallet, account)
   }
+
   async componentDidMount() {
-    this.refreshAccount()
-    this._interval = setInterval( () => {
-      this.refreshAccount()
-    }, 30000);
-  }
-
-  async componentWillUnmount() {
-    clearInterval(this._interval);
-  }
-
-  refreshAccount = () => {
-    const { account } = this.props.navigation.state.params
-    const { db, wallet } = this.props
-    this.props.getTransactionsFromServer(db, wallet, account, 1, this.offset)
+      const { db, iWallet } = this.props
+      const { account } = this.props.navigation.state.params
+    await this.props.getTransactionsFromDB(db, account.address)
+    this.props.getTransactionsFromNetwork(db, iWallet, account, 1, this.offset)
   }
 
   onEndReached = () => {
-    try {
-      const { db, wallet } = this.props
-      const { account } = this.props.navigation.state.params
-      console.log("in onEndReached", this.state.currentPage + 1, this.offset)
-      this.props.getTransactionsFromServer(db, wallet, account, this.state.currentPage + 1, this.offset)
-      this.setState({
-        currentPage: this.state.currentPage + 1
-      })
+    if (!this.props.endReached) {
+      this.props.saveEndReached(true)
+    }
+  }
 
-    } catch(e) {
-      console.log('error in WDPage.onEndReached', e)
+  onRefresh = () => {
+    if (!this.props.refreshing) {
+      this.props.saveRefreshing(true)
     }
   }
 
   render() {
     const { navigation, db, wallet, iWallet, t, i18n } = this.props
-    const { transactions } = this.state
+    const { transactions, totalTransactions } = this.state
     const { account } = this.props.navigation.state.params
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
 
@@ -185,7 +197,7 @@ class WalletDetailPage extends React.Component {
     let moneyStr = numberToString(balance)
     return (
       <View style={{ flex: 1, backgroundColor: '#303140', alignItems: 'center'}}>
-        <View style={{ height: 140, width:'100%', backgroundColor: this.headerBackgroundColor, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{ flex:0.25, width:'100%', backgroundColor: this.headerBackgroundColor, justifyContent: 'center', alignItems: 'center'}}>
           <View style={{ width:'90%', justifyContent: 'center', alignItems: 'center', borderTopWidth: 1, borderColor: '#aaaaaa' }}>
             <Button
               onPress={this.copyAddressToClipboard}
@@ -230,18 +242,38 @@ class WalletDetailPage extends React.Component {
             </View>
           </View>
         </Modal>
-        <Content style={{ width: '100%', height: '100%' }}>
+        <View style={{ width: '100%', flex:0.75, paddingBottom: 40 }}>
           {
             transactions ? (
               <View style={{ width: '100%', height: '100%' }}>
-                <TransactionList
-                  wallet={ wallet }
-                  account={ account }
-                  transactions={ transactions }
-                  iWallet={ iWallet}
-                  navigation={ navigation }
-                  onEndReached={ this.onEndReached }
-                />
+                <View style={{ width: '100%' }}>
+                  <View style={{ height: 40, width: '100%', borderBottomColor: '#aaaaaa', borderBottomWidth: 1, flexDirection: "row"}}>
+                    <View style={{ flex: 0.1, justifyContent: 'center', alignItems: 'center' }}>
+                      <Text numberOfLines={1} style={{ color: 'white', fontSize: 12 }}>{ totalTransactions }</Text>
+                    </View>
+                    <View style={{ flex: 0.4, justifyContent: 'center', alignItems: 'center', paddingLeft: 0 }}>
+                      <Text numberOfLines={1} style={{ color: 'white', fontSize: 12 }}>{ t('receiver', { locale: i18n.language }) } / { t('sender', { locale: i18n.language }) }</Text>
+                    </View>
+                    <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', paddingLeft: 0, paddingRight: 0 }}>
+                      <Text numberOfLines={1} style={{ color: 'white', fontSize: 12 }}>{ t('date', { locale: i18n.language }) } / { t('time', { locale: i18n.language }) }</Text>
+                    </View>
+                    <View style={{ flex: 0.25, justifyContent: 'center', alignItems: 'center', paddingLeft: 0, paddingRight: 0 }}>
+                      <Text numberOfLines={1} style={{ color: 'white', fontSize: 12 }}>{ t('amount', { locale: i18n.language }) }</Text>
+                    </View>
+                    <View style={{ flex: 0.05, justifyContent: 'center', alignItems: 'flex-end', paddingLeft: 0, paddingRight: 0 }}>
+                    </View>
+                  </View>
+                  <TransactionList
+                    wallet={ wallet }
+                    account={ account }
+                    transactions={ transactions }
+                    iWallet={ iWallet}
+                    navigation={ navigation }
+                    onEndReached={ this.onEndReached }
+                    onRefresh={ this.onRefresh }
+                    refreshing={ this.props.refreshing }
+                  />
+                </View>
               </View>
             ) : (
               <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 50 }}>
@@ -252,7 +284,7 @@ class WalletDetailPage extends React.Component {
               </View>
             )
           }
-        </Content>
+        </View>
         <Footer>
           <FooterTab>
             <Button
@@ -279,8 +311,8 @@ class WalletDetailPage extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  getTransactionsFromDB: (db, wallet, account) => dispatch(actions.getTransactionsFromDB(db, wallet, account)),
-  getTransactionsFromServer: (db, wallet, account, page, offset) => dispatch(actions.getTransactionsFromServer(db, wallet, account, page, offset)),
+  getTransactionsFromDB: (db, token) => dispatch(actions.getTransactionsFromDB(db, token)),
+  getTransactionsFromNetwork: (db, iWallet, account, page, offset) => dispatch(actions.getTransactionsFromNetwork(db, iWallet, account, page, offset)),
 })
 
 export default connect(null, mapDispatchToProps)(WalletDetailPage)

@@ -99,19 +99,20 @@ class WalletPage extends React.Component {
   async componentDidMount() {
     this._interval = setInterval( () => {
       this.refreshWallet().then()
-    }, 15000);
+    }, 3000);
   }
 
   async componentWillUnmount() {
     clearInterval(this._interval);
   }
 
-
-  async refreshWallet() {
+  refreshWallet = async () => {
     try {
-      const { db, iWallet } = this.props
-      // console.log("iWallet.address in refreshWallet", iWallet.address)
-      await this.props.getWalletFromNetwork(db, iWallet)
+      //TODO: avoid refreshWallet when other stuff going on
+      // if (this.props.navigation.state.routeName === "Wallet") {
+        const { db, iWallet } = this.props
+        await this.props.getWalletFromNetwork(db, iWallet)
+      // }
     } catch (e) {
       console.log(e)
     }

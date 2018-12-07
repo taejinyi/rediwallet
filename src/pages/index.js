@@ -34,11 +34,15 @@ import {
 } from './Wallet/actions'
 
 import {
-  saveTransactionsToDB,
-  getTransactionsFromDB,
-  getTransactionsFromServer,
+  getTransactionFromNetwork,
+  getTransactionsFromNetwork,
+  saveTransactions,
   saveOneTransaction,
-  getNextTransactionsOnlyState,
+  getTransactionsFromDB,
+  savePageState,
+  saveEndReached,
+  saveRefreshing,
+  saveRecentNotUpdated,
 } from './WalletDetail/actions'
 
 import { getInformation } from './Splash/actions'
@@ -86,10 +90,17 @@ const actions = {
   startWalletInstance,
   getWalletFromNetwork,
   getWalletsFromNetwork,
-  getTransactionsFromDB,
-  getTransactionsFromServer,
+
+  getTransactionFromNetwork,
+  getTransactionsFromNetwork,
+  saveTransactions,
   saveOneTransaction,
-  getNextTransactionsOnlyState,
+  getTransactionsFromDB,
+  saveEndReached,
+  saveRefreshing,
+  saveRecentNotUpdated,
+  savePageState,
+
   saveWalletToDB,
   saveWalletInstance,
   saveWalletInstanceToDB,

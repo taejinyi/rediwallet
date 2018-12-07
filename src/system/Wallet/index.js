@@ -254,7 +254,7 @@ export default class Wallet {
       }
       return null
     } catch (e) {
-      console.error("Error in getTransactions ", e);
+      console.error("Error in getEthPriceInKRW ", e);
       console.log(e)
       return null
     }
@@ -272,7 +272,7 @@ export default class Wallet {
         return midPrice
       }
     } catch (e) {
-      console.error("Error in getTransactions ", e);
+      console.error("Error in getEthPriceInUSD ", e);
       console.log(e)
       return null
     }
@@ -334,15 +334,13 @@ export default class Wallet {
       }
     }
   }
-
-  getTransactions = async (account, offset=0, count=20) => {
-    if (account.currency === "ETH") {
+  getTransactions = async (token=ethereumAddress, page=1, offset=10) => {
+    if (token === ethereumAddress) {
       const module = "account"
       const action = "txlist"
       const address = this.address
       const startblock = 0
       const endblock = 99999999
-      const page = 1
       const sort = "desc"
       const url = etherscanAPIURL + "?module=" + module +
         "&action=" + action +
@@ -351,7 +349,6 @@ export default class Wallet {
         "&endblock=" + endblock +
         "&page=" + page +
         "&offset=" + offset +
-        "&count=" + count +
         "&sort=" + sort +
         "&apiKey=" + etherscanAPIKey;
       try {
@@ -366,14 +363,13 @@ export default class Wallet {
         return e
       }
     } else {
+      // const urlll = 'https://api-kovan.etherscan.io/api?module=account&action=tokentx&contractaddress=0xb3A679368ED4E5fAD3e450081Da826193A4f8BBc&address=0x18EfFDa3D2F0Ef936dbBaD3dC85dAF2ba6540C81&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apiKey=X9ITJBMCCS6RDC96RB4AKV37KBEWBWSYWW'
       const module = "account"
       const action = "tokentx"
-      const contractAddress = account.address
+      const contractAddress = token
       const address = this.address
       const startblock = 0
       const endblock = 99999999
-      const page = 1
-      const count = 10
       const sort = "desc"
       const url = etherscanAPIURL + "?module=" + module +
         "&action=" + action +
@@ -383,9 +379,9 @@ export default class Wallet {
         "&endblock=" + endblock +
         "&page=" + page +
         "&offset=" + offset +
-        "&count=" + count +
         "&sort=" + sort +
         "&apiKey=" + etherscanAPIKey;
+
       try {
         const result = await axios({
           method: "GET",
@@ -399,6 +395,7 @@ export default class Wallet {
       }
     }
   }
+
   getTransaction = async (hash) => {
     return await this._web3.eth.getTransaction(hash)
   }

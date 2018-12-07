@@ -1,60 +1,82 @@
 export const SAVE_TRANSACTIONS = 'SAVE_TRANSACTIONS'
 export const SAVE_PAGE_STATE = 'SAVE_PAGE_STATE'
+export const SAVE_END_REACHED = 'SAVE_END_REACHED'
+export const SAVE_RECENT_NOT_UPDATED = 'SAVE_RECENT_NOT_UPDATED'
+export const SAVE_REFRESHING = 'SAVE_REFRESHING'
 
 export const SAVE_TRANSACTIONS_TO_DB = 'SAVE_TRANSACTIONS_TO_DB'
 export const GET_TRANSACTIONS_FROM_DB = 'GET_TRANSACTIONS_FROM_DB'
-export const GET_TRANSACTIONS_FROM_SERVER = 'GET_TRANSACTIONS_FROM_SERVER'
+export const GET_TRANSACTIONS_FROM_NETWORK = 'GET_TRANSACTIONS_FROM_NETWORK'
+export const GET_TRANSACTION_FROM_NETWORK = 'GET_TRANSACTION_FROM_NETWORK'
 export const SAVE_ONE_TRANSACTION = 'SAVE_ONE_TRANSACTION'
-export const GET_NEXT_TRANSACTIONS_ONLY_STATE = 'GET_NEXT_TRANSACTIONS_ONLY_STATE'
 
 export const PAGE_STATE = {
   STATE_LOADING: 'STATE_LOADING',
+  STATE_LOADING_FAILED: 'STATE_LOADING_FAILED',
   STATE_LOADING_FINISH: 'STATE_LOADING_FINISH',
+  STATE_LOADING_NEXT: 'STATE_LOADING_NEXT',
   STATE_LOADING_NEXT_FINISH: 'STATE_LOADING_NEXT_FINISH',
+  STATE_LOADING_COMPLETE: 'STATE_LOADING_COMPLETE'
 }
 
-const saveTransactions = (transactions) => ({
+export const savePageState = (pageState) => ({
+  type: SAVE_PAGE_STATE,
+  pageState,
+})
+
+export const saveRefreshing = (refreshing) => ({
+  type: SAVE_REFRESHING,
+  refreshing,
+})
+
+export const saveRecentNotUpdated = (recentNotUpdated) => ({
+  type: SAVE_RECENT_NOT_UPDATED,
+  recentNotUpdated,
+})
+
+export const saveEndReached = (endReached) => ({
+  type: SAVE_END_REACHED,
+  endReached,
+})
+
+export const saveTransactions = (transactions) => ({
   type: SAVE_TRANSACTIONS,
   transactions,
 })
 
-export const saveTransactionsToDB = (db, wallet, account, transactions) => ({
+export const saveTransactionsToDB = (db, token, transactions) => ({
   db: db,
-  wallet: wallet,
-  account: account,
+  token: token,
   transactions: transactions,
   type: SAVE_TRANSACTIONS_TO_DB,
 })
 
-export const getTransactionsFromDB = (db, wallet, account) => ({
+export const getTransactionsFromDB = (db, token) => ({
   db: db,
-  wallet: wallet,
-  account: account,
+  token: token,
   type: GET_TRANSACTIONS_FROM_DB,
 })
 
-export const getTransactionsFromServer = (db, wallet, account, page, offset) => ({
+export const getTransactionsFromNetwork = (db, iWallet, account, page, offset) => ({
   db: db,
-  wallet: wallet,
+  iWallet: iWallet,
   account: account,
   page: page,
   offset: offset,
-  type: GET_TRANSACTIONS_FROM_SERVER,
+  type: GET_TRANSACTIONS_FROM_NETWORK,
 })
 
-export const saveOneTransaction = (db, wallet, account, transaction) => ({
+export const getTransactionFromNetwork = (db, iWallet, transactionHash) => ({
   db: db,
-  wallet: wallet,
-  account: account,
+  iWallet: iWallet,
+  transactionHash: transactionHash,
+  type: GET_TRANSACTION_FROM_NETWORK,
+})
+
+export const saveOneTransaction = (db, token, transaction) => ({
+  db: db,
+  token: token,
   transaction: transaction,
   type: SAVE_ONE_TRANSACTION,
 })
 
-export const getNextTransactionsOnlyState = (db, wallet, account, offset, count) => ({
-  db: db,
-  wallet: wallet,
-  account: account,
-  offset: offset,
-  count: count,
-  type: GET_NEXT_TRANSACTIONS_ONLY_STATE
-})

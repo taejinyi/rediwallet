@@ -31,10 +31,10 @@ class TransactionList extends React.Component {
     const transaction = transactionData.item
     const currencyTicker = account.currency
     let type, typeIcon, counterAddress, statusIcon
+    //
+    // const address = wallet.address.toLowerCase()
 
-    const address = wallet.address.toLowerCase()
-
-    if (transaction.from.toLowerCase() === address) {
+    if (transaction.fromMe) {
       if (transaction.to) {
         type = 'send'
         typeIcon = require('../../assets/images/icon_send.png')
@@ -44,7 +44,7 @@ class TransactionList extends React.Component {
         typeIcon = require('../../assets/images/icon_send.png')
         counterAddress = transaction.contractAddress
       }
-    } else if (transaction.to.toLowerCase() === address) {
+    } else if (transaction.toMe) {
       type = 'receive'
       typeIcon = require('../../assets/images/icon_receive.png')
       counterAddress = transaction.from
@@ -158,7 +158,7 @@ class TransactionList extends React.Component {
       return 1;
     return 0;
   }
-  onEndReached() {
+  onEndReached = () => {
     try {
       console.log('endReached')
       this.props.onEndReached()
@@ -166,39 +166,35 @@ class TransactionList extends React.Component {
       console.log('error in TxList', e)
     }
   }
+  onRefresh = () => {
+    try {
+      console.log('onRefresh', this.props.refreshing)
+      this.props.onRefresh()
+    } catch (e) {
+      console.log('error in onRefresh', e)
+    }
+  }
   render() {
     const { transactions, t, i18n } = this.props
     if(transactions === undefined)
       return null
     const dataArray = _.values(transactions)
-
+    console.log('onRefresh, refreshing, onEndReached, endReached', this.props.onRefresh, this.props.refreshing, this.props.onEndReached)
     return (
-      <View style={{ width: '100%' }}>
-        <View style={{ height: 40, width: '100%', borderBottomColor: '#aaaaaa', borderBottomWidth: 1, flexDirection: "row"}}>
-          <View style={{ flex: 0.1, justifyContent: 'center', alignItems: 'center' }}>
-          </View>
-          <View style={{ flex: 0.4, justifyContent: 'center', alignItems: 'center', paddingLeft: 0 }}>
-            <Text numberOfLines={1} style={{ color: 'white', fontSize: 12 }}>{ t('receiver', { locale: i18n.language }) } / { t('sender', { locale: i18n.language }) }</Text>
-          </View>
-          <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', paddingLeft: 0, paddingRight: 0 }}>
-            <Text numberOfLines={1} style={{ color: 'white', fontSize: 12 }}>{ t('date', { locale: i18n.language }) } / { t('time', { locale: i18n.language }) }</Text>
-          </View>
-          <View style={{ flex: 0.25, justifyContent: 'center', alignItems: 'center', paddingLeft: 0, paddingRight: 0 }}>
-            <Text numberOfLines={1} style={{ color: 'white', fontSize: 12 }}>{ t('amount', { locale: i18n.language }) }</Text>
-          </View>
-          <View style={{ flex: 0.05, justifyContent: 'center', alignItems: 'flex-end', paddingLeft: 0, paddingRight: 0 }}>
-          </View>
-        </View>
-        <FlatList
-          data={ dataArray.sort(this._compare) }
-          renderItem={ this.renderTransactionItem }
-          contentContainerStyle={{ padding: 15 }}
-          keyExtractor={( item, index ) => index.toString() }
-          onEndReachedThreshold={ 0.5 }
-          onEndReached={this.onEndReached}
+
+      <FlatList
+        data={ dataArray.sort(this._compare) }
+        renderItem={ this.renderTransactionItem }
+        contentContainerStyle={{ padding: 15 }}
+        keyExtractor={( item, index ) => index.toString() }
+        onEndReachedThreshold={ 0.1 }
+        onEndReached={this.onEndReached}
+        onRefresh={ this.onRefresh }
+        refreshing={ this.props.refreshing }
+
 //        ref={ el => this.listElement = el }
-        />
-      </View>
+      />
+
     )
   }
 }
