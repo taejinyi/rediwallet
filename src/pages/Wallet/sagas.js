@@ -79,7 +79,6 @@ export function* saveWalletToDB(action) {
   let { db, wallet } = action
   try {
     const fetchResult = yield call(() => db.get('wallet'))
-    console.log('fetchResult in saveWalletToDB', fetchResult)
     yield call(() => db.put({
       _id: 'wallet',
       data: wallet,
@@ -182,6 +181,7 @@ export function* getWalletFromDB(action) {
   let { db } = action
   try {
     const fetchResult = yield call(() => db.get('wallet'))
+    console.log('fetchResult in getWalletFromDB', fetchResult)
     if (fetchResult.data) {
       let wallet = fetchResult.data
       if (wallet.fx !== undefined) {
@@ -192,13 +192,13 @@ export function* getWalletFromDB(action) {
         type: SAVE_WALLET,
         wallet: wallet,
       })
+      return wallet
     }
-    return fetchResult.data
   } catch (e) {
-    const wallet = yield Wallet.generateWallet()
-    yield call(saveWalletToDB, {db: db, wallet: wallet})
-    return wallet
   }
+  const wallet = yield Wallet.generateWallet()
+  yield call(saveWalletToDB, {db: db, wallet: wallet})
+  return wallet
 }
 
 
@@ -221,7 +221,9 @@ export function* startWalletInstance(action) {
   let { db, wallet } = action
   try {
     const iWallet = new Wallet()
+    console.log("iWallet.address in startWalletInstance", iWallet.address, wallet)
     yield iWallet.start(wallet)
+    console.log("iWallet.address in startWalletInstance", iWallet.address)
     yield put({
       type: SAVE_WALLET_INSTANCE,
       iWallet: iWallet,

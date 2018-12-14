@@ -96,6 +96,9 @@ export function* getTransactionsFromNetwork(action) {
           type: SAVE_PAGE_STATE,
           pageState: PAGE_STATE.STATE_LOADING_COMPLETE,
         })
+        yield put({
+          type: HIDE_PROCESSING_MODAL
+        })
         return
       } else if (data.length < offset) {
         nextState = PAGE_STATE.STATE_LOADING_COMPLETE
@@ -258,6 +261,19 @@ export function* saveOneTransaction(action) {
       })
     }
   }
+}
+
+function retryUntilWritten(doc) {
+  return db.get(doc._id).then(function (origDoc) {
+    doc._rev = origDoc._rev;
+    return db.put(doc);
+  }).catch(function (err) {
+    if (err.status === 409) {
+      return retryUntilWritten(doc);
+    } else { // new doc
+      return db.put(doc);
+    }
+  });
 }
 
 

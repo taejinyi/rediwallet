@@ -160,7 +160,7 @@ class WalletDetailPage extends React.Component {
       currencyIcon = "￦"
     }
     try {
-      fxRate = iWallet.fx[account.address][iWallet.currencyAddress]
+      fxRate = iWallet.fx[account.currency][iWallet.currency]
     } catch(e) {
       fxRate = 1
     }

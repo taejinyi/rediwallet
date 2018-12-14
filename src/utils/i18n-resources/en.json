@@ -6,7 +6,8 @@
 		"accountBalance": "Account Balance",
 		"totalAsset": "Total Asset",
 		"send": "Send",
-		"receive": "Receive"
+		"receive": "Receive",
+		"KOVAN": "KOVAN",
 	},
 	"main": {
 		"close": "Close",
@@ -81,6 +82,8 @@
 		"date": "Date",
 		"time": "Time",
 		"showToReceive": "Show to sender",
-
+		"network_setting": "Network Setting",
+		"gas_price": "Gas Price",
+		"network": "Network",
 	}
 }

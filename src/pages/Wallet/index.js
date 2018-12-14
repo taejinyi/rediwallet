@@ -27,14 +27,23 @@ class WalletPage extends React.Component {
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
   }
   renderStatusIcon = () => {
-    const { iWallet } = this.props
+    const { t, i18n, iWallet } = this.props
     switch(iWallet.traffic) {
       case TRAFFIC_STATUS.PASSING:
-        return (<FontAwesome name='check-circle' style={{ fontSize: 24, color: 'green', }} />)
+        return (<View>
+          <FontAwesome name='check-circle' style={{fontSize: 24, color: 'green',}}/>
+          <Text>{t(iWallet.rpc.name, { locale: i18n.language })}</Text>
+        </View>)
       case TRAFFIC_STATUS.PAUSED:
-        return (<MaterialCommunityIcons size={ 24 } color='yellow' name='pause-octagon' />)
+        return (<View>
+          <MaterialCommunityIcons size={ 24 } color='yellow' name='pause-octagon' />
+          <Text>{t(iWallet.rpc.name, { locale: i18n.language })}</Text>
+        </View>)
       case TRAFFIC_STATUS.PENDING:
-        return (<MaterialCommunityIcons size={ 24 } color='grey' name='dots-horizontal-circle' />)
+        return (<View>
+          <MaterialCommunityIcons size={ 24 } color='grey' name='dots-horizontal-circle' />
+          <Text>{t(iWallet.rpc.name, { locale: i18n.language })}</Text>
+        </View>)
       default:
         return (<MaterialCommunityIcons size={ 24 } color='red' name='close-octagon' />)
     }
@@ -99,7 +108,7 @@ class WalletPage extends React.Component {
   async componentDidMount() {
     this._interval = setInterval( () => {
       this.refreshWallet().then()
-    }, 3000);
+    }, 30000);
   }
 
   async componentWillUnmount() {
@@ -166,7 +175,7 @@ class WalletPage extends React.Component {
                   paddingTop: 40
                 }}>
                   <TouchableOpacity
-                    onPress={ () => this.setState({ isTrafficModalShow: true}) }
+                    onPress={ () => this.debounceNavigate('NetworkSetting') }
                     style={{ paddingLeft: 10, paddingRight:10, paddingBottom: 7, paddingTop: 0}}>
                     { this.renderStatusIcon() }
                   </TouchableOpacity>

@@ -12,32 +12,8 @@ const kovanURL = "https://kovan.infura.io"
 const mainnetURL = "https://mainnet.infura.io"
 const etherscanAPIKey = "X9ITJBMCCS6RDC96RB4AKV37KBEWBWSYWW"
 const etherscanAPIURL = "https://api-kovan.etherscan.io/api"
-// const kovanURL = "https://kovan.infura.io/v3/5f559ee7fbf849c5a63c5a272dfe2530"
-
 const ethereumAddress = "0x0000000000000000000000000000000000000000"
-const krwtAddress = "0xd5a23575d32849b7430dcd44d28c9fef3954068a"
-const infleumAddress = "0xf337f6821b18b2eb24c44d74f3fa91128ead23f4"
-
-export const initialAccounts = {
-  [ ethereumAddress ]: {
-    balance: 0,
-    currency: "ETH",
-    address: ethereumAddress,
-    decimals: 18,
-  },
-  [ krwtAddress ]: {
-    balance: 0,
-    currency: "KRWT",
-    address: krwtAddress,
-    decimals: 0,
-  },
-  [ infleumAddress ]: {
-    balance: 0,
-    currency: "IFUM",
-    address: infleumAddress,
-    decimals: 0,
-  },
-}
+// const kovanURL = "https://kovan.infura.io/v3/5f559ee7fbf849c5a63c5a272dfe2530"
 
 export async function getMnemonic() {
   const hex = await SecureStore.getItemAsync('seed')
@@ -58,21 +34,64 @@ export const TRAFFIC_STATUS = {
   PENDING: 'PENDING',
 }
 
+export const INITIAL_RPC_LIST = {
+  MAINNET: {
+    name: "MAINNET",
+    url: "https://mainnet.infura.io",
+    etherscanUrl: "https://api.etherscan.io/api",
+    djangoUrl: "https://api.socu.io",
+    ethereumAddress: ethereumAddress,
+    krwtAddress: "0xd5a23575d32849b7430dcd44d28c9fef3954068a",
+    infleumAddress: "0xf337f6821b18b2eb24c44d74f3fa91128ead23f4"
+  },
+  KOVAN: {
+    name: "KOVAN",
+    url: "https://kovan.infura.io",
+    etherscanUrl: "https://api-kovan.etherscan.io/api",
+    djangoUrl: "https://api.socu.io",
+    ethereumAddress: ethereumAddress,
+    krwtAddress: "0xd5a23575d32849b7430dcd44d28c9fef3954068a",
+    infleumAddress: "0xf337f6821b18b2eb24c44d74f3fa91128ead23f4"
+  }
+}
+export const INITIAL_RPC = INITIAL_RPC_LIST.KOVAN
+
+export const initialAccounts = {
+  [ INITIAL_RPC.ethereumAddress ]: {
+    balance: 0,
+    currency: "ETH",
+    address: INITIAL_RPC.ethereumAddress,
+    decimals: 18,
+  },
+  [ INITIAL_RPC.krwtAddress ]: {
+    balance: 0,
+    currency: "KRWT",
+    address: INITIAL_RPC.krwtAddress,
+    decimals: 0,
+  },
+  [ INITIAL_RPC.infleumAddress ]: {
+    balance: 0,
+    currency: "IFUM",
+    address: INITIAL_RPC.infleumAddress,
+    decimals: 0,
+  },
+}
+
 export const initialFx = {
-  [ ethereumAddress ]: {
-    [ ethereumAddress ] : 1,
-    [ krwtAddress ] : 135000,
-    [ infleumAddress ] : 9335,
+  ETH: {
+    ETH : 1,
+    KRWT : 100000,
+    IFUM : 5000,
   },
-  [ krwtAddress ]: {
-    [ ethereumAddress ] : 0.000005356186395,
-    [ krwtAddress ] : 1,
-    [ infleumAddress ] : 0.05,
+  KRWT: {
+    ETH : 0.000001,
+    KRWT : 1,
+    IFUM : 0.05,
   },
-  [ infleumAddress ]: {
-    [ ethereumAddress ] : 0.0001071237279,
-    [ krwtAddress ] : 20,
-    [ infleumAddress ] : 1,
+  IFUM: {
+    ETH : 0.0002,
+    KRWT : 20,
+    IFUM : 1,
   },
 }
 
@@ -80,11 +99,12 @@ export default class Wallet {
   constructor() {
     this.ready = false
     this.currency = "ETH"
-    this.currencyAddress = ethereumAddress
+    this.currencyAddress = INITIAL_RPC.ethereumAddress
     this.nonce = 0
     this.address = undefined
     this.accounts = initialAccounts
-    this.unions = {}
+    this.rpc = INITIAL_RPC
+    this.rpcList = INITIAL_RPC_LIST
     this._web3 = undefined
     this._contracts = {}
     this.fx = initialFx
@@ -92,42 +112,21 @@ export default class Wallet {
   }
 
   getWeb3 = async (mnemonic, nonce=0) => {
-    if (debug) {
-      const provider = new HDWalletProvider(mnemonic, kovanURL, nonce)
-      return new Web3(provider);
-    } else {
-      const provider = new HDWalletProvider(mnemonic, mainnetURL, nonce)
-      return new Web3(provider);
-    }
+    const provider = new HDWalletProvider(mnemonic, this.rpc.url, nonce)
+    return new Web3(provider);
   }
 
   getERC20ABIAsync = async () => {
     return require("rediwallet/src/contracts/Infleum.json").abi
   }
-  getContractAddressAsync = async (currency) => {
-    if (debug) {
-      if (currency === "KRWT") {
-        return "0xd5a23575d32849b7430dcd44d28c9fef3954068a"
-      } else if (currency === "IFUM") {
-        return "0xf337f6821b18b2eb24c44d74f3fa91128ead23f4"
-      } else {
-        return ethereumAddress
-      }
-    } else {
-      if (currency === "KRWT") {
-        return "0x"
-      } else if (currency === "IFUM") {
-        return "0x"
-      } else {
-        return "0x"
-      }
-    }
-  }
+
   getJson = () => {
     return {
       address: this.address,
       nonce: this.nonce,
       currency: this.currency,
+      rpc: this.rpc,
+      rpcList: this.rpcList,
       currencyAddress: this.currencyAddress,
       accounts: this.accounts,
       fx: this.fx
@@ -162,6 +161,7 @@ export default class Wallet {
   }
 
   start = async (wallet) => {
+    console.log('starting')
     if (this.ready) {
       return
     }
@@ -172,6 +172,12 @@ export default class Wallet {
     this.accounts = wallet.accounts
     if (wallet.fx) {
       this.fx = wallet.fx
+    }
+    if (wallet.rpc) {
+      this.rpc = wallet.rpc
+    }
+    if (wallet.rpcList) {
+      this.rpcList = wallet.rpcList
     }
     this._web3 = await this.getWeb3(await getMnemonic())
     this.ready = true
@@ -187,6 +193,7 @@ export default class Wallet {
     }
     return this._contracts[token]
   }
+
   getBalance = async (token) => {
     if (token === ethereumAddress) {
       return await this._web3.eth.getBalance(this.address)
@@ -194,6 +201,7 @@ export default class Wallet {
     const contract = await this.getTokenContract(token)
     return await contract.methods.balanceOf(this.address).call()
   }
+
   getSymbol = async (token) => {
     if (token === ethereumAddress) {
       return "ETH"
@@ -205,6 +213,7 @@ export default class Wallet {
       return "Unknown"
     }
   }
+
   getDecimals = async (token) => {
     if (token === ethereumAddress) {
       return 18
@@ -216,6 +225,7 @@ export default class Wallet {
       return 0
     }
   }
+
   getGasPrice = async () => {
     try {
       const ret = await this._web3.eth.getGasPrice()
@@ -224,6 +234,7 @@ export default class Wallet {
       return null
     }
   }
+
   getEthBalance = () => {
     try {
       return this.accounts[ethereumAddress].balance
@@ -231,6 +242,7 @@ export default class Wallet {
       return 0
     }
   }
+
   getEthDecimals = () => {
     try {
       return this.accounts[ethereumAddress].decimals
@@ -278,13 +290,14 @@ export default class Wallet {
     }
 
   }
+
   fetchWalletFromNetwork = async () => {
     const ethMidPrice = await this.getEthPriceInKRW()
     if (ethMidPrice) {
-      this.fx[ethereumAddress][krwtAddress] = ethMidPrice
-      this.fx[krwtAddress][ethereumAddress] = 1 / parseFloat(ethMidPrice)
-      this.fx[ethereumAddress][infleumAddress] = ethMidPrice / 20
-      this.fx[infleumAddress][ethereumAddress] = 20 / parseFloat(ethMidPrice)
+      this.fx["ETH"]["KRWT"] = ethMidPrice
+      this.fx["KRWT"]["ETH"] = 1 / parseFloat(ethMidPrice)
+      this.fx["ETH"]["IFUM"] = ethMidPrice / 20
+      this.fx["IFUM"]["ETH"] = 20 / parseFloat(ethMidPrice)
     }
     this.gasPrice = await this.getGasPrice()
     const gwei = Math.pow(10, 9)
@@ -334,67 +347,64 @@ export default class Wallet {
       }
     }
   }
-  getTransactions = async (token=ethereumAddress, page=1, offset=10) => {
-    if (token === ethereumAddress) {
-      const module = "account"
-      const action = "txlist"
-      const address = this.address
-      const startblock = 0
-      const endblock = 99999999
-      const sort = "desc"
-      const url = etherscanAPIURL + "?module=" + module +
-        "&action=" + action +
-        "&address=" + address +
-        "&startblock=" + startblock +
-        "&endblock=" + endblock +
-        "&page=" + page +
-        "&offset=" + offset +
-        "&sort=" + sort +
-        "&apiKey=" + etherscanAPIKey;
-      try {
-        const result = await axios({
-          method: "GET",
-          url: url
-        })
-        return result
-      } catch (e) {
-        console.error("Error in getTransactions ", e);
-        console.log(e)
-        return e
-      }
-    } else {
-      // const urlll = 'https://api-kovan.etherscan.io/api?module=account&action=tokentx&contractaddress=0xb3A679368ED4E5fAD3e450081Da826193A4f8BBc&address=0x18EfFDa3D2F0Ef936dbBaD3dC85dAF2ba6540C81&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apiKey=X9ITJBMCCS6RDC96RB4AKV37KBEWBWSYWW'
-      const module = "account"
-      const action = "tokentx"
-      const contractAddress = token
-      const address = this.address
-      const startblock = 0
-      const endblock = 99999999
-      const sort = "desc"
-      const url = etherscanAPIURL + "?module=" + module +
-        "&action=" + action +
-        "&contractaddress=" + contractAddress +
-        "&address=" + address +
-        "&startblock=" + startblock +
-        "&endblock=" + endblock +
-        "&page=" + page +
-        "&offset=" + offset +
-        "&sort=" + sort +
-        "&apiKey=" + etherscanAPIKey;
 
-      try {
+  getTransactions = async (token=ethereumAddress, page=1, offset=10) => {
+    try {
+      if (token === ethereumAddress) {
+        const module = "account"
+        const action = "txlist"
+        const address = this.address
+        const startblock = 0
+        const endblock = 99999999
+        const sort = "desc"
+        const url = this.rpc.etherscanUrl + "?module=" + module +
+          "&action=" + action +
+          "&address=" + address +
+          "&startblock=" + startblock +
+          "&endblock=" + endblock +
+          "&page=" + page +
+          "&offset=" + offset +
+          "&sort=" + sort +
+          "&apiKey=" + etherscanAPIKey;
         const result = await axios({
           method: "GET",
           url: url
         })
         return result
-      } catch (e) {
-        console.error("Error in getTransactions ", e);
-        console.log(e)
-        return e
       }
+      else {
+        // const urlll = 'https://api-kovan.etherscan.io/api?module=account&action=tokentx&contractaddress=0xb3A679368ED4E5fAD3e450081Da826193A4f8BBc&address=0x18EfFDa3D2F0Ef936dbBaD3dC85dAF2ba6540C81&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apiKey=X9ITJBMCCS6RDC96RB4AKV37KBEWBWSYWW'
+        const module = "account"
+        const action = "tokentx"
+        const contractAddress = token
+        const address = this.address
+        const startblock = 0
+        const endblock = 99999999
+        const sort = "desc"
+        const url = this.rpc.etherscanUrl + "?module=" + module +
+          "&action=" + action +
+          "&contractaddress=" + contractAddress +
+          "&address=" + address +
+          "&startblock=" + startblock +
+          "&endblock=" + endblock +
+          "&page=" + page +
+          "&offset=" + offset +
+          "&sort=" + sort +
+          "&apiKey=" + etherscanAPIKey;
+
+        const result = await axios({
+          method: "GET",
+          url: url
+        })
+        return result
+      }
+    } catch (e) {
+      console.error("Error in getTransactions ", e);
+      console.log(e)
+      return e
     }
   }
+
 
   getTransaction = async (hash) => {
     return await this._web3.eth.getTransaction(hash)
@@ -413,11 +423,14 @@ export default class Wallet {
     const tokens = _.keys(this.accounts)
     for(let i = 0; i < tokens.length; i++){
       const token = tokens[i]
+
       try {
-        totalAssetAmount = totalAssetAmount + parseFloat(this.accounts[token].balance) / Math.pow(10, this.accounts[token].decimals) * this.fx[token][this.currencyAddress]
+        const tokenCurrency = this.accounts[token].currency
+        totalAssetAmount = totalAssetAmount + parseFloat(this.accounts[token].balance) / Math.pow(10, this.accounts[token].decimals) * this.fx[tokenCurrency][this.currency]
       } catch(e) {
         try {
-          totalAssetAmount = totalAssetAmount + parseFloat(this.accounts[token].balance) / Math.pow(10, this.accounts[token].decimals) * initialFx[token][this.currencyAddress]
+          const tokenCurrency = this.accounts[token].currency
+          totalAssetAmount = totalAssetAmount + parseFloat(this.accounts[token].balance) / Math.pow(10, this.accounts[token].decimals) * initialFx[tokenCurrency][this.currency]
         } catch(e){
           console.log(e)
         }

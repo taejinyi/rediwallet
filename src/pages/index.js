@@ -14,6 +14,8 @@ import SendPage from './Send'
 import QRCodeScan from './QRCodeScan'
 import SettingPage from './Setting'
 import WalletChangeCurrency from './WalletChangeCurrency'
+import NetworkSettingPage from './NetworkSetting'
+import ChangeNetworkPage from './ChangeNetwork'
 import appStateReducer from '../reducers'
 import splashStateReducer from './Splash/reducers'
 import walletReducer from './Wallet/reducers'
@@ -145,6 +147,8 @@ export {
   QRCodeScan,
   SettingPage,
   WalletChangeCurrency,
+  NetworkSettingPage,
+  ChangeNetworkPage,
   actions,
   sagas,
   reducers,

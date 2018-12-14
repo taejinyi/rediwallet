@@ -14,7 +14,8 @@
 		"myWalletQRCode": "내 지갑의 QRCode",
 		"totalAsset": "총자산",
 		"send": "보내기",
-		"receive": "받기"
+		"receive": "받기",
+		"KOVAN": "KOVAN",
 	},
 	"main": {
 		"close": "닫기",
@@ -84,6 +85,8 @@
 		"date": "일",
 		"time": "시",
 		"showToReceive": "보내는 사람에게 보여주시기 바랍니다.",
-
+		"network_setting": "네트워크 설정",
+		"gas_price": "가스 가격",
+		"network": "네트워크",
 	}
 }

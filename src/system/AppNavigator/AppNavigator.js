@@ -18,7 +18,9 @@ import {
   SendPage,
   SettingPage,
   QRCodeScan,
-  WalletChangeCurrency
+  WalletChangeCurrency,
+  NetworkSettingPage,
+  ChangeNetworkPage,
 } from '../../pages'
 import i18n from '../../utils/i18n'
 
@@ -217,6 +219,20 @@ const AppNavigator = StackNavigator({
     navigationOptions: () => ({
       header: null,
       headerBackTitle: i18n.t('main:private_key_backup', { locale: i18n.language }),
+    })
+  },
+  NetworkSetting: {
+    screen: withLoading(withDB(withLock(withWallet(NetworkSettingPage)))),
+    navigationOptions: () => ({
+      header: null,
+      headerBackTitle: i18n.t('main:network_setting', { locale: i18n.language }),
+    })
+  },
+  ChangeNetwork: {
+    screen: withLoading(withDB(withLock(withWallet(ChangeNetworkPage)))),
+    navigationOptions: () => ({
+      header: null,
+      headerBackTitle: i18n.t('main:network', { locale: i18n.language }),
     })
   },
   MnemonicBackup: {

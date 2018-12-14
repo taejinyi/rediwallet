@@ -44,7 +44,7 @@ class WalletAccountList extends React.Component {
       currencyIcon = "￦"
     }
     try {
-      fxRate = iWallet.fx[accountData.address][iWallet.currencyAddress]
+      fxRate = iWallet.fx[accountData.currency][iWallet.currency]
     } catch(e) {
       fxRate = 1
     }
