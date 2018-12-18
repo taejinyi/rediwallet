@@ -13,16 +13,16 @@ class WalletAccountList extends React.Component {
     super(props)
 
     this.state = {
-      lastAccountIndex: props.wallet.accounts ? ((Object.keys(props.wallet.accounts).length) - 1) : undefined,
+      lastAccountIndex: props.iWallet.accounts ? ((Object.keys(props.iWallet.accounts).length) - 1) : undefined,
       refreshing: false
     }
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.wallet) {
+    if(nextProps.iWallet) {
       this.setState({
-        lastAccountIndex: Object.keys(nextProps.wallet.accounts).length - 1,
+        lastAccountIndex: Object.keys(nextProps.iWallet.accounts).length - 1,
       })
     }
   }
@@ -97,13 +97,13 @@ class WalletAccountList extends React.Component {
   }
 
   render() {
-    const { wallet, } = this.props
-    if(wallet === null || wallet.accounts === undefined)
+    const { iWallet, } = this.props
+    if(iWallet === null || iWallet.accounts === undefined)
       return null
 
     return (
       <FlatList
-        data={ _.values(wallet.accounts) }
+        data={ _.values(iWallet.accounts) }
         renderItem={ this.renderAccountItem }
         refreshing={this.state.refreshing}
         onRefresh={this._onRefresh}

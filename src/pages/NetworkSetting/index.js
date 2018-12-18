@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
-import {View, Text, Alert, StatusBar, TouchableWithoutFeedback} from 'react-native'
-import { Feather } from '@expo/vector-icons'
+import {View, Text, Alert, StatusBar, TouchableOpacity} from 'react-native'
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons'
 import { Container, Content, Body, Left, List, ListItem, Icon, Separator, Right } from 'native-base'
 import { Updates, SecureStore } from 'expo'
 import { Header } from 'rediwallet/src/components'
@@ -21,12 +21,20 @@ class NetworkSettingPage extends React.Component {
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
   }
 
-  changePinNumber = async () => {
-    this.debounceNavigate('ChangePinNumber')
-  }
-
   changeNetwork = async () => {
     this.debounceNavigate('ChangeNetwork')
+  }
+
+  refreshWallet = async () => {
+    try {
+      //TODO: avoid refreshWallet when other stuff going on
+      // if (this.props.navigation.state.routeName === "Wallet") {
+        const { db, iWallet } = this.props
+        await this.props.getWalletFromNetwork(db, iWallet)
+      // }
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   render() {
@@ -38,10 +46,10 @@ class NetworkSettingPage extends React.Component {
         backgroundColor: '#303140',
       }}>
         {/*<StatusBar barStyle='light-content' />*/}
-        <View style={{ paddingTop: 15, paddingLeft: 15, flex: 0.1, width: "100%", justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', }}>
-          <TouchableWithoutFeedback onPress={() => this.props.navigation.goBack(null)}>
+        <View style={{ paddingTop: 15, paddingLeft: 15, paddingRight: 15, flex: 0.1, width: "100%", justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', }}>
+          <TouchableOpacity onPress={() => this.props.navigation.goBack(null)}>
             <Feather name='x' style={{ fontSize: 32, color: 'white', }} />
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
         </View>
         <View style={{ flex: 0.2, }}>
           <Header
@@ -50,6 +58,20 @@ class NetworkSettingPage extends React.Component {
           />
         </View>
         <Content style={{ backgroundColor: 'white', }}>
+          <ListItem
+            onPress={ this.refreshWallet }
+            button
+            icon>
+            <Left>
+              <Icon style={{ color: '#666666', }} name='ios-megaphone' />
+            </Left>
+            <Body>
+              <Text>{t('refreshWallet', { locale: i18n.language })}</Text>
+            </Body>
+            <Right>
+              <Icon name='arrow-forward' />
+            </Right>
+          </ListItem>
           <ListItem
             onPress={ this.changeNetwork }
             button
@@ -74,21 +96,6 @@ class NetworkSettingPage extends React.Component {
             </Body>
             <Right>
               <Text>{gasPrice}</Text>
-            </Right>
-          </ListItem>
-          <Separator />
-          <ListItem
-            onPress={ this.changeNetwork }
-            button
-            icon>
-            <Left>
-              <Icon name='ios-contact' style={{ color: '#666666', }} />
-            </Left>
-            <Body>
-              <Text>{t('change_network', { locale: i18n.language })}</Text>
-            </Body>
-            <Right>
-              <Icon name='arrow-forward' />
             </Right>
           </ListItem>
         </Content>

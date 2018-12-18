@@ -85,5 +85,6 @@
 		"network_setting": "Network Setting",
 		"gas_price": "Gas Price",
 		"network": "Network",
+		"refreshWallet": "Refresh Wallet",
 	}
 }

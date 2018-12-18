@@ -19,7 +19,6 @@ class WalletPage extends React.Component {
     super(props)
 
     this.state = {
-      wallet: props.wallet,
       wallets: props.wallets,
       isTrafficModalShow: false
     }
@@ -93,14 +92,13 @@ class WalletPage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      wallet: nextProps.wallet,
       iWallet: nextProps.iWallet,
       wallets: nextProps.wallets,
     })
   }
 
   async componentWillMount() {
-    const { db, wallet, iWallet } = this.props
+    const { db, iWallet } = this.props
     this.props.getWalletFromNetwork(db, iWallet)
     this.logo = require('../../assets/images/logo_428x222.png')
   }
@@ -129,19 +127,19 @@ class WalletPage extends React.Component {
 
   render() {
     const { navigation, t, i18n } = this.props
-    const { wallet, iWallet } = this.props
+    const { iWallet } = this.props
     const { isTrafficModalShow } = this.state
 
     let currencyIcon, currencyName, totalAssetAmount = 0
 
-    if (wallet){
-      if (wallet.currency === "ETH") {
+    if (iWallet){
+      if (iWallet.currency === "ETH") {
         currencyIcon = "ETH"
         currencyName = "Ethereum"
-      } else if (wallet.currency === "IFUM") {
+      } else if (iWallet.currency === "IFUM") {
         currencyIcon = "IFUM"
         currencyName = "Infleum"
-      } else if (wallet.currency === "KRWT") {
+      } else if (iWallet.currency === "KRWT") {
         currencyIcon = "￦"
         currencyName = "KRW Tether"
       } else {
@@ -203,11 +201,10 @@ class WalletPage extends React.Component {
         </View>
         <Content style={{ backgroundColor: '#303140', width:'100%'}}>
           {
-            (wallet && wallet.address !== undefined) ? (
+            (iWallet && iWallet.address !== undefined) ? (
               <View style={ styles.WalletAccountListContainer }>
                 <WalletAccountList
-                  wallet={ wallet }
-                  iWallet={this.props.iWallet}
+                  iWallet={ iWallet }
                   navigation={ navigation }
                 />
               </View>
@@ -296,7 +293,6 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => ({
   // getWalletFromDB: (db) => dispatch(actions.getWalletFromDB(db)),
-  getWalletFromNetwork: (db, iWallet) => dispatch(actions.getWalletFromNetwork(db, iWallet)),
   showProcessingModal: (message) => dispatch(actions.showProcessingModal(message))
 })
 

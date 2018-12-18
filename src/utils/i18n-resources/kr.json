@@ -88,5 +88,6 @@
 		"network_setting": "네트워크 설정",
 		"gas_price": "가스 가격",
 		"network": "네트워크",
+		"refreshWallet": "지갑정보 다시 불러오기",
 	}
 }
