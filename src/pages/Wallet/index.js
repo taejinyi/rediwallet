@@ -109,6 +109,7 @@ class WalletPage extends React.Component {
   }
 
   async componentWillUnmount() {
+    console.log('WP.componentWillUnmount')
     clearInterval(this._interval);
     const { db, iWallet } = this.props
     this.props.saveWalletInstanceToDB(db, iWallet)

@@ -137,7 +137,10 @@ export function* getWalletFromNetwork(action) {
   let { db, iWallet } = action
   try {
     yield iWallet.fetchWalletFromNetwork()
-    yield call(saveWalletInstanceToDB, {db: db, iWallet: iWallet})
+    yield put({
+      type: SAVE_WALLET_INSTANCE,
+      iWallet: iWallet,
+    })
   } catch (e) {
     console.log("error1 in getWalletFromNetwork", e)
   }

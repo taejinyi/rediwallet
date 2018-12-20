@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { call, put, take, takeEvery } from 'redux-saga/effects'
+import { call, put, take, select, takeEvery } from 'redux-saga/effects'
 
 
 import {
@@ -21,10 +21,10 @@ export function* saveTransactionsToDB(action) {
   const dbIndex = "tx" + token
 
   yield call(() => retryUntilWritten(db, dbIndex, transactions))
-  yield put({
-    type: SAVE_TRANSACTIONS,
-    transactions: transactions,
-  })
+  // yield put({
+  //   type: SAVE_TRANSACTIONS,
+  //   transactions: transactions,
+  // })
 }
 
 function retryUntilWritten(db, index, data) {
@@ -118,31 +118,30 @@ export function* getTransactionsFromNetwork(action) {
         transactions = Object.assign(newTransaction, transactions)
       }
       try {
-        // let originTransactions = yield select((state) => state.transactionsReducer.transactions)
+        let originTransactions = yield select((state) => state.transactionsReducer.transactions)
+        console.log('originTransactions', originTransactions)
         //
-        // if(!originTransactions || !Object.keys(originTransactions).length) {
-        //
+        if(!originTransactions || !Object.keys(originTransactions).length) {
+          yield put({
+            type: SAVE_TRANSACTIONS,
+            transactions: transactions,
+          })
+          updated = true
+        } else {
+          const newTransactions = Object.assign({}, originTransactions, transactions)
+          yield put({
+            type: SAVE_TRANSACTIONS,
+            transactions: newTransactions,
+          })
+          _.keys(transactions).forEach((key) => {
+            // console.log("in forEach", key)
+            if (originTransactions.hasOwnProperty(key)) {
+              updated = true
+            }
+          })
 
-        const fetchResult = yield call(() => db.get(dbIndex))
-
-        const newTransactions = Object.assign({}, fetchResult.data, transactions)
-        // yield call(() => db.put({
-        //   data: newTransactions,
-        //   _id: dbIndex,
-        //   _rev: fetchResult._rev,
-        // }))
-        yield put({
-          type: SAVE_TRANSACTIONS,
-          transactions: newTransactions,
-        })
-
+        }
         // yield call(() => saveTransactionsToDB({db:db, token:token, transactions:newTransactions}))
-        _.keys(transactions).forEach((key) => {
-          // console.log("in forEach", key)
-          if (fetchResult.data.hasOwnProperty(key)) {
-            updated = true
-          }
-        })
       } catch (error) {
         console.log("error in getTransactionsFromNetwork", error)
         yield put({

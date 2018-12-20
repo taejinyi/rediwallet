@@ -96,6 +96,14 @@ class WalletDetailPage extends React.Component {
     Clipboard.setString(this.props.wallet.address)
   }
 
+  async componentWillUnmount() {
+    console.log('WDP.componentWillUnmount')
+    const {db, transactions } = this.props
+    const token = this.props.navigation.state.params.account.address
+    this.props.saveTransactionsToDB(db, token, transactions)
+
+  }
+
   async componentWillMount() {
     const { account } = this.props.navigation.state.params
     const { db, wallet } = this.props.wallet
@@ -128,6 +136,7 @@ class WalletDetailPage extends React.Component {
       'headerTitle': currencyName
     })
     this.headerBackgroundColor = headerBackgroundColor
+    this.props.saveTransactions(undefined)
   }
 
   async componentDidMount() {
@@ -311,6 +320,8 @@ class WalletDetailPage extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
+  saveTransactions: (transactions) => dispatch(actions.saveTransactions(transactions)),
+  saveTransactionsToDB: (db, token, transactions) => dispatch(actions.saveTransactionsToDB(db, token, transactions)),
   getTransactionsFromDB: (db, token) => dispatch(actions.getTransactionsFromDB(db, token)),
   getTransactionsFromNetwork: (db, iWallet, account, page, offset) => dispatch(actions.getTransactionsFromNetwork(db, iWallet, account, page, offset)),
 })
