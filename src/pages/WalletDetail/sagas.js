@@ -20,38 +20,33 @@ export function* saveTransactionsToDB(action) {
   const { db, token, transactions } = action
   const dbIndex = "tx" + token
 
-  try {
-    const fetchResult = yield call(() => db.get(dbIndex))
-    // console.log(dbIndex, fetchResult)
-
-    yield call(() => db.put({
-      data: transactions,
-      _id: dbIndex,
-      _rev: fetchResult._rev,
-    }))
-
-    yield put({
-      type: SAVE_TRANSACTIONS,
-      transactions: transactions,
-    })
-
-  } catch (error) {
-    console.log('error1 in saveTransactionsToDB', error)
-    const { status } = error
-
-    if(status === 404) {
-      yield call(() => db.put({
-        _id: dbIndex,
-        data: transactions,
-      }))
-
-      yield put({
-        type: SAVE_TRANSACTIONS,
-        transactions: transactions,
-      })
-    }
-  }
+  yield call(() => retryUntilWritten(db, dbIndex, transactions))
+  yield put({
+    type: SAVE_TRANSACTIONS,
+    transactions: transactions,
+  })
 }
+
+function retryUntilWritten(db, index, data) {
+  // console.log("in retryUntilWritten", index, _.values(data).length)
+  return db.get(index).then(function (origDoc) {
+    return db.put({
+      data: data,
+      _id: index,
+      _rev: origDoc._rev,
+    });
+  }).catch(function (err) {
+    if (err.status === 409) {
+      return retryUntilWritten(db, index, data);
+    } else { // new doc
+      return db.put({
+        data: data,
+        _id: index,
+      });
+    }
+  });
+}
+
 
 export function* getTransactionsFromDB(action) {
   const { db, token } = action
@@ -60,7 +55,7 @@ export function* getTransactionsFromDB(action) {
 
   try {
     const fetchResult = yield call(() => db.get(dbIndex))
-    console.log('dbIndex fetchResult', dbIndex, fetchResult.data.length)
+    console.log('dbIndex fetchResult', dbIndex, fetchResult._id, fetchResult.data.length)
 
     const transactions = fetchResult.data
 
@@ -81,8 +76,9 @@ export function* getTransactionsFromDB(action) {
 
 export function* getTransactionsFromNetwork(action) {
   const { db, iWallet, account, page, offset } = action
-  const dbIndex = "tx" + account.address
-  console.log('page, dbIndex', page, dbIndex)
+  const token = account.address
+  const dbIndex = "tx" + token
+  // console.log('page, dbIndex', page, dbIndex)
 
   const response = yield call(() => iWallet.getTransactions(account.address, page, offset))
   let nextState = PAGE_STATE.STATE_LOADING_FINISH
@@ -110,7 +106,7 @@ export function* getTransactionsFromNetwork(action) {
         const hash = data[i].hash
         const fromMe = data[i].from.toLowerCase() === iWallet.address.toLowerCase()
         const toMe = data[i].to.toLowerCase() === iWallet.address.toLowerCase()
-        console.log("fromMe, toMe", i, fromMe, toMe, data[i].from, data[i].to, iWallet.address)
+        // console.log("fromMe, toMe", i, fromMe, toMe, data[i].from, data[i].to, iWallet.address)
 
         const newTransaction = {
           [ hash ]: {
@@ -122,43 +118,38 @@ export function* getTransactionsFromNetwork(action) {
         transactions = Object.assign(newTransaction, transactions)
       }
       try {
+        // let originTransactions = yield select((state) => state.transactionsReducer.transactions)
+        //
+        // if(!originTransactions || !Object.keys(originTransactions).length) {
+        //
+
         const fetchResult = yield call(() => db.get(dbIndex))
+
         const newTransactions = Object.assign({}, fetchResult.data, transactions)
-        yield call(() => db.put({
-          data: newTransactions,
-          _id: dbIndex,
-          _rev: fetchResult._rev,
-        }))
+        // yield call(() => db.put({
+        //   data: newTransactions,
+        //   _id: dbIndex,
+        //   _rev: fetchResult._rev,
+        // }))
         yield put({
           type: SAVE_TRANSACTIONS,
           transactions: newTransactions,
         })
+
+        // yield call(() => saveTransactionsToDB({db:db, token:token, transactions:newTransactions}))
         _.keys(transactions).forEach((key) => {
-          console.log("in forEach", key)
+          // console.log("in forEach", key)
           if (fetchResult.data.hasOwnProperty(key)) {
             updated = true
           }
         })
       } catch (error) {
-        console.log('error 1 in getTransactionsFromNetwork', error)
-        try {
-          yield call(() => db.put({
-            _id: dbIndex,
-            data: transactions,
-          }))
-
-          yield put({
-            type: SAVE_TRANSACTIONS,
-            transactions: transactions,
-          })
-        }
-        catch (error) {
-          console.log('error 2 in getTransactionsFromNetwork', error)
-          yield put({
-            type: SAVE_PAGE_STATE,
-            pageState: PAGE_STATE.STATE_LOADING_FAILED,
-          })
-        }
+        console.log("error in getTransactionsFromNetwork", error)
+        yield put({
+          type: SAVE_TRANSACTIONS,
+          transactions: transactions,
+        })
+        // yield call(() => saveTransactionsToDB({db:db, token:token, transactions:transactions}))
       }
     }
 
@@ -262,20 +253,6 @@ export function* saveOneTransaction(action) {
     }
   }
 }
-
-function retryUntilWritten(doc) {
-  return db.get(doc._id).then(function (origDoc) {
-    doc._rev = origDoc._rev;
-    return db.put(doc);
-  }).catch(function (err) {
-    if (err.status === 409) {
-      return retryUntilWritten(doc);
-    } else { // new doc
-      return db.put(doc);
-    }
-  });
-}
-
 
 const transactionsSagas = [
   takeEvery(SAVE_TRANSACTIONS_TO_DB, saveTransactionsToDB),

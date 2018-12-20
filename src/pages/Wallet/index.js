@@ -19,7 +19,7 @@ class WalletPage extends React.Component {
     super(props)
 
     this.state = {
-      wallets: props.wallets,
+      iWallet: props.iWallet,
       isTrafficModalShow: false
     }
 
@@ -93,7 +93,6 @@ class WalletPage extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       iWallet: nextProps.iWallet,
-      wallets: nextProps.wallets,
     })
   }
 
@@ -106,11 +105,13 @@ class WalletPage extends React.Component {
   async componentDidMount() {
     this._interval = setInterval( () => {
       this.refreshWallet().then()
-    }, 30000);
+    }, 3000);
   }
 
   async componentWillUnmount() {
     clearInterval(this._interval);
+    const { db, iWallet } = this.props
+    this.props.saveWalletInstanceToDB(db, iWallet)
   }
 
   refreshWallet = async () => {
@@ -127,7 +128,7 @@ class WalletPage extends React.Component {
 
   render() {
     const { navigation, t, i18n } = this.props
-    const { iWallet } = this.props
+    const { iWallet } = this.state
     const { isTrafficModalShow } = this.state
 
     let currencyIcon, currencyName, totalAssetAmount = 0
@@ -150,6 +151,7 @@ class WalletPage extends React.Component {
         totalAssetAmount = iWallet.getTotalAssetAmount()
       }
     }
+    console.log('render in WalletPage', iWallet ? iWallet.accounts : null)
 
     return (
       <View style={{ flex: 1, backgroundColor: '#303140', alignItems: 'center'}}>
@@ -201,10 +203,12 @@ class WalletPage extends React.Component {
         </View>
         <Content style={{ backgroundColor: '#303140', width:'100%'}}>
           {
-            (iWallet && iWallet.address !== undefined) ? (
+            (this.state.iWallet && this.state.iWallet.address !== undefined) ? (
               <View style={ styles.WalletAccountListContainer }>
                 <WalletAccountList
-                  iWallet={ iWallet }
+                  currency={ iWallet.currency }
+                  accounts={ iWallet.accounts }
+                  fx={ iWallet.fx }
                   navigation={ navigation }
                 />
               </View>

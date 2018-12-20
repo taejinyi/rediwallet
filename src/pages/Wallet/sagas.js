@@ -14,6 +14,7 @@ import {
 } from './actions'
 import Wallet, {initialFx} from "../../system/Wallet"
 import {UNSET_LOADING} from "../../actions";
+import {SAVE_TRANSACTIONS} from "../WalletDetail/actions";
 
 export function* createWallet(action) {
   const { db } = action
@@ -74,47 +75,34 @@ export function* setDefaultWallet(action) {
     console.log("error2 in setDefaultWallet", e)
   }
 }
-
 export function* saveWalletToDB(action) {
   let { db, wallet } = action
-  try {
-    const fetchResult = yield call(() => db.get('wallet'))
-    yield call(() => db.put({
-      _id: 'wallet',
-      data: wallet,
-      _rev: fetchResult._rev,
-    }))
-    yield put({
-      type: SAVE_WALLET,
-      wallet: wallet,
-    })
-  } catch (e) {
-    console.log("error1 in saveWalletToDB", e)
-    yield call(() => db.put({
-      _id: 'wallet',
-      data: wallet,
-    }))
-    yield put({
-      type: SAVE_WALLET,
-      wallet: wallet,
-    })
-  }
-  // const newWallet = {
-  //   [wallet.address]: {
-  //     address: wallet.address,
-  //     nonce: wallet.nonce,
-  //     currency: wallet.currency,
-  //     accounts: wallet.accounts
-  //   }
-  // }
-  // let wallets = null
-  // try {
-  //   const fetchResult = yield call(() => db.get('wallets'))
-  //   wallets = Object.assign({}, fetchResult.data, newWallet)
-  // } catch (e) {
-  //   wallets = newWallet
-  // }
-  // yield call(saveWalletsToDB, {db: db, wallets: wallets})
+
+  yield call(() => retryUntilWritten(db, "wallet", wallet))
+  yield put({
+    type: SAVE_WALLET,
+    wallet: wallet,
+  })
+
+}
+
+function retryUntilWritten(db, index, data) {
+  return db.get(index).then(function (origDoc) {
+    return db.put({
+      data: data,
+      _id: index,
+      _rev: origDoc._rev,
+    });
+  }).catch(function (err) {
+    if (err.status === 409) {
+      return retryUntilWritten(db, index, data);
+    } else { // new doc
+      return db.put({
+        data: data,
+        _id: index,
+      });
+    }
+  });
 }
 
 export function* saveWalletsToDB(action) {
@@ -149,8 +137,7 @@ export function* getWalletFromNetwork(action) {
   let { db, iWallet } = action
   try {
     yield iWallet.fetchWalletFromNetwork()
-    const newWallet = iWallet.getJson()
-    yield call(saveWalletToDB, {db: db, wallet: newWallet})
+    yield call(saveWalletInstanceToDB, {db: db, iWallet: iWallet})
   } catch (e) {
     console.log("error1 in getWalletFromNetwork", e)
   }
@@ -238,15 +225,11 @@ export function* startWalletInstance(action) {
 
 export function* saveWalletInstanceToDB(action) {
   let { db, iWallet } = action
-  // console.log('in saveWalletInstanceToDB', iWallet)
+  console.log('in saveWalletInstanceToDB', iWallet.accounts)
   try {
 
     const wallet = iWallet.getJson()
-    yield put({
-      type: SAVE_WALLET_TO_DB,
-      db: db,
-      wallet: wallet,
-    })
+    yield call(saveWalletToDB, {db: db, wallet: wallet})
     yield put({
       type: SAVE_WALLET_INSTANCE,
       iWallet: iWallet,

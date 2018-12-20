@@ -13,18 +13,9 @@ class WalletAccountList extends React.Component {
     super(props)
 
     this.state = {
-      lastAccountIndex: props.iWallet.accounts ? ((Object.keys(props.iWallet.accounts).length) - 1) : undefined,
-      refreshing: false
+      refreshing: false,
     }
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.iWallet) {
-      this.setState({
-        lastAccountIndex: Object.keys(nextProps.iWallet.accounts).length - 1,
-      })
-    }
   }
 
   onWalletClicked = (cardIndex) => {
@@ -35,16 +26,18 @@ class WalletAccountList extends React.Component {
   }
 
   renderAccountItem = (account) => {
-    const { navigation, iWallet } = this.props
+    const { navigation } = this.state
+    const { fx, accounts, currency } = this.props
     const accountData = account.item
+    console.log("accountData in rencerAccountIte", accountData)
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
 
-    currencyIcon = iWallet.currency
+    currencyIcon = currency
     if (currencyIcon === "KRWT") {
       currencyIcon = "￦"
     }
     try {
-      fxRate = iWallet.fx[accountData.currency][iWallet.currency]
+      fxRate = fx[accountData.currency][currency]
     } catch(e) {
       fxRate = 1
     }
@@ -97,14 +90,13 @@ class WalletAccountList extends React.Component {
   }
 
   render() {
-    const { iWallet, } = this.props
-    if(iWallet === null || iWallet.accounts === undefined)
+    const { accounts, } = this.props
+    if(accounts === undefined)
       return null
-
     return (
       <FlatList
-        data={ _.values(iWallet.accounts) }
-        renderItem={ this.renderAccountItem }
+        data={ _.values(accounts) }
+        renderItem={ this.renderAccountItem.bind(this) }
         refreshing={this.state.refreshing}
         onRefresh={this._onRefresh}
         contentContainerStyle={{ padding: 15 }}
@@ -116,6 +108,9 @@ class WalletAccountList extends React.Component {
 
 WalletAccountList.propTypes = {
   // wallets: PropTypes.oneOfType([ PropTypes.array, PropTypes.object ]),
+  accounts: PropTypes.object,
+  fx: PropTypes.object,
+  currency: PropTypes.string,
   navigation: PropTypes.object,
 }
 
