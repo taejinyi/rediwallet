@@ -119,7 +119,6 @@ export function* getTransactionsFromNetwork(action) {
       }
       try {
         let originTransactions = yield select((state) => state.transactionsReducer.transactions)
-        console.log('originTransactions', originTransactions)
         //
         if(!originTransactions || !Object.keys(originTransactions).length) {
           yield put({

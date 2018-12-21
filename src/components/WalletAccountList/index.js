@@ -29,7 +29,6 @@ class WalletAccountList extends React.Component {
     const { navigation } = this.state
     const { fx, accounts, currency } = this.props
     const accountData = account.item
-    console.log("accountData in rencerAccountIte", accountData)
     let accountColor, currencyIcon, currencyName, currencyTicker, fxRate
 
     currencyIcon = currency

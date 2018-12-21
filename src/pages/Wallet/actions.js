@@ -69,8 +69,7 @@ export const startWalletInstance = (db, wallet) => ({
   type: START_WALLET_INSTANCE,
 })
 
-export const getWalletFromNetwork = (db, iWallet) => ({
-  db: db,
+export const getWalletFromNetwork = (iWallet) => ({
   iWallet: iWallet,
   type: GET_WALLET_FROM_NETWORK,
 })

@@ -30,7 +30,7 @@ export function* getInformation(action) {
 
   const wallet = yield call(getWalletFromDB, {db: db})
   const iWallet = yield call(startWalletInstance, {db: db, wallet: wallet})
-  call(getWalletFromNetwork, {db: db, iWallet: iWallet})
+  call(getWalletFromNetwork, {iWallet: iWallet})
 
   yield put({
     type: SAVE_SPLASH_STATE,

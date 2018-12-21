@@ -30,7 +30,7 @@ class NetworkSettingPage extends React.Component {
       //TODO: avoid refreshWallet when other stuff going on
       // if (this.props.navigation.state.routeName === "Wallet") {
         const { db, iWallet } = this.props
-        await this.props.getWalletFromNetwork(db, iWallet)
+        await this.props.getWalletFromNetwork(iWallet)
       // }
     } catch (e) {
       console.log(e)

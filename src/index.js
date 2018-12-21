@@ -1,10 +1,10 @@
 import React from 'react';
-import {StatusBar, StyleSheet, View} from 'react-native';
+import {StatusBar, StyleSheet, View, AppState} from 'react-native';
 import { Root } from 'native-base'
 // import Modal from 'react-native-modal'
 import { RippleLoader, TextLoader } from 'react-native-indicator'
 import './global';
-import {SecureStore, Updates, DangerZone} from "expo";
+import {SecureStore, Updates, DangerZone } from "expo";
 import Modal from 'react-native-modal'
 import {actions, LockPage} from "./pages";
 import { withDB, withLock, AppNavigator } from './system'

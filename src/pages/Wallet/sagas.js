@@ -14,7 +14,6 @@ import {
 } from './actions'
 import Wallet, {initialFx} from "../../system/Wallet"
 import {UNSET_LOADING} from "../../actions";
-import {SAVE_TRANSACTIONS} from "../WalletDetail/actions";
 
 export function* createWallet(action) {
   const { db } = action
@@ -29,6 +28,7 @@ export function* createWallet(action) {
     type: UNSET_LOADING,
   })
 }
+
 export function* addWallet(action) {
   const { db, wallet } = action
 
@@ -134,13 +134,19 @@ export function* saveWalletsToDB(action) {
 
 
 export function* getWalletFromNetwork(action) {
-  let { db, iWallet } = action
+  let { iWallet } = action
   try {
     yield iWallet.fetchWalletFromNetwork()
     yield put({
       type: SAVE_WALLET_INSTANCE,
       iWallet: iWallet,
     })
+    const wallet = iWallet.getJson()
+    yield put({
+      type: SAVE_WALLET,
+      wallet: wallet,
+    })
+
   } catch (e) {
     console.log("error1 in getWalletFromNetwork", e)
   }
@@ -149,21 +155,6 @@ export function* getWalletFromNetwork(action) {
 
 
 export function* getWalletsFromNetwork(action) {
-  let { db } = action
-  try {
-    const fetchResult = yield call(() => db.get('wallets'))
-    const addresses = Object.keys(fetchResult.data)
-    let i
-    let wallets = fetchResult.data
-    for (i = 0; i < addresses.length; i++) {
-      yield call(getWalletFromNetwork, {db: db, wallet: wallets[addresses[i]]})
-    }
-  } catch (e) {
-    console.log("error1 in getWalletsFromNetwork", e)
-    return false
-  }
-
-  return true
 }
 
 
@@ -218,7 +209,7 @@ export function* startWalletInstance(action) {
       type: SAVE_WALLET_INSTANCE,
       iWallet: iWallet,
     })
-    call(getWalletFromNetwork, {db: db, iWallet: iWallet})
+    call(getWalletFromNetwork, {iWallet: iWallet})
     return iWallet
   } catch (error) {
     console.log('error in startWalletInstance', error)
@@ -248,7 +239,6 @@ const walletSaga = [
   takeEvery(SET_DEFAULT_WALLET, setDefaultWallet),
   takeEvery(START_WALLET_INSTANCE, startWalletInstance),
   takeEvery(SAVE_WALLET_INSTANCE_TO_DB, saveWalletInstanceToDB),
-  takeEvery(START_WALLET_INSTANCE, startWalletInstance),
   takeEvery(GET_WALLET_FROM_NETWORK, getWalletFromNetwork),
   takeEvery(GET_WALLETS_FROM_NETWORK, getWalletsFromNetwork),
   takeEvery(GET_WALLET_FROM_DB, getWalletFromDB),

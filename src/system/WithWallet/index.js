@@ -21,7 +21,7 @@ const withWallet = (Component) => {
     saveWalletToDB: (db, wallet) => dispatch(actions.saveWalletToDB(db, wallet)),
     saveWalletInstance: (iWallet) => dispatch(actions.saveWalletInstance(iWallet)),
     saveWalletInstanceToDB: (db, iWallet) => dispatch(actions.saveWalletInstanceToDB(db, iWallet)),
-    getWalletFromNetwork: (db, iWallet) => dispatch(actions.getWalletFromNetwork(db, iWallet)),
+    getWalletFromNetwork: (iWallet) => dispatch(actions.getWalletFromNetwork(iWallet)),
   })
 
   return connect(mapStateToProps, mapDispatchToProps)(WrapperComponent)

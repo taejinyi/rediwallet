@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React from 'react'
-import {StyleSheet, View, Text, Image, Alert, TouchableWithoutFeedback, TouchableOpacity} from 'react-native'
+import {StyleSheet, View, Text, Image, Alert, TouchableWithoutFeedback, TouchableOpacity, AppState} from 'react-native'
 import { MaterialCommunityIcons, FontAwesome, Feather } from '@expo/vector-icons'
 import { Container, Content, Body, Left, List, ListItem, Icon, Separator, Right } from 'native-base'
 import { Header, WalletAccountList } from '../../components'
@@ -19,14 +19,15 @@ class WalletPage extends React.Component {
     super(props)
 
     this.state = {
-      iWallet: props.iWallet,
-      isTrafficModalShow: false
+      isTrafficModalShow: false,
+      appState: AppState.currentState
     }
 
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
   }
   renderStatusIcon = () => {
-    const { t, i18n, iWallet } = this.props
+    const { t, i18n } = this.props
+    const { iWallet } = this.props
     switch(iWallet.traffic) {
       case TRAFFIC_STATUS.PASSING:
         return (<View>
@@ -90,29 +91,38 @@ class WalletPage extends React.Component {
     )
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      iWallet: nextProps.iWallet,
-    })
+  _handleAppStateChange = (nextAppState) => {
+    if (this.state.appState === 'active' && nextAppState.match(/inactive|background/)) {
+      // console.log('App has come to the', nextAppState)
+      clearInterval(this._interval);
+      const { db, iWallet } = this.props
+      this.props.saveWalletInstanceToDB(db, iWallet)
+    }
+    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+      // console.log('App has come to the foreground!')
+      this._interval = setInterval( () => {
+        this.refreshWallet().then()
+      }, 30000);
+    }
+    this.setState({appState: nextAppState});
   }
+
 
   async componentWillMount() {
     const { db, iWallet } = this.props
-    this.props.getWalletFromNetwork(db, iWallet)
+    this.props.getWalletFromNetwork(iWallet)
     this.logo = require('../../assets/images/logo_428x222.png')
   }
 
   async componentDidMount() {
+    AppState.addEventListener('change', this._handleAppStateChange);
     this._interval = setInterval( () => {
       this.refreshWallet().then()
-    }, 3000);
+    }, 30000);
   }
 
   async componentWillUnmount() {
-    console.log('WP.componentWillUnmount')
-    clearInterval(this._interval);
-    const { db, iWallet } = this.props
-    this.props.saveWalletInstanceToDB(db, iWallet)
+    AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
   refreshWallet = async () => {
@@ -120,7 +130,7 @@ class WalletPage extends React.Component {
       //TODO: avoid refreshWallet when other stuff going on
       // if (this.props.navigation.state.routeName === "Wallet") {
         const { db, iWallet } = this.props
-        await this.props.getWalletFromNetwork(db, iWallet)
+        await this.props.getWalletFromNetwork(iWallet)
       // }
     } catch (e) {
       console.log(e)
@@ -129,7 +139,7 @@ class WalletPage extends React.Component {
 
   render() {
     const { navigation, t, i18n } = this.props
-    const { iWallet } = this.state
+    const { iWallet } = this.props
     const { isTrafficModalShow } = this.state
 
     let currencyIcon, currencyName, totalAssetAmount = 0
@@ -152,7 +162,6 @@ class WalletPage extends React.Component {
         totalAssetAmount = iWallet.getTotalAssetAmount()
       }
     }
-    console.log('render in WalletPage', iWallet ? iWallet.accounts : null)
 
     return (
       <View style={{ flex: 1, backgroundColor: '#303140', alignItems: 'center'}}>
@@ -204,7 +213,7 @@ class WalletPage extends React.Component {
         </View>
         <Content style={{ backgroundColor: '#303140', width:'100%'}}>
           {
-            (this.state.iWallet && this.state.iWallet.address !== undefined) ? (
+            (iWallet && iWallet.address !== undefined) ? (
               <View style={ styles.WalletAccountListContainer }>
                 <WalletAccountList
                   currency={ iWallet.currency }
