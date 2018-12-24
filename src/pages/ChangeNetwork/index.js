@@ -18,8 +18,7 @@ class ChangeNetworkPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      selected: false,
-      selectedCurrency: undefined
+      selectedNetwork: props.iWallet.rpc
     }
     this.debounceNavigate = _.debounce(props.navigation.navigate, 1000, { leading: true, trailing: false, })
   }
@@ -30,26 +29,23 @@ class ChangeNetworkPage extends React.Component {
 
   renderNetworkItem = (data) => {
     const { t, i18n, iWallet } = this.props
-    const account = data.item
+    const rpc = data.item
     let checked = false
-    if (this.state.selectedCurrency && this.state.selectedCurrency.address === account.address) {
+    if (this.state.selectedNetwork && this.state.selectedNetwork.name === rpc.name) {
       checked = true
     }
-    const decimals = Math.pow(10, account.decimals)
-    const balance = numberToString(account.balance / decimals)
     return (
         <TouchableWithoutFeedback onPress={() => {
           this.setState({
-            selected: true,
-            selectedCurrency: account
+            selectedNetwork: rpc
           })
         }}>
         <View style={{ height: 40, width: '100%', flexDirection: "row"}}>
           <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', paddingLeft: 0 }}>
-            <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'black', fontSize: 16 }}>{ account.currency }</Text>
+            <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'black', fontSize: 16 }}>{ rpc.name }</Text>
           </View>
           <View style={{ flex: 0.6, justifyContent: 'center', alignItems: 'center', paddingLeft: 0, paddingRight: 0 }}>
-            <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'black', fontSize: 16 }}>{ balance }</Text>
+            <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'black', fontSize: 16 }}>{ rpc.url }</Text>
           </View>
           <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', paddingLeft: 0, paddingRight: 0 }}>
             <CheckBox disabled={true} color='#303140' checked={ checked } />
@@ -69,7 +65,7 @@ class ChangeNetworkPage extends React.Component {
   render() {
     const { t, i18n, iWallet } = this.props
 
-    const { selected, selectedCurrency } = this.state
+    const { selectedNetwork } = this.state
 
     return (
       <Container>
@@ -89,17 +85,18 @@ class ChangeNetworkPage extends React.Component {
             </Left>
             <Body style={{ justifyContent: 'center', flexDirection: 'row' }}>
               <Title style={{ color: 'white', }}>
-                { t('selectCurrency',{ lng: i18n.language })}
+                { t('selectNetwork',{ lng: i18n.language })}
               </Title>
             </Body>
             <Right>
               {
-                selected && (
+                selectedNetwork.name !== iWallet.rpc.name && (
                   <TouchableOpacity onPress={async () => {
-                    const { iWallet } = this.props
-                    iWallet.currency = selectedCurrency.currency
-                    iWallet.currencyAddress = selectedCurrency.address
+                    const { iWallet, db } = this.props
+                    iWallet.rpc = selectedNetwork
                     await this.props.saveWalletInstanceToDB(this.props.db, this.props.iWallet)
+                    iWallet.reload()
+                    db.destroy()
                     this.props.navigation.goBack(null)
                   }}>
                     <Text style={{ color: 'white', fontSize: 16 }}>

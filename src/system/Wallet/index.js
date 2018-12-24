@@ -39,16 +39,22 @@ export const INITIAL_RPC_LIST = {
     name: "MAINNET",
     url: "https://mainnet.infura.io",
     etherscanUrl: "https://api.etherscan.io/api",
-    djangoUrl: "https://api.socu.io",
     ethereumAddress: ethereumAddress,
     krwtAddress: "0xd5a23575d32849b7430dcd44d28c9fef3954068a",
     infleumAddress: "0xf337f6821b18b2eb24c44d74f3fa91128ead23f4"
+  },
+  ROPSTEN: {
+    name: "ROPSTEN",
+    url: "https://ropsten.infura.io",
+    etherscanUrl: "https://api-kovan.etherscan.io/api",
+    ethereumAddress: ethereumAddress,
+    krwtAddress: "0xd5a23575d32849b7430dcd44d28c9fef3954068a",
+    infleumAddress: "0x0b89a70aa7501e6f420a2a39613e15953e75066c"
   },
   KOVAN: {
     name: "KOVAN",
     url: "https://kovan.infura.io",
     etherscanUrl: "https://api-kovan.etherscan.io/api",
-    djangoUrl: "https://api.socu.io",
     ethereumAddress: ethereumAddress,
     krwtAddress: "0xd5a23575d32849b7430dcd44d28c9fef3954068a",
     infleumAddress: "0xf337f6821b18b2eb24c44d74f3fa91128ead23f4"
@@ -102,8 +108,8 @@ export default class Wallet {
     this.currencyAddress = INITIAL_RPC.ethereumAddress
     this.nonce = 0
     this.address = undefined
-    this.accounts = initialAccounts
     this.rpc = INITIAL_RPC
+    this.accounts = initialAccounts[this.rpc.name]
     this.rpcList = INITIAL_RPC_LIST
     this._web3 = undefined
     this._contracts = {}
@@ -151,7 +157,7 @@ export default class Wallet {
         nonce: nonce,
         currency: "ETH",
         currencyAddress: ethereumAddress,
-        accounts: initialAccounts
+        accounts: initialAccounts,
       }
       return wallet
     } catch(e){
@@ -181,6 +187,12 @@ export default class Wallet {
     }
     this._web3 = await this.getWeb3(await getMnemonic())
     this.ready = true
+  }
+
+  reload = async () => {
+    this._web3 = await this.getWeb3(await getMnemonic())
+    this._contracts = {}
+    this.accounts = initialAccounts
   }
 
   getTokenContract = async (token) => {
@@ -292,39 +304,44 @@ export default class Wallet {
   }
 
   fetchWalletFromNetwork = async () => {
-    const ethMidPrice = await this.getEthPriceInKRW()
-    if (ethMidPrice) {
-      this.fx["ETH"]["KRWT"] = ethMidPrice
-      this.fx["KRWT"]["ETH"] = 1 / parseFloat(ethMidPrice)
-      this.fx["ETH"]["IFUM"] = ethMidPrice / 20
-      this.fx["IFUM"]["ETH"] = 20 / parseFloat(ethMidPrice)
-    }
-    this.gasPrice = await this.getGasPrice()
-    const gwei = Math.pow(10, 9)
-    if (this.gasPrice === null) {
-      this.traffic = TRAFFIC_STATUS.FAILING
-    } else if (this.gasPrice > 20 * gwei) {
-      this.traffic = TRAFFIC_STATUS.PAUSED
-    } else if (this.gasPrice > 10 * gwei) {
-      this.traffic = TRAFFIC_STATUS.PENDING
-    } else {
-      this.traffic = TRAFFIC_STATUS.PASSING
-    }
-
-
-    const tokens = _.keys(this.accounts)
-    for(let i = 0; i < tokens.length; i++){
-      const token = tokens[i]
-      const account = {
-        [ token ]: {
-          address: token,
-          balance: await this.getBalance(token),
-          currency: await this.getSymbol(token),
-          decimals: await this.getDecimals(token),
-        }
+    try {
+      const ethMidPrice = await this.getEthPriceInKRW()
+      if (ethMidPrice) {
+        this.fx["ETH"]["KRWT"] = ethMidPrice
+        this.fx["KRWT"]["ETH"] = 1 / parseFloat(ethMidPrice)
+        this.fx["ETH"]["IFUM"] = ethMidPrice / 20
+        this.fx["IFUM"]["ETH"] = 20 / parseFloat(ethMidPrice)
       }
-      // console.log(token, 'account', account)
-      this.accounts = Object.assign({}, this.accounts, account)
+      console.log('1 iWallet.fetchWalletFromNetwork')
+      this.gasPrice = await this.getGasPrice()
+      const gwei = Math.pow(10, 9)
+      if (this.gasPrice === null) {
+        this.traffic = TRAFFIC_STATUS.FAILING
+      } else if (this.gasPrice > 20 * gwei) {
+        this.traffic = TRAFFIC_STATUS.PAUSED
+      } else if (this.gasPrice > 10 * gwei) {
+        this.traffic = TRAFFIC_STATUS.PENDING
+      } else {
+        this.traffic = TRAFFIC_STATUS.PASSING
+      }
+
+      const tokens = _.keys(this.accounts)
+      for(let i = 0; i < tokens.length; i++){
+        const token = tokens[i]
+        console.log('2 iWallet.fetchWalletFromNetwork.token', token)
+        const account = {
+          [ token ]: {
+            address: token,
+            balance: await this.getBalance(token),
+            currency: await this.getSymbol(token),
+            decimals: await this.getDecimals(token),
+          }
+        }
+        // console.log(token, 'account', account)
+        this.accounts = Object.assign({}, this.accounts, account)
+      }
+    } catch(e) {
+      console.log('error in iWallet.fetchWalletFromNetwork', e)
     }
   }
 

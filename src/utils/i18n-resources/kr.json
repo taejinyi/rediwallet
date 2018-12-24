@@ -15,7 +15,6 @@
 		"totalAsset": "총자산",
 		"send": "보내기",
 		"receive": "받기",
-		"KOVAN": "KOVAN",
 	},
 	"main": {
 		"close": "닫기",
@@ -89,5 +88,7 @@
 		"gas_price": "가스 가격",
 		"network": "네트워크",
 		"refreshWallet": "지갑정보 다시 불러오기",
+		"KOVAN": "KOVAN",
+		"selectNetwork": "네트워크 선택"
 	}
 }
