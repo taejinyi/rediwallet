@@ -1,9 +1,23 @@
 import _ from 'lodash'
 import React from 'react'
-import { View, Text, TouchableWithoutFeedback, Clipboard } from 'react-native'
+import {View, Text, TouchableWithoutFeedback, Clipboard, TouchableOpacity} from 'react-native'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 import { MaterialIcons } from '@expo/vector-icons'
-import { Button, Container, Content, Footer, FooterTab, Body, Left, List, ListItem, Icon, Separator, Right } from 'native-base'
+import {
+  Button,
+  Container,
+  Content,
+  Footer,
+  FooterTab,
+  Body,
+  Left,
+  List,
+  ListItem,
+  Icon,
+  Separator,
+  Right,
+  StyleProvider, Header, Title
+} from 'native-base'
 import {actions} from "../index";
 import connect from "react-redux/es/connect/connect";
 import Modal from 'react-native-modal'
@@ -11,8 +25,12 @@ import { QRCode } from 'react-native-custom-qr-codes'
 import {translate} from "react-i18next";
 import Color from '../../constants/Colors'
 import { TransactionList } from '../../components'
-import {numberToString} from "../../utils/crypto";
+import {getHeaderBackgroundColor, getHeaderTitle, numberToString} from "../../utils/crypto";
 import {PAGE_STATE, SAVE_PAGE_STATE} from "./actions";
+import getTheme from "../../native-base-theme/components";
+import platform from "../../native-base-theme/variables/platform";
+import {HeaderBackButton, NavigationActions} from "react-navigation";
+import i18n from "../../utils/i18n";
 
 @translate(['main'], { wait: true })
 class WalletDetailPage extends React.Component {
@@ -30,25 +48,25 @@ class WalletDetailPage extends React.Component {
       transactions: _.values(props.transactions).sort(this._compare),
       currency: this.props.navigation.state.params.account.currency
     }
-    this.offset = 10
+    this.offset = 50
 
   }
 
   componentWillReceiveProps(nextProps) {
     const { db, iWallet, pageState, transactions, endReached, recentNotUpdated, refreshing } = nextProps
     const { account } = this.props.navigation.state.params
-    console.log('componentWillReceiveProps', pageState, refreshing, endReached, recentNotUpdated)
+    // console.log('componentWillReceiveProps', pageState, refreshing, endReached, recentNotUpdated)
     switch(pageState) {
       case PAGE_STATE.STATE_LOADING_FINISH:
         if (refreshing) {
           this.props.savePageState(PAGE_STATE.STATE_LOADING)
-          this.props.getTransactionsFromNetwork(db, iWallet, account, 1, this.offset)
+          this.props.getTransactionsFromNetwork(iWallet, account, 1, this.offset)
           this.props.saveRefreshing(false)
 
         } else if (endReached || recentNotUpdated) {
           this.props.savePageState(PAGE_STATE.STATE_LOADING)
           const nextPage = this.state.currentPage + 1
-          this.props.getTransactionsFromNetwork(db, iWallet, account, nextPage, this.offset)
+          this.props.getTransactionsFromNetwork(iWallet, account, nextPage, this.offset)
           this.setState({
             currentPage: nextPage
           })
@@ -62,12 +80,12 @@ class WalletDetailPage extends React.Component {
         break
       case PAGE_STATE.STATE_LOADING_FAILED:
         this.props.savePageState(PAGE_STATE.STATE_LOADING)
-        this.props.getTransactionsFromNetwork(db, iWallet, account, this.state.currentPage, this.offset)
+        this.props.getTransactionsFromNetwork(iWallet, account, this.state.currentPage, this.offset)
         break
       case PAGE_STATE.STATE_LOADING_COMPLETE:
         if (refreshing) {
           this.props.savePageState(PAGE_STATE.STATE_LOADING)
-          this.props.getTransactionsFromNetwork(db, iWallet, account, 1, this.offset)
+          this.props.getTransactionsFromNetwork(iWallet, account, 1, this.offset)
           this.props.saveRefreshing(false)
         }
     }
@@ -94,14 +112,6 @@ class WalletDetailPage extends React.Component {
   }
   copyAddressToClipboard = () => {
     Clipboard.setString(this.props.wallet.address)
-  }
-
-  async componentWillUnmount() {
-    console.log('WDP.componentWillUnmount')
-    const {db, transactions } = this.props
-    const token = this.props.navigation.state.params.account.address
-    this.props.saveTransactionsToDB(db, token, transactions)
-
   }
 
   async componentWillMount() {
@@ -136,14 +146,13 @@ class WalletDetailPage extends React.Component {
       'headerTitle': currencyName
     })
     this.headerBackgroundColor = headerBackgroundColor
-    this.props.saveTransactions(undefined)
   }
 
   async componentDidMount() {
       const { db, iWallet } = this.props
       const { account } = this.props.navigation.state.params
-    await this.props.getTransactionsFromDB(db, account.address)
-    this.props.getTransactionsFromNetwork(db, iWallet, account, 1, this.offset)
+    await this.props.getTransactionsFromDB(db, iWallet.rpc.name, account.address)
+    this.props.getTransactionsFromNetwork(iWallet, account, 1, this.offset)
   }
 
   onEndReached = () => {
@@ -156,6 +165,24 @@ class WalletDetailPage extends React.Component {
     if (!this.props.refreshing) {
       this.props.saveRefreshing(true)
     }
+  }
+
+  exit = async () => {
+    const { navigation } = this.props
+    navigation.dispatch(NavigationActions.back())
+
+    const { t, i18n, iWallet, transactions, db, showProcessingModal, hideProcessingModal } = this.props
+    await showProcessingModal(t('savingTransactions',{ lng: i18n.language }))
+    const token = this.props.navigation.state.params.account.address
+    const network = iWallet.rpc.name
+    await this.props.saveTransactionsToDB(db, network, token, transactions)
+    await this.props.saveTransactions(undefined)
+    setTimeout(async () =>{
+      await hideProcessingModal()
+      await this.props.navigation.goBack(null)
+    }, 1000)
+
+
   }
 
   render() {
@@ -204,8 +231,34 @@ class WalletDetailPage extends React.Component {
     const balance = account.balance / Math.pow(10, account.decimals)
 
     let moneyStr = numberToString(balance)
+    //      <View style={{ flex: 1, backgroundColor: '#303140', alignItems: 'center'}}
+    const backgroundColor = navigation.state.params ? getHeaderBackgroundColor(navigation.state.params.account) : "#303140"
+    const headerTitle = navigation.state.params ? getHeaderTitle(navigation.state.params.account) : "Unknown"
+
     return (
-      <View style={{ flex: 1, backgroundColor: '#303140', alignItems: 'center'}}>
+      <Container style={{backgroundColor: "#303140"}}>
+        <StyleProvider style={ getTheme(platform) }>
+          <Header
+            iosBarStyle='light-content'
+            style={{ backgroundColor: backgroundColor}}>
+            <Left>
+              <TouchableOpacity onPress={ async () => {
+                await this.exit()
+              }}>
+                <Text style={{ color: 'white', fontSize: 16 }}>
+                  { t('wallet',{ lng: i18n.language })}
+                </Text>
+              </TouchableOpacity>
+            </Left>
+            <Body style={{ justifyContent: 'center', flexDirection: 'row' }}>
+              <Title style={{ color: 'white', }}>
+                { headerTitle }
+              </Title>
+            </Body>
+            <Right style={{ justifyContent: 'center', flexDirection: 'row' }}>
+            </Right>
+          </Header>
+        </StyleProvider>
         <View style={{ flex:0.25, width:'100%', backgroundColor: this.headerBackgroundColor, justifyContent: 'center', alignItems: 'center'}}>
           <View style={{ width:'90%', justifyContent: 'center', alignItems: 'center', borderTopWidth: 1, borderColor: '#aaaaaa' }}>
             <Button
@@ -314,16 +367,9 @@ class WalletDetailPage extends React.Component {
             </Button>
           </FooterTab>
         </Footer>
-      </View>
+      </Container>
     )
   }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  saveTransactions: (transactions) => dispatch(actions.saveTransactions(transactions)),
-  saveTransactionsToDB: (db, token, transactions) => dispatch(actions.saveTransactionsToDB(db, token, transactions)),
-  getTransactionsFromDB: (db, token) => dispatch(actions.getTransactionsFromDB(db, token)),
-  getTransactionsFromNetwork: (db, iWallet, account, page, offset) => dispatch(actions.getTransactionsFromNetwork(db, iWallet, account, page, offset)),
-})
-
-export default connect(null, mapDispatchToProps)(WalletDetailPage)
+export default WalletDetailPage

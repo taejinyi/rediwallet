@@ -46,9 +46,9 @@ export const INITIAL_RPC_LIST = {
   ROPSTEN: {
     name: "ROPSTEN",
     url: "https://ropsten.infura.io",
-    etherscanUrl: "https://api-kovan.etherscan.io/api",
+    etherscanUrl: "https://api-ropsten.etherscan.io/api",
     ethereumAddress: ethereumAddress,
-    krwtAddress: "0xd5a23575d32849b7430dcd44d28c9fef3954068a",
+    krwtAddress: "0x0a8d640b34b99bf183a47c289c8d237ecd29d950",
     infleumAddress: "0x0b89a70aa7501e6f420a2a39613e15953e75066c"
   },
   KOVAN: {
@@ -58,8 +58,9 @@ export const INITIAL_RPC_LIST = {
     ethereumAddress: ethereumAddress,
     krwtAddress: "0xd5a23575d32849b7430dcd44d28c9fef3954068a",
     infleumAddress: "0xf337f6821b18b2eb24c44d74f3fa91128ead23f4"
-  }
+  },
 }
+
 export const INITIAL_RPC = INITIAL_RPC_LIST.KOVAN
 
 export const initialAccounts = {
@@ -192,7 +193,27 @@ export default class Wallet {
   reload = async () => {
     this._web3 = await this.getWeb3(await getMnemonic())
     this._contracts = {}
-    this.accounts = initialAccounts
+
+    this.accounts = {
+      [ this.rpc.ethereumAddress ]: {
+        balance: 0,
+        currency: "ETH",
+        address: this.rpc.ethereumAddress,
+        decimals: 18,
+      },
+      [ this.rpc.krwtAddress ]: {
+        balance: 0,
+        currency: "KRWT",
+        address: this.rpc.krwtAddress,
+        decimals: 0,
+      },
+      [ this.rpc.infleumAddress ]: {
+        balance: 0,
+        currency: "IFUM",
+        address: this.rpc.infleumAddress,
+        decimals: 4,
+      },
+    }
   }
 
   getTokenContract = async (token) => {
@@ -383,6 +404,7 @@ export default class Wallet {
           "&offset=" + offset +
           "&sort=" + sort +
           "&apiKey=" + etherscanAPIKey;
+        console.log('url in getTransactions', url)
         const result = await axios({
           method: "GET",
           url: url
@@ -408,6 +430,7 @@ export default class Wallet {
           "&offset=" + offset +
           "&sort=" + sort +
           "&apiKey=" + etherscanAPIKey;
+        console.log('url in getTransactions', url)
 
         const result = await axios({
           method: "GET",
@@ -421,6 +444,7 @@ export default class Wallet {
       return e
     }
   }
+
 
 
   getTransaction = async (hash) => {

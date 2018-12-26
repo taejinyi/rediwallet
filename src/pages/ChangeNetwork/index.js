@@ -61,7 +61,16 @@ class ChangeNetworkPage extends React.Component {
       // </TouchableOpacity>
     )
   }
-
+  changeNetwork = async () => {
+    const { t, i18n, iWallet, db, showProcessingModal, hideProcessingModal } = this.props
+    await showProcessingModal(t('changingNetwork',{ lng: i18n.language }))
+    iWallet.rpc = this.state.selectedNetwork
+    await iWallet.reload()
+    await iWallet.fetchWalletFromNetwork()
+    await this.props.saveWalletInstanceToDB(this.props.db, this.props.iWallet)
+    await hideProcessingModal()
+    this.props.navigation.goBack(null)
+  }
   render() {
     const { t, i18n, iWallet } = this.props
 
@@ -91,14 +100,7 @@ class ChangeNetworkPage extends React.Component {
             <Right>
               {
                 selectedNetwork.name !== iWallet.rpc.name && (
-                  <TouchableOpacity onPress={async () => {
-                    const { iWallet, db } = this.props
-                    iWallet.rpc = selectedNetwork
-                    await this.props.saveWalletInstanceToDB(this.props.db, this.props.iWallet)
-                    iWallet.reload()
-                    db.destroy()
-                    this.props.navigation.goBack(null)
-                  }}>
+                  <TouchableOpacity onPress={async () => this.changeNetwork()}>
                     <Text style={{ color: 'white', fontSize: 16 }}>
                       { t('change',{ lng: i18n.language })}
                     </Text>
@@ -111,10 +113,10 @@ class ChangeNetworkPage extends React.Component {
 
         <View style={{ height: 40, width: '100%', borderBottomColor: '#303140', backgroundColor: '#303140', borderBottomWidth: 1, flexDirection: "row"}}>
           <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', paddingLeft: 0 }}>
-            <Text numberOfLines={1} style={{ color: '#C7C7CC', fontSize: 12 }}>{ t('currency',{ lng: i18n.language })}</Text>
+            <Text numberOfLines={1} style={{ color: '#C7C7CC', fontSize: 12 }}>{ t('network',{ lng: i18n.language })}</Text>
           </View>
           <View style={{ flex: 0.7, justifyContent: 'center', alignItems: 'center', paddingLeft: 0, paddingRight: 0 }}>
-            <Text numberOfLines={1} style={{ color: '#C7C7CC', fontSize: 12 }}>{ t('balance',{ lng: i18n.language })}</Text>
+            <Text numberOfLines={1} style={{ color: '#C7C7CC', fontSize: 12 }}>{ t('rpcUrl',{ lng: i18n.language })}</Text>
           </View>
           <View style={{ flex: 0.1, justifyContent: 'center', alignItems: 'flex-end', paddingLeft: 0, paddingRight: 0 }}>
           </View>

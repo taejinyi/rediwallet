@@ -106,20 +106,8 @@ const MainNavigator = StackNavigator({
   },
   WalletDetail: {
     screen: withDB(withWallet(withTransactions(WalletDetailPage))),
-    navigationOptions: ({ navigation }) => ({
-      headerTitle: navigation.state.params ? getHeaderTitle(navigation.state.params.account) : i18n.t('main:loading', { locale: i18n.language }),
-      headerTintColor: 'white',
-      headerStyle: {
-        backgroundColor: navigation.state.params ? getHeaderBackgroundColor(navigation.state.params.account) : "#303140",
-        borderBottomWidth: 0,
-      },
-      headerLeft: (
-        <HeaderBackButton
-          tintColor='white'
-          title={i18n.t('main:wallet', { locale: i18n.language })}  // TODO onPress
-          onPress={() => navigation.goBack(null)} // TODO Alert
-        />
-      )
+    navigationOptions: () => ({
+      header: null
     })
   },
   QRCodeScan: {
@@ -129,7 +117,7 @@ const MainNavigator = StackNavigator({
     })
   },
   Send: {
-    screen: withDB(withWallet(SendPage)),
+    screen: withDB(withWallet(withTransactions(SendPage))),
     navigationOptions: ({ navigation }) => ({
       headerTitle: i18n.t('main:transfer', { locale: i18n.language }),
       headerTintColor: 'white',

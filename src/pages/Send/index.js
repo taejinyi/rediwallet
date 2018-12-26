@@ -235,7 +235,7 @@ class SendPage extends React.Component {
         }
 
         const transaction = Object.assign({}, tx, transactionData)
-        this.props.saveOneTransaction(this.props.db, wallet, account, transaction)
+        this.props.saveOneTransaction(transaction)
         this.props.hideProcessingModal()
 
         setTimeout(async () => {
@@ -452,12 +452,6 @@ const styles = StyleSheet.create({
 	}
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  showProcessingModal: (message) => dispatch(actions.showProcessingModal(message)),
-  hideProcessingModal: () => dispatch(actions.hideProcessingModal()),
-  saveOneTransaction: (db, wallet, account, transaction) => dispatch(actions.saveOneTransaction(db, wallet, account, transaction)),
-})
-
-export default connect(null, mapDispatchToProps)(SendPage)
+export default SendPage
 
 

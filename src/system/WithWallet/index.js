@@ -14,7 +14,6 @@ const withWallet = (Component) => {
   const mapStateToProps = (state) => ({
     wallet: state.walletReducer.wallet,
     iWallet: state.walletReducer.iWallet,
-    // wallets: state.walletReducer.wallets,
   })
 
   const mapDispatchToProps = (dispatch) => ({
@@ -22,6 +21,8 @@ const withWallet = (Component) => {
     saveWalletInstance: (iWallet) => dispatch(actions.saveWalletInstance(iWallet)),
     saveWalletInstanceToDB: (db, iWallet) => dispatch(actions.saveWalletInstanceToDB(db, iWallet)),
     getWalletFromNetwork: (iWallet) => dispatch(actions.getWalletFromNetwork(iWallet)),
+    showProcessingModal: (message) => dispatch(actions.showProcessingModal(message)),
+    hideProcessingModal: () => dispatch(actions.hideProcessingModal()),
   })
 
   return connect(mapStateToProps, mapDispatchToProps)(WrapperComponent)

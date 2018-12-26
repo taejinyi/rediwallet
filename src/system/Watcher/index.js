@@ -80,10 +80,10 @@ class Watcher extends React.Component {
         saveWalletInformation(db, data.wallet)
         break
       case 'transaction':
-        const { saveOneTransaction, getWalletInformationFromServer } = this.props
+        // const { saveOneTransaction, getWalletInformationFromServer } = this.props
 
-        saveOneTransaction(db, data.transaction)
-        getWalletInformationFromServer(token, db)
+        // saveOneTransaction(db, data.transaction)
+        // getWalletInformationFromServer(token, db)
         break
       case 'contact':
         const { addOneContact } = this.props
@@ -202,7 +202,6 @@ const dispatchToProps = (dispatch) => ({
   addOneContact: (db, contact) => dispatch(actions.addOneContact(db, contact)),
   getWalletInformationFromServer: (token, db) => dispatch(actions.getWalletInformationFromServer(token, db)),
   saveWalletInformation: (db, wallet_info) => dispatch(actions.saveWalletInformationToDB(db, wallet_info)),
-  saveOneTransaction: (db, transaction) => dispatch(actions.saveOneTransaction(db, transaction)),
   saveUnion: (db, unions) => dispatch(actions.saveUnionsToDB(db, unions)),
   saveToken: (token) => dispatch(actions.saveToken(token)),
 })

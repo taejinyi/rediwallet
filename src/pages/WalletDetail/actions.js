@@ -44,21 +44,22 @@ export const saveTransactions = (transactions) => ({
   transactions,
 })
 
-export const saveTransactionsToDB = (db, token, transactions) => ({
+export const saveTransactionsToDB = (db, network, token, transactions) => ({
   db: db,
+  network: network,
   token: token,
   transactions: transactions,
   type: SAVE_TRANSACTIONS_TO_DB,
 })
 
-export const getTransactionsFromDB = (db, token) => ({
+export const getTransactionsFromDB = (db, network, token) => ({
   db: db,
+  network: network,
   token: token,
   type: GET_TRANSACTIONS_FROM_DB,
 })
 
-export const getTransactionsFromNetwork = (db, iWallet, account, page, offset) => ({
-  db: db,
+export const getTransactionsFromNetwork = (iWallet, account, page, offset) => ({
   iWallet: iWallet,
   account: account,
   page: page,
@@ -73,9 +74,7 @@ export const getTransactionFromNetwork = (db, iWallet, transactionHash) => ({
   type: GET_TRANSACTION_FROM_NETWORK,
 })
 
-export const saveOneTransaction = (db, token, transaction) => ({
-  db: db,
-  token: token,
+export const saveOneTransaction = (transaction) => ({
   transaction: transaction,
   type: SAVE_ONE_TRANSACTION,
 })

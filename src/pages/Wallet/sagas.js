@@ -219,7 +219,7 @@ export function* startWalletInstance(action) {
 
 export function* saveWalletInstanceToDB(action) {
   let { db, iWallet } = action
-  console.log('in saveWalletInstanceToDB', iWallet.accounts)
+  console.log('in saveWalletInstanceToDB', iWallet.accounts, iWallet.rpc)
   try {
 
     const wallet = iWallet.getJson()

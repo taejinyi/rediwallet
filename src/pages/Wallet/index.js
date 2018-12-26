@@ -13,7 +13,7 @@ import Wallet, {TRAFFIC_STATUS} from "../../system/Wallet"
 import {translate} from "react-i18next";
 import Modal from "react-native-modal";
 
-@translate(['wallet'], { wait: true, })
+@translate(['main'], { wait: true, })
 class WalletPage extends React.Component {
   constructor(props) {
     super(props)
@@ -31,21 +31,32 @@ class WalletPage extends React.Component {
     switch(iWallet.traffic) {
       case TRAFFIC_STATUS.PASSING:
         return (<View>
-          <FontAwesome name='check-circle' style={{fontSize: 24, color: 'green',}}/>
-          <Text>{t(iWallet.rpc.name, { locale: i18n.language })}</Text>
+          <Text>
+            <FontAwesome name='check-circle' style={{fontSize: 24, color: 'green',}}/>
+            <Text style={{fontSize: 24, color: 'white',}}> {t(iWallet.rpc.name, { locale: i18n.language })}</Text>
+          </Text>
         </View>)
       case TRAFFIC_STATUS.PAUSED:
         return (<View>
-          <MaterialCommunityIcons size={ 24 } color='yellow' name='pause-octagon' />
-          <Text>{t(iWallet.rpc.name, { locale: i18n.language })}</Text>
+          <Text>
+            <MaterialCommunityIcons size={ 24 } color='yellow' name='pause-octagon' />
+            <Text style={{fontSize: 24, color: 'white',}}> {t(iWallet.rpc.name, { locale: i18n.language })}</Text>
+          </Text>
         </View>)
       case TRAFFIC_STATUS.PENDING:
         return (<View>
-          <MaterialCommunityIcons size={ 24 } color='grey' name='dots-horizontal-circle' />
-          <Text>{t(iWallet.rpc.name, { locale: i18n.language })}</Text>
+          <Text>
+            <MaterialCommunityIcons size={ 24 } color='grey' name='dots-horizontal-circle' />
+            <Text style={{fontSize: 24, color: 'white',}}> {t(iWallet.rpc.name, { locale: i18n.language })}</Text>
+          </Text>
         </View>)
       default:
-        return (<MaterialCommunityIcons size={ 24 } color='red' name='close-octagon' />)
+        return (<View>
+          <Text>
+            <MaterialCommunityIcons size={ 24 } color='red' name='close-octagon' />
+            <Text style={{fontSize: 24, color: 'white',}}> {t(iWallet.rpc.name, { locale: i18n.language })}</Text>
+          </Text>
+        </View>)
     }
   }
 

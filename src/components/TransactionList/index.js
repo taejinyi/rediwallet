@@ -179,7 +179,7 @@ class TransactionList extends React.Component {
     if(transactions === undefined)
       return null
     const dataArray = _.values(transactions)
-    console.log('onRefresh, refreshing, onEndReached, endReached', this.props.onRefresh, this.props.refreshing, this.props.onEndReached)
+    // console.log('onRefresh, refreshing, onEndReached, endReached', this.props.onRefresh, this.props.refreshing, this.props.onEndReached)
     return (
 
       <FlatList

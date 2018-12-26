@@ -21,10 +21,11 @@ const withTransactions = (Component) => {
 
   const mapDispatchToProps = (dispatch) => ({
     getTransactionFromNetwork: (db, iWallet, hash) => dispatch(actions.getTransactionFromNetwork(db, iWallet, hash)),
-    getTransactionsFromNetwork: (db, iWallet, account, page, offset) => dispatch(actions.getTransactionsFromNetwork(db, iWallet, account, page, offset)),
+    getTransactionsFromNetwork: (iWallet, account, page, offset) => dispatch(actions.getTransactionsFromNetwork(iWallet, account, page, offset)),
     saveTransactions: (transactions) => dispatch(actions.saveTransactions(transactions)),
-    saveOneTransaction: (db, token, transaction) => dispatch(actions.saveOneTransaction(db, token, transaction)),
-    getTransactionsFromDB: (db, token) => dispatch(actions.getTransactionsFromDB(db, token)),
+    saveOneTransaction: (transaction) => dispatch(actions.saveOneTransaction(transaction)),
+    getTransactionsFromDB: (db, network, token) => dispatch(actions.getTransactionsFromDB(db, network, token)),
+    saveTransactionsToDB: (db, network, token, transactions) => dispatch(actions.saveTransactionsToDB(db, network, token, transactions)),
     savePageState: (pageState) => dispatch(actions.savePageState(pageState)),
     saveEndReached: (endReached) => dispatch(actions.saveEndReached(endReached)),
     saveRefreshing: (refreshing) => dispatch(actions.saveRefreshing(refreshing)),

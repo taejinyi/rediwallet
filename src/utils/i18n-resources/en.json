@@ -1,14 +1,14 @@
 {
-	"signin": {
-		"login": "Login"
-	},
-	"wallet": {
+	"main": {
+		"login": "Login",
 		"accountBalance": "Account Balance",
 		"totalAsset": "Total Asset",
-		"send": "Send",
 		"receive": "Receive",
-	},
-	"main": {
+		"transactions": "Transactions",
+		"scanQRCode": "Scan QRCode",
+		"myQRCode": "My QRCode",
+		"confirm": "확인",
+		"myWalletQRCode": "내 지갑의 QRCode",
 		"close": "Close",
 		"address": "Address",
 		"amount": "Amount",
@@ -86,6 +86,11 @@
 		"network": "Network",
 		"refreshWallet": "Refresh Wallet",
 		"KOVAN": "KOVAN",
-		"selectNetwork": "Network"
+		"ROPSTEN": "ROPSTEN",
+		"MAINNET": "MAINNET",
+		"selectNetwork": "Network",
+		"savingTransactions": "Saving transactions",
+		"rpcUrl": "RPC URL",
+		"changingNetwork": "Changing Network",
 	}
 }

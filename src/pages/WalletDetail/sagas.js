@@ -17,8 +17,8 @@ import {HIDE_PROCESSING_MODAL} from "../../actions";
 
 
 export function* saveTransactionsToDB(action) {
-  const { db, token, transactions } = action
-  const dbIndex = "tx" + token
+  const { db, network, token, transactions } = action
+  const dbIndex = "tx" + network + token
 
   yield call(() => retryUntilWritten(db, dbIndex, transactions))
   // yield put({
@@ -49,13 +49,13 @@ function retryUntilWritten(db, index, data) {
 
 
 export function* getTransactionsFromDB(action) {
-  const { db, token } = action
-  const dbIndex = "tx" + token
-  console.log('dbIndex', dbIndex)
+  const { db, network, token } = action
+  const dbIndex = "tx" + network + token
+  console.log('dbIndex in getTransactionsFromDB', dbIndex)
 
   try {
     const fetchResult = yield call(() => db.get(dbIndex))
-    console.log('dbIndex fetchResult', dbIndex, fetchResult._id, fetchResult.data.length)
+    console.log('dbIndex fetchResult', dbIndex, fetchResult._id, _.values(fetchResult.data).length)
 
     const transactions = fetchResult.data
 
@@ -75,16 +75,12 @@ export function* getTransactionsFromDB(action) {
 }
 
 export function* getTransactionsFromNetwork(action) {
-  const { db, iWallet, account, page, offset } = action
-  const token = account.address
-  const dbIndex = "tx" + token
-  // console.log('page, dbIndex', page, dbIndex)
-
-  const response = yield call(() => iWallet.getTransactions(account.address, page, offset))
-  let nextState = PAGE_STATE.STATE_LOADING_FINISH
-  let updated = false
 
   try {
+    const { iWallet, account, page, offset } = action
+    const response = yield call(() => iWallet.getTransactions(account.address, page, offset))
+    let nextState = PAGE_STATE.STATE_LOADING_FINISH
+    let updated = false
     if(response && response.status === 200) {
       const data = response.data.result
       if (data.length === 0) {
@@ -140,14 +136,12 @@ export function* getTransactionsFromNetwork(action) {
           })
 
         }
-        // yield call(() => saveTransactionsToDB({db:db, token:token, transactions:newTransactions}))
       } catch (error) {
-        console.log("error in getTransactionsFromNetwork", error)
+        console.log("error1 in getTransactionsFromNetwork", error)
         yield put({
           type: SAVE_TRANSACTIONS,
           transactions: transactions,
         })
-        // yield call(() => saveTransactionsToDB({db:db, token:token, transactions:transactions}))
       }
     }
 
@@ -170,7 +164,7 @@ export function* getTransactionsFromNetwork(action) {
     }
 
   } catch(e) {
-    console.log('error in getTransactionsFromNetwork', e)
+    console.log('error2 in getTransactionsFromNetwork', e)
     // TODK: Network error
   }
 }
@@ -189,8 +183,6 @@ export function* getTransactionFromNetwork(action) {
     console.log('newTransaction in getTransactionFromNetwork', newTransaction)
 
     yield call(saveOneTransaction, {
-      db: db,
-      token: iWallet.currencyAddress,
       transaction: newTransaction,
     })
 
@@ -204,51 +196,29 @@ export function* getTransactionFromNetwork(action) {
 
 //TODO: add transaction for querying send gas expenses
 export function* saveOneTransaction(action) {
-  const { db, token, transaction } = action
-  const dbIndex = "tx" + token
-
+  // const { network, token, transaction } = action
+  const { transaction } = action
   try {
-    const fetchResult = yield call(() => db.get(dbIndex))
+    let transactions = {}
+    let originTransactions = yield select((state) => state.transactionsReducer.transactions)
 
     const transactionData = {
-      [ transaction.transactionHash ]: {
+      [ transaction.hash ]: {
         ... transaction,
       }
     }
-    const transactions = Object.assign({}, fetchResult.data, transactionData)
 
-    yield call(() => db.put({
-      data: transactions,
-      _id: dbIndex,
-      _rev: fetchResult._rev,
-    }))
-
+    if (originTransactions && _.values(originTransactions).length > 0) {
+      transactions = Object.assign({}, originTransactions, transactionData)
+    } else {
+      transactions = transactionData
+    }
     yield put({
       type: SAVE_TRANSACTIONS,
       transactions: transactions,
     })
-
-  } catch (error) {
-    console.log('error1 in saveOneTransaction', error)
-    // console.log('transaction in saveOneTransaction', transaction)
-    const { status } = error
-
-    if(status === 404) {
-      const transactionData = {
-        [ transaction.transactionHash ]: {
-          ... transaction,
-        }
-      }
-      yield call(() => db.put({
-        _id: dbIndex,
-        data: transactionData,
-      }))
-
-      yield put({
-        type: SAVE_TRANSACTIONS,
-        transactions: transactionData,
-      })
-    }
+  } catch (e) {
+    console.log("error in saveOneTransaction", e)
   }
 }
 
