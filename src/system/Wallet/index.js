@@ -48,8 +48,8 @@ export const INITIAL_RPC_LIST = {
     url: "https://ropsten.infura.io",
     etherscanUrl: "https://api-ropsten.etherscan.io/api",
     ethereumAddress: ethereumAddress,
-    krwtAddress: "0x0a8d640b34b99bf183a47c289c8d237ecd29d950",
-    infleumAddress: "0x0b89a70aa7501e6f420a2a39613e15953e75066c"
+    krwtAddress: "0xF2a018F0aA772E4eB2c902b863a2FcEe0D632395",
+    infleumAddress: "0x5D63a97780e2D8721F2eFfF7BF364322E7B8820d"
   },
   KOVAN: {
     name: "KOVAN",
