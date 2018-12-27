@@ -226,6 +226,7 @@ class SendPage extends React.Component {
         // console.log(tx)
         const now = parseInt(Date.now() / 1000)
         const transactionData = {
+          fromMe: true,
           from: iWallet.address,
           to: this.sendData.address,
           value: this.sendData.amount * Math.pow(10, account.decimals),
