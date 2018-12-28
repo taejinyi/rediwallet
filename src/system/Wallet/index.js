@@ -403,7 +403,7 @@ export default class Wallet {
           "&offset=" + offset +
           "&sort=" + sort +
           "&apiKey=" + etherscanAPIKey;
-        console.log('url in getTransactions', url)
+        // console.log('url in getTransactions', url)
         const result = await axios({
           method: "GET",
           url: url
@@ -429,7 +429,7 @@ export default class Wallet {
           "&offset=" + offset +
           "&sort=" + sort +
           "&apiKey=" + etherscanAPIKey;
-        console.log('url in getTransactions', url)
+        // console.log('url in getTransactions', url)
 
         const result = await axios({
           method: "GET",

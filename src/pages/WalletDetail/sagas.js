@@ -51,11 +51,11 @@ function retryUntilWritten(db, index, data) {
 export function* getTransactionsFromDB(action) {
   const { db, network, token } = action
   const dbIndex = "tx" + network + token
-  console.log('dbIndex in getTransactionsFromDB', dbIndex)
+  // console.log('dbIndex in getTransactionsFromDB', dbIndex)
 
   try {
     const fetchResult = yield call(() => db.get(dbIndex))
-    console.log('dbIndex fetchResult', dbIndex, fetchResult._id, _.values(fetchResult.data).length)
+    // console.log('dbIndex fetchResult', dbIndex, fetchResult._id, _.values(fetchResult.data).length)
 
     const transactions = fetchResult.data
 

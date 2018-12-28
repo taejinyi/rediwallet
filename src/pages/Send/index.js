@@ -301,8 +301,9 @@ class SendPage extends React.Component {
       accountColor = "#999999"
       fxRate = 1
     }
+    const balance = account.balance / Math.pow(10, account.decimals)
 
-    let moneyStr = numberToString(account.balance)
+    let moneyStr = numberToString(balance)
 
 		return (
 
@@ -325,7 +326,7 @@ class SendPage extends React.Component {
             </Button>
             <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 14, marginTop: 0 }}>{ currencyIcon + numberToString(fxRate) + " per " + currencyTicker }</Text>
             <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ color: 'white', fontSize: 18, marginTop: 10 }}>{ currencyTicker + " " + moneyStr }</Text>
-            <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 28 }}>{ " ~ " + currencyIcon + numberToString(account.balance / Math.pow(10, account.decimals) * fxRate) }</Text>
+            <Text numberOfLines={1} adjustsFontSizeToFit={true} style={{ fontWeight: 'bold', color: 'white', fontSize: 28 }}>{ " ~ " + currencyIcon + numberToString(balance * fxRate) }</Text>
           </View>
         </View>
         <Modal

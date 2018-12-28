@@ -4,6 +4,8 @@ import { NavigationComponent } from 'react-native-material-bottom-navigation'
 import { NavigationActions, HeaderBackButton, StackNavigator, TabNavigator, TabBarBottom } from 'react-navigation'
 import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
 import { getHeaderBackgroundColor, getHeaderTitle } from "../../utils/crypto";
+import { MaterialCommunityIcons} from '@expo/vector-icons'
+
 import {
   SplashPage,
   LandingPage,
@@ -37,9 +39,7 @@ const MainTabNavigator = TabNavigator({
     navigationOptions: () => ({
       tabBarLabel: i18n.t('main:wallet', { locale: i18n.language }),
       tabBarIcon: () => (
-        <Image
-          source={ require('../../assets/images/wallet.png') }
-        />
+        <MaterialCommunityIcons size={ 24 } name='wallet' />
       )
     })
   },
@@ -67,10 +67,7 @@ const MainTabNavigator = TabNavigator({
         tabs: {
           Wallet: {
             activeIcon: (
-              <Image
-                source={ require('../../assets/images/wallet-selected.png') }
-                style={{ tintColor: '#303140', }}
-              />
+              <MaterialCommunityIcons size={ 24 } name='wallet' />
             ),
             activeLabelColor: '#303140',
           },

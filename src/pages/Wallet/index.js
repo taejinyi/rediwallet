@@ -32,29 +32,29 @@ class WalletPage extends React.Component {
       case TRAFFIC_STATUS.PASSING:
         return (<View>
           <Text>
-            <FontAwesome name='check-circle' style={{fontSize: 24, color: 'green',}}/>
-            <Text style={{fontSize: 24, color: 'white',}}> {t(iWallet.rpc.name, { locale: i18n.language })}</Text>
+            <FontAwesome name='check-circle' style={{fontSize: 20, color: 'green',}}/>
+            <Text style={{fontSize: 20, color: 'white',}}> {t(iWallet.rpc.name, { locale: i18n.language })}</Text>
           </Text>
         </View>)
       case TRAFFIC_STATUS.PAUSED:
         return (<View>
           <Text>
-            <MaterialCommunityIcons size={ 24 } color='yellow' name='pause-octagon' />
-            <Text style={{fontSize: 24, color: 'white',}}> {t(iWallet.rpc.name, { locale: i18n.language })}</Text>
+            <MaterialCommunityIcons size={ 20 } color='yellow' name='pause-octagon' />
+            <Text style={{fontSize: 20, color: 'white',}}> {t(iWallet.rpc.name, { locale: i18n.language })}</Text>
           </Text>
         </View>)
       case TRAFFIC_STATUS.PENDING:
         return (<View>
           <Text>
-            <MaterialCommunityIcons size={ 24 } color='grey' name='dots-horizontal-circle' />
-            <Text style={{fontSize: 24, color: 'white',}}> {t(iWallet.rpc.name, { locale: i18n.language })}</Text>
+            <MaterialCommunityIcons size={ 20 } color='grey' name='dots-horizontal-circle' />
+            <Text style={{fontSize: 20, color: 'white',}}> {t(iWallet.rpc.name, { locale: i18n.language })}</Text>
           </Text>
         </View>)
       default:
         return (<View>
           <Text>
-            <MaterialCommunityIcons size={ 24 } color='red' name='close-octagon' />
-            <Text style={{fontSize: 24, color: 'white',}}> {t(iWallet.rpc.name, { locale: i18n.language })}</Text>
+            <MaterialCommunityIcons size={ 20 } color='red' name='close-octagon' />
+            <Text style={{fontSize: 20, color: 'white',}}> {t(iWallet.rpc.name, { locale: i18n.language })}</Text>
           </Text>
         </View>)
     }
@@ -197,7 +197,7 @@ class WalletPage extends React.Component {
                 }}>
                   <TouchableOpacity
                     onPress={ () => this.debounceNavigate('NetworkSetting') }
-                    style={{ paddingLeft: 10, paddingRight:10, paddingBottom: 7, paddingTop: 0}}>
+                    style={{ paddingLeft: 0, paddingRight:10, paddingBottom: 7, paddingTop: 0}}>
                     { this.renderStatusIcon() }
                   </TouchableOpacity>
 
@@ -206,7 +206,7 @@ class WalletPage extends React.Component {
                              justifyContent: 'flex-start',
                              alignItems: 'flex-end',
                              flexDirection: 'row'}}>
-                  <Image style={{ height: 78, width: 150, alignItems: 'flex-end',  }} source={ this.logo } />
+                  <Image style={{ height: 62, width: 120, alignItems: 'flex-end',  }} source={ this.logo } />
                 </View>
               </View>
               <View style={{flex: 0.5, flexDirection: 'column'}} >

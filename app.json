@@ -21,7 +21,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "3",
+      "buildNumber": "2",
       "supportsTablet": true,
       "bundleIdentifier": "io.infleum.rediwallet",
       "icon": "./src/assets/images/logo_ios.png"
