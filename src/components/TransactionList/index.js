@@ -160,7 +160,7 @@ class TransactionList extends React.Component {
   }
   onEndReached = () => {
     try {
-      console.log('endReached')
+      // console.log('endReached')
       this.props.onEndReached()
     } catch (e) {
       console.log('error in TxList', e)
@@ -168,7 +168,7 @@ class TransactionList extends React.Component {
   }
   onRefresh = () => {
     try {
-      console.log('onRefresh', this.props.refreshing)
+      // console.log('onRefresh', this.props.refreshing)
       this.props.onRefresh()
     } catch (e) {
       console.log('error in onRefresh', e)
