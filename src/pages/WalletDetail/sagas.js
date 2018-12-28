@@ -67,7 +67,6 @@ export function* getTransactionsFromDB(action) {
     yield put({
       type: HIDE_PROCESSING_MODAL
     })
-    console.log('HIDE_PROCESSING_MODAL')
 
   } catch (error) {
     return null
@@ -149,7 +148,6 @@ export function* getTransactionsFromNetwork(action) {
     yield put({
       type: HIDE_PROCESSING_MODAL
     })
-    console.log('HIDE_PROCESSING_MODAL')
 
     yield put({
       type: SAVE_PAGE_STATE,

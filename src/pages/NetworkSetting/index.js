@@ -2,7 +2,7 @@ import _ from 'lodash'
 import React from 'react'
 import {View, Text, Alert, StatusBar, TouchableOpacity} from 'react-native'
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons'
-import { Container, Content, Body, Left, List, ListItem, Icon, Separator, Right } from 'native-base'
+import {Container, Content, Body, Left, List, ListItem, Icon, Separator, Right, Button} from 'native-base'
 import { Updates, SecureStore } from 'expo'
 import { Header } from 'rediwallet/src/components'
 import {actions} from "../index";
@@ -63,7 +63,7 @@ class NetworkSettingPage extends React.Component {
             button
             icon>
             <Left>
-              <Icon style={{ color: '#666666', }} name='ios-megaphone' />
+              <MaterialCommunityIcons style={{ color: '#666666', fontSize: 24 }} name='refresh' />
             </Left>
             <Body>
               <Text>{t('refreshWallet', { locale: i18n.language })}</Text>
@@ -77,7 +77,7 @@ class NetworkSettingPage extends React.Component {
             button
             icon>
             <Left>
-              <Icon style={{ color: '#666666', }} name='ios-megaphone' />
+              <Feather name='refresh-cw' style={{ color: '#666666', fontSize: 24 }} />
             </Left>
             <Body>
               <Text>{t('network', { locale: i18n.language })}</Text>
@@ -89,7 +89,7 @@ class NetworkSettingPage extends React.Component {
           </ListItem>
           <ListItem icon last>
             <Left>
-              <Icon style={{ color: '#666666', }} name='ios-megaphone' />
+              <MaterialCommunityIcons style={{ color: '#666666', fontSize: 24 }} name='fuel' />
             </Left>
             <Body>
               <Text>{t('gas_price', { locale: i18n.language })}</Text>

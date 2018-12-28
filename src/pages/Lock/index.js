@@ -87,16 +87,17 @@ class LockPage extends React.Component {
         backgroundColor: '#303140',
       }}>
         <StatusBar barStyle='light-content' />
-        <View style={{flex:0.4,
+        <View style={{flex:0.3,
           alignItems: 'center',
-          justifyContent: 'flex-end',
+          justifyContent: 'flex-start',
         }}>
           <View style={{flex:1,
             alignItems: 'center',
-            justifyContent: 'flex-end',
+            justifyContent: 'center',
+            paddingTop: 40,
           }}>
-          	<Image style={{ width: 150, height: 150, }} source={ require('rediwallet/src/assets/images/logo_400x400.png') } />
-            <Text style={{ marginTop: 10, fontSize: 24, color: 'white', }}>
+          	{/*<Image style={{ width: 100, height: 100, }} source={ require('rediwallet/src/assets/images/logo_400x400.png') } />*/}
+            <Text style={{ marginTop: 0, fontSize: 24, color: 'white', }}>
               {t('locked_desc', { locale: i18n.language })}
             </Text>
             <Text style={{ marginTop: 15, fontSize: 15, color: '#999999', }}>
@@ -109,7 +110,8 @@ class LockPage extends React.Component {
         </View>
         <View style={{
           paddingTop: 40,
-          flex:0.6,
+          paddingBottom: 40,
+          flex:0.7,
           alignItems: 'center',
           justifyContent: 'center',
         }}>

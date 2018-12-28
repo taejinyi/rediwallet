@@ -101,8 +101,8 @@ class MnemonicBackupVerificationPage extends React.Component {
             underlineColor={ locals.hasError ? '#e75a5a' : '#dadada' }
             underlineHoverColor='#aaaaaa'
             keyboardType='default'
-            containerStyle={{ width: 130, }}
-            textStyle={{ fontSize: 36, color: '#303140', }}
+            containerStyle={{ width: 150, }}
+            textStyle={{ fontSize: 24, color: '#303140', }}
             autoCapitalize="none"
             onChangeText={ value => locals.onChange(value) }
             value={ locals.value }
@@ -177,7 +177,7 @@ class MnemonicBackupVerificationPage extends React.Component {
     const { t, i18n } = this.props
 
     return (
-      <DismissKeyboardView style={{ flex: 1, }}>
+      <View style={{ flex: 1, }}>
         <StyleProvider style={ getTheme(platform) }>
           <Header
             iosBarStyle='light-content'
@@ -206,22 +206,19 @@ class MnemonicBackupVerificationPage extends React.Component {
           </Header>
         </StyleProvider>
 
-        <KeyboardAvoidingView keyboardVerticalOffset={ 0 } style={{ zIndex: -3, flex: 1, }} behavior='padding'>
-          {/*//-144*/}
-          <View style={{ padding: 30, }}>
-            <View style={{ justifyContent: 'flex-end', }}>
-              {/*<Text style={{ color: '#8E8E8E', fontSize: 18, }}>새 한도</Text>*/}
-              <Form
-                value={ formValue }
-                options={ formOptions }
-                type={ this.formFields }
-                ref={ el => this.formElement = el }
-                onChange={ value => { this.setState({ formValue: { ... value } })}}
-              />
-            </View>
+        <View style={{ padding: 30, }}>
+          <View style={{ justifyContent: 'flex-end', }}>
+            {/*<Text style={{ color: '#8E8E8E', fontSize: 18, }}>새 한도</Text>*/}
+            <Form
+              value={ formValue }
+              options={ formOptions }
+              type={ this.formFields }
+              ref={ el => this.formElement = el }
+              onChange={ value => { this.setState({ formValue: { ... value } })}}
+            />
           </View>
-        </KeyboardAvoidingView>
-      </DismissKeyboardView>
+        </View>
+      </View>
     )
   }
 }

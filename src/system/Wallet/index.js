@@ -168,7 +168,6 @@ export default class Wallet {
   }
 
   start = async (wallet) => {
-    console.log('starting')
     if (this.ready) {
       return
     }
@@ -333,7 +332,7 @@ export default class Wallet {
         this.fx["ETH"]["IFUM"] = ethMidPrice / 20
         this.fx["IFUM"]["ETH"] = 20 / parseFloat(ethMidPrice)
       }
-      console.log('1 iWallet.fetchWalletFromNetwork')
+      // console.log('1 iWallet.fetchWalletFromNetwork')
       this.gasPrice = await this.getGasPrice()
       const gwei = Math.pow(10, 9)
       if (this.gasPrice === null) {
@@ -349,7 +348,7 @@ export default class Wallet {
       const tokens = _.keys(this.accounts)
       for(let i = 0; i < tokens.length; i++){
         const token = tokens[i]
-        console.log('2 iWallet.fetchWalletFromNetwork.token', token)
+        // console.log('2 iWallet.fetchWalletFromNetwork.token', token)
         const account = {
           [ token ]: {
             address: token,

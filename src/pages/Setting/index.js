@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
 import {View, Text, Alert} from 'react-native'
-import { MaterialIcons } from '@expo/vector-icons'
+import { MaterialIcons, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
 import { Container, Content, Body, Left, List, ListItem, Icon, Separator, Right } from 'native-base'
 import { Updates, SecureStore } from 'expo'
 import { Header } from 'rediwallet/src/components'
@@ -104,24 +104,24 @@ class SettingPage extends React.Component {
           />
         </View>
         <Content style={{ backgroundColor: 'white', }}>
-          <ListItem icon last>
-            <Left>
-              <Icon style={{ color: '#666666', }} name='ios-megaphone' />
-            </Left>
-            <Body>
-              <Text>{t('notice', { locale: i18n.language })}</Text>
-            </Body>
-            <Right>
-              <Icon name='arrow-forward' />
-            </Right>
-          </ListItem>
-          <Separator />
+          {/*<ListItem icon last>*/}
+            {/*<Left>*/}
+              {/*<Icon style={{ color: '#666666', }} name='ios-megaphone' />*/}
+            {/*</Left>*/}
+            {/*<Body>*/}
+              {/*<Text>{t('notice', { locale: i18n.language })}</Text>*/}
+            {/*</Body>*/}
+            {/*<Right>*/}
+              {/*<Icon name='arrow-forward' />*/}
+            {/*</Right>*/}
+          {/*</ListItem>*/}
+          {/*<Separator />*/}
           <ListItem
             onPress={ this.changeCurrency }
             button
             icon>
             <Left>
-              <Icon name='ios-contact' style={{ color: '#666666', }} />
+              <FontAwesome name='exchange' style={{fontSize: 24, color: '#666666' }}/>
             </Left>
             <Body>
               <Text>{t('change_currency', { locale: i18n.language })}</Text>
@@ -135,7 +135,7 @@ class SettingPage extends React.Component {
             button
             icon>
             <Left>
-              <Icon name='ios-contact' style={{ color: '#666666', }} />
+              <MaterialCommunityIcons style={{ color: '#666666', fontSize: 24 }} name='lock-reset' />
             </Left>
             <Body>
               <Text>{t('changePinNumber', { locale: i18n.language })}</Text>
@@ -149,7 +149,7 @@ class SettingPage extends React.Component {
             button
             icon>
             <Left>
-              <Icon name='ios-contact' style={{ color: '#666666', }} />
+              <FontAwesome name='pencil-square-o' style={{fontSize: 24, color: '#666666' }}/>
             </Left>
             <Body>
               <Text>{t('backup_private_key', { locale: i18n.language })}</Text>
@@ -163,7 +163,7 @@ class SettingPage extends React.Component {
             button
             icon>
             <Left>
-              <Icon name='ios-contact' style={{ color: '#666666', }} />
+              <FontAwesome name='pencil-square-o' style={{fontSize: 24, color: '#666666' }}/>
             </Left>
             <Body>
               <Text>{t('backup_mnemonic', { locale: i18n.language })}</Text>
@@ -172,26 +172,27 @@ class SettingPage extends React.Component {
               <Icon name='arrow-forward' />
             </Right>
           </ListItem>
-          <ListItem
-            onPress={ this.resetDB }
-            button
-            icon>
-            <Left>
-              <Icon name='ios-contact' style={{ color: '#666666', }} />
-            </Left>
-            <Body>
-              <Text>{t('resetDB', { locale: i18n.language })}</Text>
-            </Body>
-            <Right>
-              <Icon name='arrow-forward' />
-            </Right>
-          </ListItem>
+          {/*<ListItem*/}
+            {/*onPress={ this.resetDB }*/}
+            {/*button*/}
+            {/*icon>*/}
+            {/*<Left>*/}
+              {/*<Icon name='ios-contact' style={{ color: '#666666', }} />*/}
+            {/*</Left>*/}
+            {/*<Body>*/}
+              {/*<Text>{t('resetDB', { locale: i18n.language })}</Text>*/}
+            {/*</Body>*/}
+            {/*<Right>*/}
+              {/*<Icon name='arrow-forward' />*/}
+            {/*</Right>*/}
+          {/*</ListItem>*/}
+          <Separator />
           <ListItem
             onPress={ this.deleteMnemonic }
             button
             icon>
             <Left>
-              <Icon name='ios-contact' style={{ color: '#666666', }} />
+              <MaterialCommunityIcons style={{ color: '#666666', fontSize: 24 }} name='delete-forever' />
             </Left>
             <Body>
               <Text>{t('delete_mnemonic', { locale: i18n.language })}</Text>
